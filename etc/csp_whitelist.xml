@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp/etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="frame-src">
+            <values>
+                <value id="easycredit" type="host">ratenkauf.easycredit.de</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="easycredit-static" type="host">static.easycredit.de</value>
+                <value id="easycredit-www" type="host">www.easycredit-ratenkauf.de</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

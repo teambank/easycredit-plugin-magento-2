@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Sales:etc/pdf_file.xsd">
+    <totals>
+        <total name="easycredit">
+            <title translate="true">Interest</title>
+            <source_field>easycredit_amount</source_field>
+            <font_size>7</font_size>
+            <display_zero>0</display_zero>
+            <sort_order>650</sort_order>
+            <amount_prefix/>
+        </total>
+    </totals>
+</config>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <easycredit>
+                <active>1</active>
+                <active_in_frontend>1</active_in_frontend>
+                <title>ratenkauf by easyCredit</title>
+                <model>Netzkollektiv\EasyCredit\Model\Payment</model>
+                <instructions>Instruction.</instructions>
+                <order_status>pending</order_status>
+                <allowspecific>1</allowspecific>
+                <specificcountry>DE</specificcountry>
+                <payment_action>authorize_capture</payment_action>
+                <widget_enabled>1</widget_enabled>
+                <remove_interest>1</remove_interest>
+            </easycredit>
+        </payment>
+    </default>
+</config>

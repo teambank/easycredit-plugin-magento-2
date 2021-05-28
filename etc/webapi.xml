@@ -1,0 +1,48 @@
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/easycredit/verify/credentials" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\VerifyCredentialsInterface" method="verifyCredentials"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/easycredit/checkout/prefix-valid" method="POST">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="isPrefixValid"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+    <route url="/V1/easycredit/checkout/data/:cartId" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="getCheckoutData"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/easycredit/checkout/data" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="getCheckoutData"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/easycredit/transactions" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="getTransactions"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+    <route url="/V1/easycredit/transaction" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="getTransaction"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+    <route url="/V1/easycredit/transactions" method="POST">
+        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="saveTransaction"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+</routes>
