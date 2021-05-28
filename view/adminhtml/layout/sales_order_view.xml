@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Netzkollektiv_EasyCredit::merchant-interface/css/app.css" />
+        <link src="Netzkollektiv_EasyCredit::merchant-interface/js/app.js" />
+    </head>
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Netzkollektiv\EasyCredit\Block\Adminhtml\Merchant\Config" name="easycredit-merchant-config" template="Netzkollektiv_EasyCredit::order/script.phtml" />
+        </referenceContainer>
+        <referenceContainer name="order_totals">
+            <block class="Netzkollektiv\EasyCredit\Block\Sales\Order\Totals\Fee" name="easycredit_amount"/>
+        </referenceContainer>
+        <referenceBlock name="order_info">
+            <block class="Magento\Backend\Block\Template" name="easycredit-tx-status-container" template="Netzkollektiv_EasyCredit::order/view/info/tx-status-container.phtml">
+                <block class="Netzkollektiv\EasyCredit\Block\Adminhtml\Order\View\Info\Transaction" name="easycredit-tx-status" template="Netzkollektiv_EasyCredit::order/view/info/tx-widget.phtml">
+                    <arguments>
+                        <argument name="elementType" xsi:type="string">easycredit-tx-status</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="payment_additional_info">
+            <block class="Netzkollektiv\EasyCredit\Block\Adminhtml\Order\View\Info\Transaction" name="easycredit-tx-manager" template="Netzkollektiv_EasyCredit::order/view/info/tx-widget.phtml">
+                <arguments>
+                    <argument name="elementType" xsi:type="string">easycredit-tx-manager</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

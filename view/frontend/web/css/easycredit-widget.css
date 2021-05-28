@@ -1,0 +1,446 @@
+.easycredit-widget .glyphicon-modal-window:before {
+  content: "\e237";
+}
+
+/**
+ * Widget Styles
+ *
+ */
+.easycredit-widget {
+  color: #000;
+  font-size: 13px;
+  padding:10px;
+  display: inline-block;
+
+  background-image: url(https://static.easycredit.de/content/image/logo/ratenkauf_42_55.png);
+  background-size: 55px 42px;
+  background-repeat: no-repeat;
+  padding-left: 60px;
+  background-position-y: center;
+  min-width:200px;
+}
+.easycredit-widget .easycredit-suffix,
+.easycredit-widget .easycredit-rate {
+  font-weight: bold;
+}
+.easycredit-widget .easycredit-link {
+  cursor: pointer; cursor: hand;
+}
+
+/**
+ * iFrame Content Styles
+ *
+ */
+.easycredit-embed-responsive {
+  position: relative;
+  display: block;
+  height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.easycredit-embed-responsive .embed-responsive-item,
+.easycredit-embed-responsive iframe,
+.easycredit-embed-responsive embed,
+.easycredit-embed-responsive ob.easycreditt,
+.easycredit-embed-responsive video {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/**
+ * Bootstrap Modal Styles
+ *
+ */
+.easycredit-widget .close {
+  float: right;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2;
+}
+.easycredit-widget .close:hover,
+.easycredit-widget .close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+.easycredit-widget button.close {
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+.easycredit-widget .modal-open {
+  overflow: hidden;
+}
+.easycredit-widget .modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+.easycredit-widget .modal.fade .modal-dialog {
+  -webkit-transition: -webkit-transform .3s ease-out;
+       -o-transition:      -o-transform .3s ease-out;
+          transition:         transform .3s ease-out;
+  -webkit-transform: translate(0, -25%);
+      -ms-transform: translate(0, -25%);
+       -o-transform: translate(0, -25%);
+          transform: translate(0, -25%);
+}
+.easycredit-widget .modal.in .modal-dialog {
+  -webkit-transform: translate(0, 0);
+      -ms-transform: translate(0, 0);
+       -o-transform: translate(0, 0);
+          transform: translate(0, 0);
+}
+.easycredit-widget .modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.easycredit-widget .modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+.easycredit-widget .modal-content {
+  position: relative;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+          background-clip: padding-box;
+  border: 1px solid #999;
+  border: 1px solid rgba(0, 0, 0, .2);
+  border-radius: 6px;
+  outline: 0;
+  -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+          box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+}
+.easycredit-widget .modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+.easycredit-widget .modal-backdrop.fade {
+  filter: alpha(opacity=0);
+  opacity: 0;
+}
+.easycredit-widget .modal-backdrop.in {
+  filter: alpha(opacity=50);
+  opacity: .5;
+}
+.easycredit-widget .modal-header {
+  min-height: 16.42857143px;
+  padding: 15px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.easycredit-widget .modal-header .close {
+  margin-top: -2px;
+}
+.easycredit-widget .modal-title {
+  margin: 0;
+  line-height: 1.42857143;
+}
+.easycredit-widget .modal-body {
+  position: relative;
+  padding: 15px;
+}
+.easycredit-widget .modal-footer {
+  padding: 15px;
+  text-align: right;
+  border-top: 1px solid #e5e5e5;
+}
+.easycredit-widget .modal-footer .btn + .btn {
+  margin-bottom: 0;
+  margin-left: 5px;
+}
+.easycredit-widget .modal-footer .btn-group .btn + .btn {
+  margin-left: -1px;
+}
+.easycredit-widget .modal-footer .btn-block + .btn-block {
+  margin-left: 0;
+}
+.easycredit-widget .modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+@media (min-width: 768px) {
+  .easycredit-widget .modal-dialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+  .easycredit-widget .modal-content {
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+  }
+  .easycredit-widget .modal-sm {
+    width: 300px;
+  }
+}
+@media (min-width: 992px) {
+  .easycredit-widget .modal-lg {
+    width: 900px;
+  }
+}
+.easycredit-widget .clearfix:before,
+.easycredit-widget .clearfix:after,
+.easycredit-widget .dl-horizontal dd:before,
+.easycredit-widget .dl-horizontal dd:after,
+.easycredit-widget .container:before,
+.easycredit-widget .container:after,
+.easycredit-widget .container-fluid:before,
+.easycredit-widget .container-fluid:after,
+.easycredit-widget .row:before,
+.easycredit-widget .row:after,
+.easycredit-widget .form-horizontal .form-group:before,
+.easycredit-widget .form-horizontal .form-group:after,
+.easycredit-widget .btn-toolbar:before,
+.easycredit-widget .btn-toolbar:after,
+.easycredit-widget .btn-group-vertical > .btn-group:before,
+.easycredit-widget .btn-group-vertical > .btn-group:after,
+.easycredit-widget .nav:before,
+.easycredit-widget .nav:after,
+.easycredit-widget .navbar:before,
+.easycredit-widget .navbar:after,
+.easycredit-widget .navbar-header:before,
+.easycredit-widget .navbar-header:after,
+.easycredit-widget .navbar-collapse:before,
+.easycredit-widget .navbar-collapse:after,
+.easycredit-widget .pager:before,
+.easycredit-widget .pager:after,
+.easycredit-widget .panel-body:before,
+.easycredit-widget .panel-body:after,
+.easycredit-widget .modal-footer:before,
+.easycredit-widget .modal-footer:after {
+  display: table;
+  content: " ";
+}
+.easycredit-widget .clearfix:after,
+.easycredit-widget .dl-horizontal dd:after,
+.easycredit-widget .container:after,
+.easycredit-widget .container-fluid:after,
+.easycredit-widget .row:after,
+.easycredit-widget .pager:after,
+.easycredit-widget .panel-body:after,
+.easycredit-widget .modal-footer:after {
+  clear: both;
+}
+.easycredit-widget .center-block {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.easycredit-widget .pull-right {
+  float: right !important;
+}
+.easycredit-widget .pull-left {
+  float: left !important;
+}
+.easycredit-widget .hide {
+  display: none !important;
+}
+.easycredit-widget .show {
+  display: block !important;
+}
+.easycredit-widget .invisible {
+  visibility: hidden;
+}
+.easycredit-widget .text-hide {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+.easycredit-widget .hidden {
+  display: none !important;
+}
+.easycredit-widget .affix {
+  position: fixed;
+}
+@-ms-viewport {
+  width: device-width;
+}
+.easycredit-widget .visible-xs,
+.easycredit-widget .visible-sm,
+.easycredit-widget .visible-md,
+.easycredit-widget .visible-lg {
+  display: none !important;
+}
+.easycredit-widget .visible-xs-block,
+.easycredit-widget .visible-xs-inline,
+.easycredit-widget .visible-xs-inline-block,
+.easycredit-widget .visible-sm-block,
+.easycredit-widget .visible-sm-inline,
+.easycredit-widget .visible-sm-inline-block,
+.easycredit-widget .visible-md-block,
+.easycredit-widget .visible-md-inline,
+.easycredit-widget .visible-md-inline-block,
+.easycredit-widget .visible-lg-block,
+.easycredit-widget .visible-lg-inline,
+.easycredit-widget .visible-lg-inline-block {
+  display: none !important;
+}
+@media (max-width: 767px) {
+  .easycredit-widget .visible-xs {
+    display: block !important;
+  }
+  .easycredit-widget table.visible-xs {
+    display: table !important;
+  }
+  .easycredit-widget tr.visible-xs {
+    display: table-row !important;
+  }
+  .easycredit-widget th.visible-xs,
+  .easycredit-widget td.visible-xs {
+    display: table-cell !important;
+  }
+}
+@media (max-width: 767px) {
+  .easycredit-widget .visible-xs-block {
+    display: block !important;
+  }
+}
+@media (max-width: 767px) {
+  .easycredit-widget .visible-xs-inline {
+    display: inline !important;
+  }
+}
+@media (max-width: 767px) {
+  .easycredit-widget .visible-xs-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .easycredit-widget .visible-sm {
+    display: block !important;
+  }
+  .easycredit-widget table.visible-sm {
+    display: table !important;
+  }
+  .easycredit-widget tr.visible-sm {
+    display: table-row !important;
+  }
+  .easycredit-widget th.visible-sm,
+  .easycredit-widget td.visible-sm {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .easycredit-widget .visible-sm-block {
+    display: block !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .easycredit-widget .visible-sm-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .easycredit-widget .visible-sm-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .easycredit-widget .visible-md {
+    display: block !important;
+  }
+  .easycredit-widget table.visible-md {
+    display: table !important;
+  }
+  .easycredit-widget tr.visible-md {
+    display: table-row !important;
+  }
+  .easycredit-widget th.visible-md,
+  .easycredit-widget td.visible-md {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .easycredit-widget .visible-md-block {
+    display: block !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .easycredit-widget .visible-md-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .easycredit-widget .visible-md-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (min-width: 1200px) {
+  .easycredit-widget .visible-lg {
+    display: block !important;
+  }
+  .easycredit-widget table.visible-lg {
+    display: table !important;
+  }
+  .easycredit-widget tr.visible-lg {
+    display: table-row !important;
+  }
+  .easycredit-widget th.visible-lg,
+  .easycredit-widget td.visible-lg {
+    display: table-cell !important;
+  }
+}
+@media (min-width: 1200px) {
+  .easycredit-widget .visible-lg-block {
+    display: block !important;
+  }
+}
+@media (min-width: 1200px) {
+  .easycredit-widget .visible-lg-inline {
+    display: inline !important;
+  }
+}
+@media (min-width: 1200px) {
+  .easycredit-widget .visible-lg-inline-block {
+    display: inline-block !important;
+  }
+}
+@media (max-width: 767px) {
+  .easycredit-widget .hidden-xs {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .easycredit-widget .hidden-sm {
+    display: none !important;
+  }
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+  .easycredit-widget .hidden-md {
+    display: none !important;
+  }
+}
+@media (min-width: 1200px) {
+  .easycredit-widget .hidden-lg {
+    display: none !important;
+  }
+}

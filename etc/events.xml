@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_invoice_save_after">
+        <observer name="sales_order_invoice_save_after" instance="Netzkollektiv\EasyCredit\Observer\InvoiceSaveAfter"/>
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="sales_order_creditmemo_save_after" instance="Netzkollektiv\EasyCredit\Observer\CreditmemoSaveAfter"/>
+    </event>
+    <event name="payment_method_assign_data_easycredit">
+        <observer name="easycredit_payment_data_assign"
+            instance="Netzkollektiv\EasyCredit\Observer\PaymentAdditionalDataAssignObserver" />
+    </event>
+</config>

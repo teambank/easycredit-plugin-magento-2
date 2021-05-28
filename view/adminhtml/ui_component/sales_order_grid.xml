@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="sales_order_columns">
+        <column name="easycredit_transaction_status" class="Netzkollektiv\EasyCredit\Ui\Component\Listing\Column\Status">
+            <!-- <= Magento 2.2-->
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">ratenkauf by easyCredit Transaktionsstatus</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+            <!-- >= Magento 2.2 -->
+            <!-- settings>
+                <label translate="true">ratenkauf by easyCredit Transaktionsstatus</label>
+                <bodyTmpl>ui/grid/cells/html</bodyTmpl>
+                <filter>text</filter>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings -->
+        </column>
+    </columns>
+</listing>

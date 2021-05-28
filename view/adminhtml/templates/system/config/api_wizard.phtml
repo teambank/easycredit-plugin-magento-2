@@ -1,0 +1,71 @@
+<?php
+/**
+ * @see \Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\ApiWizard
+ * @var \Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\ApiWizard $block
+ */
+?>
+<div class="pp-buttons-container">
+    <div dir="ltr" style="text-align: left;" trbidi="on">
+        <a id="easycredit-verify-credentials"
+            class="action-default"
+            href="#">
+            <?= $block->escapeHtml($block->getButtonLabel()); ?>
+        </a>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alert, storage) {
+
+
+        function easyCreditVerifyCredentials () {
+            var apiKeySelector = "<?= $block->escapeHtml($block->getApiKeySelector()); ?>",
+                apiTokenSelector= "<?= $block->escapeHtml($block->getApiTokenSelector()); ?>",
+                apiKey= $('input[data-ui-id="' + apiKeySelector + '"]').val(),
+                apiToken = $('input[data-ui-id="' + apiTokenSelector + '"]').val(),
+                serviceUrl = "<?= $block->escapeHtml($block->getServiceUrl()); ?>";
+
+            if (apiKey.length === 0 || apiToken.length === 0) {
+                alert({content: $.mage.__("Please insert Api Key and Token")});
+                return;
+            }
+
+            storage['<?= $block->escapeHtml($block->getServiceMethod()); ?>'](
+                serviceUrl + '?apiKey=' + encodeURIComponent(apiKey) + '&apiToken=' + encodeURIComponent(apiToken)
+            ).done(
+                function (response) {
+                    if (response === true) {
+                        alert({
+                            content: $.mage.__([
+                                'Credentials are valid.',
+                                'After saving the configuration the extension is ready for operation.'
+                            ].join(' '))
+                        });
+                    } else {
+                        alert({
+                            content: $.mage.__([
+                                'Credentials incorrect.',
+                                'Please review the inserted values and try again.'
+                            ].join(' '))
+                        });
+                    }
+                }
+            ).fail(
+                function (response) {
+                    alert({content: $.mage.__("Error verifying credentials. Please try again later.")});
+                }
+            );
+        }
+
+        $("#easycredit-verify-credentials").click(function() {
+            easyCreditVerifyCredentials();
+            return false;
+        });
+    });
+</script>

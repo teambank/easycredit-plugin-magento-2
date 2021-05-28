@@ -1,0 +1,89 @@
+<?php
+// @codingStandardsIgnoreFile
+/**
+ * @var \Netzkollektiv\EasyCredit\Block\Checkout\Review $block
+ */
+?>
+<div class="easycredit-review view">
+    <div class="block block-order-details-view">
+        <div class="block-content columns">
+            <?php if ($block->getShippingAddress()): ?>
+                <div class="box box-order-shipping-address">
+                    <strong class="box-title">
+                        <span><?php echo $block->escapeHtml(__('Shipping Address')); ?></span>
+                    </strong>
+                    <div class="box-content">
+                        <address>
+                            <?php echo $block->escapeHtml(
+                                $block->renderAddress($block->getShippingAddress()),
+                                ['br']
+                            );?>
+                        </address>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="box box-order-billing-address">
+                <strong class="box-title"><span><?php echo $block->escapeHtml(__('Billing Address')); ?></span></strong>
+                <div class="box-content">
+                    <address>
+                        <?php echo $block->escapeHtml(
+                            $block->renderAddress($block->getBillingAddress()),
+                            ['br']
+                        );?>
+                    </address>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block block-order-details-view">
+        <div class="block-content columns">
+            <div class="box box-easycredit-payment-method">
+                <strong class="box-title"><span><?php echo $block->escapeHtml(__('Payment Method')); ?></span></strong>
+                <div class="box-content">
+                    <div style="background-image:url(https://www.easycredit-ratenkauf.de/download/200x43_Ratenkauf_Logo_mitSubline.png); text-indent:-1000px; width:124px; height:27px; background-position-x:center; background-repeat:no-repeat; background-size:contain; overflow:hidden;"><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></div><br />
+                    <strong>Einfach. Fair. In Raten zahlen.</strong><br />
+                    <?php echo $block->getPaymentPlan(); ?>
+                </div>
+            </div>
+            <div class="box box-order-shipping-method">
+                <strong class="box-title">
+                    <span><?php echo $block->escapeHtml(__('Shipping Method')) ?></span>
+                </strong>
+                <div class="box-content">
+                    <p>
+                        <?php /* @noEscape */ echo $block->renderShippingRateOption(
+                            $block->getCurrentShippingRate()
+                        ); ?>
+                    </p>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="easycredit-review-items">
+        <div class="easycredit-review-title">
+            <strong><?php echo $block->escapeHtml(__('Items in Your Shopping Cart')); ?></strong>
+        </div>
+
+        <?php echo $block->getChildHtml('details'); ?>
+
+        <form method="post" id="order-review-form" action="<?php echo $block->escapeUrl($block->getPlaceOrderUrl()); ?>"
+              class="form order-review-form">
+            <?php echo $block->getChildHtml('agreements'); ?>
+            <div class="actions-toolbar" id="review-buttons-container">
+                <div class="primary">
+                    <button type="submit" id="review-button" class="action checkout primary"
+                            value="<?php echo $block->escapeHtml(__('Place Order')); ?>">
+                        <span><?php echo $block->escapeHtml(__('Place Order')); ?></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "#order-review-form": {
+            "validation": {}
+        }
+    }
+</script>

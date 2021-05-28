@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Netzkollektiv_EasyCredit::merchant-interface/css/app.css" />
+        <link src="Netzkollektiv_EasyCredit::merchant-interface/js/app.js" />
+    </head>
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Netzkollektiv\EasyCredit\Block\Adminhtml\Merchant\Config" name="easycredit-merchant-config" template="Netzkollektiv_EasyCredit::order/script.phtml" />
+        </referenceContainer>
+    </body>
+</page>

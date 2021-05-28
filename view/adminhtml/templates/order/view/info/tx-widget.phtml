@@ -1,0 +1,8 @@
+<style>
+.order-payment-method-title, .order-payment-currency { display:none; }
+</style>
+
+<<?= $block->escapeHtml($block->getData('elementType')); ?> 
+    id="<?= $block->escapeHtml($block->getPayment()->getAdditionalInformation('transaction_id')); ?>" 
+    date="<?= $block->escapeHtml($block->getCreatedAtFormatted()); ?>"
+/>
