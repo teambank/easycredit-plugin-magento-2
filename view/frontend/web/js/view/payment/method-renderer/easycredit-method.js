@@ -4,13 +4,16 @@ define(
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/payment/method-list',
         'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/action/set-payment-information',
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/model/quote',
         'mage/storage',
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/model/full-screen-loader',
         'uiRegistry'
     ],
-    function ($, Component, paymentMethods, customer, quote, storage, urlBuilder, fullScreenLoader, registry) {
+    function ($, Component, paymentMethods, customer, setPaymentInformation, additionalValidators, customerData, quote, storage, urlBuilder, fullScreenLoader, registry) {
         'use strict';
 
         return Component.extend({
@@ -129,10 +132,20 @@ define(
                 });
                 return true;
             },
-            afterPlaceOrder: function (data, event) {
-                $.mage.redirect(
-                    window.checkoutConfig.payment.easycredit.redirectUrl
+            continueToEasyCredit: function () {
+              if (additionalValidators.validate()) {
+                this.selectPaymentMethod();
+                setPaymentInformation(this.messageContainer, quote.paymentMethod()).done(
+                  function () {
+                    customerData.invalidate(['cart']);
+                    $.mage.redirect(
+                      window.checkoutConfig.payment.easycredit.redirectUrl
+                    );
+                  }
                 );
+
+                return false;
+              }
             }
         });
     }

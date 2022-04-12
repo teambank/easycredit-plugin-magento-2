@@ -58,7 +58,7 @@
             <div class="primary">
                 <button class="action primary checkout"
                         type="submit"
-                        data-bind="click: placeOrder, enable: (getCode() == isChecked() && isAgreementChecked() && (isPrefixSelected() || isPrefixValid()))"
+                        data-bind="click: continueToEasyCredit, enable: (getCode() == isChecked() && isAgreementChecked() && (isPrefixSelected() || isPrefixValid()))"
                         disabled>
                     <span data-bind="i18n: 'Continue to easyCredit'"></span>
                 </button>
