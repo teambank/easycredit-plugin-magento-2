@@ -64,4 +64,20 @@ class Data extends AbstractHelper
             $this->logger
         );
     }
+
+    public function formatPaymentPlan($paymentPlan) {
+        $paymentPlan = \json_decode($paymentPlan);
+        if (!\is_object($paymentPlan)) {
+            return '';
+        }
+
+        return \sprintf('%d Raten à %0.2f€ (%d x %0.2f€, %d x %0.2f€)',
+            (int)   $paymentPlan->anzahlRaten,
+            (float) $paymentPlan->betragRate,
+            (int)   $paymentPlan->anzahlRaten - 1,
+            (float) $paymentPlan->betragRate,
+            1,
+            (float) $paymentPlan->betragLetzteRate
+        );
+    }
 }

@@ -9,7 +9,7 @@
     "magento/module-checkout": ">=100.0",
     "magento/module-payment": ">=100.0",
     "magento/framework": ">=100.0",
-    "ratenkaufbyeasycredit/php-sdk" : "1.4.0"
+    "ratenkaufbyeasycredit/php-sdk" : "1.6.0"
   },
   "authors": [
     {

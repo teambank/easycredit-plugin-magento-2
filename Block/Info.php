@@ -7,32 +7,32 @@
 
 namespace Netzkollektiv\EasyCredit\Block;
 
-use Magento\Payment\Block\ConfigurableInfo;
+use Magento\Payment\Block\Info as PaymentInfo;
 
-class Info extends ConfigurableInfo
+class Info extends PaymentInfo
 {
-    protected function _prepareSpecificInformation($transport = null)
-    {
-        $transport = parent::_prepareSpecificInformation($transport);
-        $payment = $this->getInfo();
+    protected $_template = 'Netzkollektiv_EasyCredit::easycredit/info.phtml';
 
-        foreach (['transaction_id'] as $field) {
-            $fieldData = $payment->getAdditionalInformation($field);
-
-            if ($fieldData !== null && !empty($fieldData)) {
-                $this->setDataToTransfer(
-                    $transport,
-                    $field,
-                    $fieldData
-                );
-            }
-        }
-
-        return $transport;
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
+        array $data = []
+    ) {
+        $this->easyCreditHelper = $easyCreditHelper;
+        parent::__construct($context, $data);
     }
 
-    protected function getLabel($field)
+    /**
+     * Render as PDF
+     * @return string
+     */
+    public function toPdf()
     {
-        return __($field);
+        $this->setTemplate('Netzkollektiv_EasyCredit::easycredit/info/pdf/default.phtml');
+        return $this->toHtml();
+    }
+
+    public function getPaymentPlan() {
+        return $this->easyCreditHelper->formatPaymentPlan($this->getInfo()->getAdditionalInformation('payment_plan'));
     }
 }

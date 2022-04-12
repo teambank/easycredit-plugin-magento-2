@@ -303,11 +303,12 @@ class Review extends \Magento\Framework\View\Element\Template
             $this->getUrl("{$this->_controllerPath}/placeOrder", ['_secure' => true])
         );
 
-        $payment = $this->_quote->getPayment();
-        $this->setPaymentPlan(
-            $payment->getAdditionalInformation('payment_plan')
-        );
-
         return parent::_beforeToHtml();
+    }
+
+    public function getPaymentPlan() {
+        return $this->_easycreditHelper->formatPaymentPlan(
+            $this->_quote->getPayment()->getAdditionalInformation('payment_plan')
+        );
     }
 }

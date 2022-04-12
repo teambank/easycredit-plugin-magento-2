@@ -116,4 +116,8 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
             $this->_moduleResource
         );
     }
+
+    public function getDuration() {
+
+    }
 }
