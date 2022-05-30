@@ -2,8 +2,13 @@
 /**
  * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block
  */
+if (!$block->getApiKey()) {
+  return;
+}
 ?>
-<script>
+<div id="easycredit-popup"></div>
+
+<?php /** * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block */ ?> <script>
     require([
         "jquery",
         "Magento_Ui/js/modal/modal",
@@ -12,6 +17,16 @@
         "easycreditWidget"
     ], function ($, modal) {
         $(function() {
+
+            var easycreditModal = modal({
+                autoOpen:false,
+                innerScroll: false,
+                responsive: true,
+                type: 'popup',
+                title: 'ratenkauf by easyCredit',
+                buttons: []
+            }, $('#easycredit-popup'));
+
             $('.product-info-main .price-box').each(function(){
                 var me = this;
                 var amount = function() {
@@ -22,22 +37,20 @@
                     webshopId : '<?= $block->escapeHtml($block->getApiKey()); ?>',
                     amount: amount,
                     modal: function(element, content, opts) {
-                        var container = '<div class="easycredit-embed-responsive">'+content+'</div>';
-                        element.append(container);
-                        var modal = $(container).modal({
-                            autoOpen:true,
-                            innerScroll: false,
-                            responsive: true,
-                            type: 'popup',
-                            title: 'ratenkauf by easyCredit',
-                            buttons: []
-                        });
-                        modal.css('height','700px')
+                        var wrappedContent = $('<div class="easycredit-embed-responsive">'+content+'</div>')
+                            .css('height','700px');
+
+                        if (wrappedContent.prop('outerHTML') !== $('#easycredit-popup').html()) {
+                            $('#easycredit-popup')
+                                .html(wrappedContent);
+                        }
+                        
+                        $('#easycredit-popup')
+                            .modal('openModal')
                             .closest('.modal-inner-wrap')
                             .css({'max-width':'700px'});
                     }
                 });
             });
         });
-    });
-</script>
+    });</script>
