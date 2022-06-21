@@ -32,7 +32,7 @@ class Logger implements \Netzkollektiv\EasyCreditApi\LoggerInterface
             return;
         }
 
-        return $this->logInfo(
+        return $this->info(
             $this->_format($msg)
         );
     }
@@ -43,7 +43,7 @@ class Logger implements \Netzkollektiv\EasyCreditApi\LoggerInterface
             return;
         }
 
-        $this->_logger->addDebug(
+        $this->_logger->debug(
             $this->_format($msg)
         );
         return $this;
@@ -55,7 +55,7 @@ class Logger implements \Netzkollektiv\EasyCreditApi\LoggerInterface
             return;
         }
 
-        $this->_logger->addInfo(
+        $this->_logger->info(
             $this->_format($msg)
         );
         return $this;
@@ -63,7 +63,7 @@ class Logger implements \Netzkollektiv\EasyCreditApi\LoggerInterface
 
     public function logWarn($msg)
     {
-        $this->_logger->addWarning(
+        $this->_logger->warning(
             $this->_format($msg)
         );
         return $this;
@@ -71,7 +71,7 @@ class Logger implements \Netzkollektiv\EasyCreditApi\LoggerInterface
 
     public function logError($msg)
     {
-        $this->_logger->addError(
+        $this->_logger->error(
             $this->_format($msg)
         );
         return $this;
