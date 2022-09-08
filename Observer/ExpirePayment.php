@@ -30,10 +30,14 @@ class ExpirePayment implements ObserverInterface
 
     public function __construct(
         CartRepositoryInterface $quoteRepository,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
+        \Netzkollektiv\EasyCredit\BackendApi\Quote $easyCreditQuote
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->messageManager = $messageManager;
+        $this->easyCreditCheckout = $easyCreditHelper->getCheckout();
+        $this->easyCreditQuote = $easyCreditQuote;
     }
 
     public function execute(Observer $observer)
@@ -51,14 +55,15 @@ class ExpirePayment implements ObserverInterface
             return;
         }
 
-        $authorizedAmount = $quote->getPayment()
-            ->getAdditionalInformation('authorized_amount');
-        $interestAmount = $quote->getPayment()
-            ->getAdditionalInformation('interest_amount');
+        if ($quote->getPayment()->getAdditionalInformation('interest_amount') === null) {
+            return;
+        }
 
-        if ($authorizedAmount > 0
-            && $interestAmount > 0
-            && round($amount, 2) != round($authorizedAmount + $interestAmount, 2)
+        $checkout = $this->easyCreditCheckout;
+        $ecQuote = $this->easyCreditQuote;
+        if (!$checkout->isAmountValid($ecQuote)
+            || !$checkout->verifyAddressNotChanged($ecQuote)
+            || !$checkout->sameAddresses($ecQuote)
         ) {
             $quote->getPayment()->unsAdditionalInformation()->save();
         }

@@ -233,5 +233,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()
                 ->query("UPDATE {$setup->getTable('core_config_data')} Set value = REPLACE(value, 'ratenkauf by easyCredit','easyCredit-Ratenkauf') WHERE path = 'payment/easycredit/title';");
         }
+
+        if (version_compare($context->getVersion(), '1.3.9',"<")
+            && version_compare($package->getVersion(), '1.6.3', '<')
+        ) {
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.6.3 with composer');
+        }
     }
 }
