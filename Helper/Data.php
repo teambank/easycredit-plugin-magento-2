@@ -66,7 +66,7 @@ class Data extends AbstractHelper
     }
 
     public function formatPaymentPlan($paymentPlan) {
-        $paymentPlan = \json_decode($paymentPlan);
+        $paymentPlan = \json_decode((string)$paymentPlan);
         if (!\is_object($paymentPlan)) {
             return '';
         }

@@ -228,5 +228,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
         ) {
             throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.4.0, run: "composer require ratenkaufbyeasycredit/php-sdk"');
         }
+
+        if (version_compare($context->getVersion(), '1.3.9',"<")
+            && version_compare($package->getVersion(), '1.6.3', '<')
+        ) {
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.6.3 with composer');
+        }
     }
 }
