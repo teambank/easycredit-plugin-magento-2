@@ -5,7 +5,7 @@
             <!-- <= Magento 2.2-->
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string" translate="true">ratenkauf by easyCredit Transaktionsstatus</item>
+                    <item name="label" xsi:type="string" translate="true">easyCredit-Ratenkauf Transaktionsstatus</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -13,7 +13,7 @@
             </argument>
             <!-- >= Magento 2.2 -->
             <!-- settings>
-                <label translate="true">ratenkauf by easyCredit Transaktionsstatus</label>
+                <label translate="true">easyCredit-Ratenkauf Transaktionsstatus</label>
                 <bodyTmpl>ui/grid/cells/html</bodyTmpl>
                 <filter>text</filter>
                 <visible>true</visible>

@@ -5,7 +5,7 @@
                class="radio"
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible(), enable: isAvailable"/>
         <label data-bind="attr: {'for': getCode()}" class="label">
-            <span data-bind="text: getTitle()" style="background-image:url(https://www.easycredit-ratenkauf.de/download/200x43_Ratenkauf_Logo_mitSubline.png); display:inline-block; overflow:hidden; text-indent:-1000px; width:140px; height:24px; background-position-x:center; background-repeat:no-repeat; background-size:contain;">ratenkauf by easyCredit</span><br />
+            <span data-bind="text: getTitle()" class="easycredit-logo">easyCredit-Ratenkauf</span><br />
             <strong data-bind="i18n: 'Easy. Fair. Pay by installments.'"></strong><br />
 
             <div class="easycredit-error-message" data-bind="visible: !isAvailable()">
@@ -21,7 +21,7 @@
         <!--/ko-->
 
         <div class="payment-method-billing-address">
-            <span data-bind="i18n: 'ratenkauf by easyCredit requires the billing address to be the shipping address.'"></span>
+            <span data-bind="i18n: 'easyCredit-Ratenkauf requires the billing address to be the shipping address.'"></span>
         </div>
 
         <div class="checkout-agreements-block">

@@ -228,5 +228,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         ) {
             throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.4.0, run: "composer require ratenkaufbyeasycredit/php-sdk"');
         }
+
+        if (version_compare($context->getVersion(), '1.3.9','<')) {
+            $setup->getConnection()
+                ->query("UPDATE {$setup->getTable('core_config_data')} Set value = REPLACE(value, 'ratenkauf by easyCredit','easyCredit-Ratenkauf') WHERE path = 'payment/easycredit/title';");
+        }
     }
 }

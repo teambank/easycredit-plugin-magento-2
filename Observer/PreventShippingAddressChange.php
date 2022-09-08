@@ -19,7 +19,7 @@ class PreventShippingAddressChange implements ObserverInterface
             && \Netzkollektiv\EasyCredit\Model\Payment::CODE == $address->getOrder()->getPayment()->getMethod()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(__(
-                'Die Lieferadresse kann bei mit ratenkauf by easyCredit bezahlten Bestellungen 
+                'Die Lieferadresse kann bei mit easyCredit-Ratenkauf bezahlten Bestellungen 
                 nicht im Nachhinein geändert werden. Bitte stornieren Sie die Bestellung und Zahlung 
                 hierfür und legen Sie eine neue Bestellung an.'
             ));

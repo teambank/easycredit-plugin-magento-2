@@ -1,0 +1,11 @@
+ul.simple {
+    padding-left:40px;
+}
+
+ul.simple li {
+    list-style: disc;
+}
+
+ul.simple li p {
+    margin-bottom: 10px;
+}

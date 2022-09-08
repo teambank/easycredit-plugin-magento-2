@@ -52,7 +52,7 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
             $config['payment'][Payment::CODE] = [
                 'redirectUrl'           => $this->urlBuilder->getUrl('easycredit/checkout/start'),
                 'defaultErrorMessage'   => implode(' ', [
-                    'ratenkauf by easyCredit ist derzeit nicht verfügbar.',
+                    'easyCredit-Ratenkauf ist derzeit nicht verfügbar.',
                     'Bitte versuchen Sie es später erneut.'
                 ])
             ];

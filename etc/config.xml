@@ -5,7 +5,7 @@
             <easycredit>
                 <active>1</active>
                 <active_in_frontend>1</active_in_frontend>
-                <title>ratenkauf by easyCredit</title>
+                <title>easyCredit-Ratenkauf</title>
                 <model>Netzkollektiv\EasyCredit\Model\Payment</model>
                 <instructions>Instruction.</instructions>
                 <order_status>pending</order_status>
