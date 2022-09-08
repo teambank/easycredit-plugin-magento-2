@@ -4,9 +4,9 @@
         <section id="payment">
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <label>ratenkauf by easyCredit</label>
+                <label>easyCredit-Ratenkauf</label>
                 <comment><![CDATA[
-                    Bieten Sie Ihren Kunden die Möglichkeit der Ratenzahlung mit ratenkauf by easyCredit.<br />
+                    Bieten Sie Ihren Kunden die Möglichkeit der Ratenzahlung mit easyCredit-Ratenkauf.<br />
                     Einfach. Fair. In Raten zahlen.<br /><br />
                     <a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">zum Partnerportal</a>
                     - <a href="https://www.easycredit-ratenkauf.de/shopsysteme.htm" target="_blank">zum Integration-Center</a>
@@ -53,7 +53,7 @@
                 </field>
                 <group id="credentials" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Credentials</label>
-                    <comment>Please insert the Credentials you were provided by ratenkauf by easyCredit.</comment>
+                    <comment>Please insert the Credentials you were provided by easyCredit-Ratenkauf.</comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
                     <field id="api_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -163,7 +163,7 @@
     </a>
 
     <p>
-    Sie wollen Click&Collect für den ratenkauf by easyCredit nutzen?
+    Sie wollen Click&Collect für den easyCredit-Ratenkauf nutzen?
     Nichts einfacher als das! Um das Feature nutzen zu können, benötigen Sie eine ergänzende Zusatzvereinbarung zu Ihrem Factoringvertrag.
     Sprechen Sie dazu einfach Ihren Key-Account-Manager an oder fragen Sie diesen über unser <a href="https://www.easycredit-ratenkauf.de/click-und-collect/" target="_blank">Click&Collect-Formular</a> an.
     </p>

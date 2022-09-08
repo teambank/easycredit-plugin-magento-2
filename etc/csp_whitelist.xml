@@ -6,11 +6,5 @@
                 <value id="easycredit" type="host">ratenkauf.easycredit.de</value>
             </values>
         </policy>
-        <policy id="img-src">
-            <values>
-                <value id="easycredit-static" type="host">static.easycredit.de</value>
-                <value id="easycredit-www" type="host">www.easycredit-ratenkauf.de</value>
-            </values>
-        </policy>
     </policies>
 </csp_whitelist>

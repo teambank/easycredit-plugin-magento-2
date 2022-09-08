@@ -3,9 +3,17 @@
 	 flex-flow: row wrap;
 	 justify-content: flex-start;
 }
-.payment-method.payment-method-easycredit .payment-method-title .label[for="easycredit"] span {
-	 width: 100% !important;
-	 background-position: initial !important;
+.payment-method.payment-method-easycredit .payment-method-title .label[for="easycredit"] span.easycredit-logo {
+     display:inline-block; 
+	 width: 100%;
+     height:24px; 
+     background-image:url(../images/ratenkauf-logo.svg); 
+	 background-position: initial;
+     background-repeat:no-repeat; 
+     background-size:contain;
+
+     text-indent:-1000px; 
+     overflow:hidden; 
 	 margin-bottom: 5px;
 }
 .payment-method.payment-method-easycredit .payment-method-content .payment-method-billing-address {
@@ -32,4 +40,18 @@
 }
 .easycredit-review .block .columns .box {
 	flex-basis: 50%;
+}
+
+.easycredit-review div.easycredit-logo {
+  width:70px; 
+  height:35px; 
+
+  background-image:url(../images/ratenkauf-logo.svg); 
+  background-position-x:center; 
+  background-repeat:no-repeat; 
+  background-size:contain; 
+
+  text-indent:-1000px; 
+  overflow:hidden;
+  margin: 10px 0 5px 0;
 }

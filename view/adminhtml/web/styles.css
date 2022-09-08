@@ -1,2 +1,7 @@
-.easycredit-section .heading {background: url("https://www.easycredit-ratenkauf.de/download/200x43_Ratenkauf_Logo_mitSubline.png") no-repeat 0 50% / 18rem auto; padding-left: 20rem;}
-.easycredit-section .button-container {float: right;}
+.easycredit-section .heading {
+  background: url('merchant-interface/img/ratenkauf-logo.svg') no-repeat 0 50% / 18rem auto; 
+  padding-left: 20rem;
+}
+.easycredit-section .button-container {
+  float: right;
+}

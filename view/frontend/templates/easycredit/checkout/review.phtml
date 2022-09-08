@@ -40,7 +40,7 @@
             <div class="box box-easycredit-payment-method">
                 <strong class="box-title"><span><?php echo $block->escapeHtml(__('Payment Method')); ?></span></strong>
                 <div class="box-content">
-                    <div style="background-image:url(https://www.easycredit-ratenkauf.de/download/200x43_Ratenkauf_Logo_mitSubline.png); text-indent:-1000px; width:124px; height:27px; background-position-x:center; background-repeat:no-repeat; background-size:contain; overflow:hidden;"><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></div><br />
+                    <div class="easycredit-logo"><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></div>
                     <strong>Einfach. Fair. In Raten zahlen.</strong><br />
                     <?php echo $block->getPaymentPlan(); ?>
                 </div>

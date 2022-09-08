@@ -8,7 +8,7 @@
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset;
 
 /**
- * Fieldset renderer for ratenkauf by easyCredit
+ * Fieldset renderer for easyCredit-Ratenkauf
  */
 class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
 {
