@@ -5,6 +5,8 @@ v1.3.9
 ------
 
 * Änderungen zum Markenrelaunch von easyCredit-Ratenkauf
+* die Finanzierung ist nun auch ohne Zinsen möglich
+* die PHP-SDK wurde auf v1.6.3 aktualisiert (Änderungen zu Markenumstellung, PHP 8-Kompatiblität & 0% Finanzierung)
 
 v1.3.8
 ------

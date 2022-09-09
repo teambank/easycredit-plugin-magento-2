@@ -43,7 +43,7 @@ manuelle Installation via SSH
     $ mkdir app/code/Netzkollektiv/EasyCredit
     $ unzip -d app/code/Netzkollektiv/EasyCredit m2-easycredit-x.x.x.zip
 
-* Installieren Sie das ratenkauf by easyCredit PHP SDK über Composer:
+* Installieren Sie das easyCredit-Ratenkauf PHP SDK über Composer:
 
 .. code-block:: bash
 
