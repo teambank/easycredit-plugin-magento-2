@@ -12,9 +12,9 @@ class Storage implements \Netzkollektiv\EasyCreditApi\StorageInterface
     protected $_payment;
 
     public function __construct(
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Quote\Model\Quote\Payment $payment
     ) {
-        $this->_payment = $checkoutSession->getQuote()->getPayment();
+        $this->_payment = $payment;
     }
 
     public function set($key, $value)

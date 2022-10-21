@@ -39,7 +39,7 @@ class Data extends AbstractHelper
         $this->logger = $logger;
     }
 
-    public function getCheckout()
+    public function getCheckout($quote = null)
     {
         if (!isset($this->checkout)) {
             $client = new \Netzkollektiv\EasyCreditApi\Client(
@@ -48,9 +48,10 @@ class Data extends AbstractHelper
                 $this->logger
             );
 
+	    $payment = ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment();
             $this->checkout = new \Netzkollektiv\EasyCreditApi\Checkout(
                 $client,
-                new \Netzkollektiv\EasyCredit\BackendApi\Storage($this->checkoutSession)
+                new \Netzkollektiv\EasyCredit\BackendApi\Storage($payment)
             );
         }
         return $this->checkout;
