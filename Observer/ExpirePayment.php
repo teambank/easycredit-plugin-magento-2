@@ -36,7 +36,7 @@ class ExpirePayment implements ObserverInterface
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->messageManager = $messageManager;
-        $this->easyCreditCheckout = $easyCreditHelper->getCheckout();
+        $this->easyCreditHelper = $easyCreditHelper;
         $this->easyCreditQuote = $easyCreditQuote;
     }
 
@@ -59,8 +59,8 @@ class ExpirePayment implements ObserverInterface
             return;
         }
 
-        $checkout = $this->easyCreditCheckout;
-        $ecQuote = $this->easyCreditQuote;
+        $checkout = $this->easyCreditHelper->getCheckout($quote);
+        $ecQuote = $this->easyCreditQuote->setQuote($quote);
         if (!$checkout->isAmountValid($ecQuote)
             || !$checkout->verifyAddressNotChanged($ecQuote)
             || !$checkout->sameAddresses($ecQuote)

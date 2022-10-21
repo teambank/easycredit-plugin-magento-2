@@ -30,7 +30,6 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
         \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->_quote = $checkoutSession->getQuote();
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
         $this->_salesOrderCollection = $salesOrderCollection;
@@ -42,21 +41,33 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
         $this->scopeConfig = $scopeConfig;
     }
 
+    public function setQuote($quote) {
+        $this->_quote = $quote;
+        return $this;
+    }
+
+    public function getQuote() {
+	    if (!$this->_quote) {
+	        $this->_quote = $this->_checkoutSession->getQuote();
+	    }
+        return $this->_quote;
+    }
+
     public function getId()
     {
-        return $this->_quote->getId();
+        return $this->getQuote()->getId();
     }
 
     public function getShippingMethod()
     {
-        if ($this->_quote->getShippingAddress()) {
-            return $this->_quote->getShippingAddress()->getShippingMethod();
+        if ($this->getQuote()->getShippingAddress()) {
+            return $this->getQuote()->getShippingAddress()->getShippingMethod();
         }
     }
 
     public function getIsClickAndCollect()
     {
-        if ($this->_quote->getShippingAddress() && $shippingMethod = $this->_quote->getShippingAddress()->getShippingMethod()) {
+        if ($this->getQuote()->getShippingAddress() && $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod()) {
             return $shippingMethod === $this->scopeConfig->getValue('payment/easycredit/clickandcollect/shipping_method', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
         }
         return false;
@@ -64,17 +75,17 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
 
     public function getGrandTotal()
     {
-        return $this->_quote->getGrandTotal();
+        return $this->getQuote()->getGrandTotal();
     }
 
     public function getBillingAddress()
     {
-        return new Quote\Address($this->_quote->getBillingAddress());
+        return new Quote\Address($this->getQuote()->getBillingAddress());
     }
 
     public function getShippingAddress()
     {
-        return new Quote\ShippingAddress($this->_quote->getShippingAddress());
+        return new Quote\ShippingAddress($this->getQuote()->getShippingAddress());
     }
 
     public function getCustomer()
@@ -82,9 +93,9 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
         return new Quote\Customer(
             $this->_customerSession,
             $this->_salesOrderCollection,
-            $this->_quote->getCustomer(),
-            $this->_quote->getBillingAddress(),
-            $this->_quote->getShippingAddress(),
+            $this->getQuote()->getCustomer(),
+            $this->getQuote()->getBillingAddress(),
+            $this->getQuote()->getShippingAddress(),
             $this->_easyCreditHelper
         );
     }
@@ -92,7 +103,7 @@ class Quote implements \Netzkollektiv\EasyCreditApi\Rest\QuoteInterface
     public function getItems()
     {
         return $this->_getItems(
-            $this->_quote->getAllVisibleItems()
+            $this->getQuote()->getAllVisibleItems()
         );
     }
 
