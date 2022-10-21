@@ -26,7 +26,7 @@ author = u'Teambank AG'
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'1.3.5'
+release = u'1.3.10'
 
 
 # -- General configuration ---------------------------------------------------

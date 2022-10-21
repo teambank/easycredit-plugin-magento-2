@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v1.3.10
+-------
+
+* behebt eine Endlosschleife, die unter bestimmten Umständen auftrat (siehe Github "Infinite loop detected #6")
+
 v1.3.9
 ------
 
