@@ -12,10 +12,14 @@ use Magento\Integration\Model\Oauth\TokenFactory;
 
 class Config extends \Magento\Backend\Block\Template
 {
-    /** @var TokenFactory */
+    /**
+     * @var TokenFactory 
+     */
     private $tokenFactory;
 
-    /** @var AdminSession */
+    /**
+     * @var AdminSession 
+     */
     private $adminSession;
 
     public function __construct(
@@ -42,11 +46,13 @@ class Config extends \Magento\Backend\Block\Template
      */
     public function getConfig()
     {
-        return json_encode([
+        return json_encode(
+            [
             'endpoints' => [
-                'get' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction',
-                'list' => $this->getBaseUrl() . 'rest/V1/easycredit/transactions',
-                'post' => $this->getBaseUrl() . 'rest/V1/easycredit/transactions'
+                'list' => $this->getBaseUrl() . 'rest/V1/easycredit/transactions?ids={transactionId}',
+                'get' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}',
+                'refund' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/refund',
+                'capture' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/capture'
             ],
             'request_config' => [
                 'headers' => [
@@ -54,6 +60,7 @@ class Config extends \Magento\Backend\Block\Template
                     'Authorization' => 'Bearer ' . $this->getToken()
                 ]
             ]
-        ]);
+            ]
+        );
     }
 }

@@ -10,17 +10,16 @@
  */
 $paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($paymentTitle) ?>{{pdf_row_separator}}
-Einfach. Fair. In Raten zahlen.{{pdf_row_separator}}
+<?php echo $block->escapeHtml($paymentTitle) ?>{{pdf_row_separator}}
 
 <?php if ($specificInfo = $block->getSpecificInformation()) : ?>
     <?php foreach ($specificInfo as $label => $value) : ?>
-        <?= $block->escapeHtml($label) ?>:
-        <?= $block->escapeHtml(implode(' ', $block->getValueAsArray($value))) ?>
+        <?php echo $block->escapeHtml($label) ?>:
+        <?php echo $block->escapeHtml(implode(' ', $block->getValueAsArray($value))) ?>
         {{pdf_row_separator}}
     <?php endforeach; ?>
 <?php endif;?>
 
-<?php echo $this->getPaymentPlan(); ?>{{pdf_row_separator}}
+Transaktions-Nr: <?php echo $this->escapeHtml($this->getInfo()->getAdditionalInformation('transaction_id')); ?>{{pdf_row_separator}}
 
-<?= $block->escapeHtml(implode('{{pdf_row_separator}}', $block->getChildPdfAsArray())) ?>
+<?php echo $block->escapeHtml(implode('{{pdf_row_separator}}', $block->getChildPdfAsArray())) ?>

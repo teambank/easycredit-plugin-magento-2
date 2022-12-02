@@ -22,14 +22,16 @@ class Status extends Column
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
+
+    private $paymentCollectionFactory;
 
     /**
-     * @param ContextInterface $context
+     * @param ContextInterface   $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param Escaper $escaper
-     * @param array $components
-     * @param array $data
+     * @param Escaper            $escaper
+     * @param array              $components
+     * @param array              $data
      */
     public function __construct(
         ContextInterface $context,
@@ -47,7 +49,7 @@ class Status extends Column
     /**
      * Prepare Data Source
      *
-     * @param array $dataSource
+     * @param  array $dataSource
      * @return array
      */
     public function prepareDataSource(array $dataSource)
@@ -74,9 +76,9 @@ class Status extends Column
                 $transactionId = $this->escaper->escapeHtml(
                     $paymentItem->getData('additional_information/transaction_id')
                 );
-                $item[$this->getData('name')] = '<easycredit-tx-status 
-                    id="' . $transactionId . '" 
-                    date="' . substr($item['created_at'], 0, strpos(' ', $item['created_at'])) . '" />
+                $item[$this->getData('name')] = '<easycredit-merchant-status-widget 
+                    tx-id="' . $transactionId . '" 
+                    date="' . substr($item['created_at'], 0, strpos(' ', $item['created_at'])) . '"></<easycredit-merchant-status-widget>
                 ';
             }
         }

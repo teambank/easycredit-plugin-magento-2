@@ -45,9 +45,13 @@ class Fee extends \Magento\Framework\View\Element\Template
 
     public function initTotals()
     {
-
-        /** @var $parent \Magento\Sales\Block\Adminhtml\Order\Totals */
+        /**
+          * @var \Magento\Sales\Block\Adminhtml\Order\Totals $parent
+        */
         $parent = $this->getParentBlock();
+        if (!$parent instanceof \Magento\Sales\Block\Adminhtml\Order\Totals) {
+            return $this;
+        }
         $source = $parent->getSource();
 
         $amount = $source->getEasycreditAmount();
@@ -57,12 +61,14 @@ class Fee extends \Magento\Framework\View\Element\Template
             return $this;
         }
 
-        $total = new \Magento\Framework\DataObject([
+        $total = new \Magento\Framework\DataObject(
+            [
             'code'  => 'easycredit_amount',
             'value' => $amount,
             'base_value' => $baseAmount,
             'label' => __('Interest')
-        ]);
+            ]
+        );
         $after = 'subtotal';
 
         $parent->addTotal($total, $after);

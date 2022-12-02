@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v2.0.0
+------
+
+* Migration auf ratenkauf by easyCredit API v3
+* Integration von EasyCredit Ratenkauf Web-Komponenten
+
 v1.3.10
 -------
 

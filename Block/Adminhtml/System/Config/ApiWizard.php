@@ -34,7 +34,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Unset some non-related element parameters
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
@@ -46,7 +46,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Get the button and scripts contents
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
@@ -59,7 +59,8 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
                 'button_label' => __($originalData['button_label']),
                 'html_id' => $element->getHtmlId(),
                 'api_key_selector' => $originalData['api_key_selector'],
-                'api_token_selector' => $originalData['api_token_selector']
+                'api_token_selector' => $originalData['api_token_selector'],
+                'api_signature_selector' => $originalData['api_signature_selector']
             ]
         );
         return $this->_toHtml();

@@ -11,18 +11,15 @@ use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 
 class CheckoutData implements CheckoutDataInterface
 {
-    private $errorMessage;
-
-    private $agreement;
-
-    private $prefixValid;
-
+    private ?string $errorMessage = null;
+    private ?string $redirectUrl = null;
+    
     /**
      * Gets the error message
      *
-     * @return string|null Error Message
+     * @return string
      */
-    public function getErrorMessage()
+    public function getErrorMessage() : ?string
     {
         return $this->errorMessage;
     }
@@ -30,56 +27,32 @@ class CheckoutData implements CheckoutDataInterface
     /**
      * Sets the error message
      *
-     * @param int $message
-     * @return $this
+     * @return self
      */
-    public function setErrorMessage($message)
+    public function setErrorMessage(string $message) : self
     {
         $this->errorMessage = $message;
         return $this;
     }
 
     /**
-     * Gets the agreement
+     * Gets the redirect url
      *
-     * @return string|null Agreement
+     * @return string
      */
-    public function getAgreement()
+    public function getRedirectUrl() : ?string
     {
-        return $this->agreement;
+        return $this->redirectUrl;
     }
 
     /**
-     * Sets the agreement
+     * Sets the redirect url
      *
-     * @param int $agreement
-     * @return $this
+     * @return self
      */
-    public function setAgreement($agreement)
+    public function setRedirectUrl(string $url) : self
     {
-        $this->agreement = $agreement;
-        return $this;
-    }
-
-    /**
-     * Prefix valid
-     *
-     * @return boolean
-     */
-    public function getIsPrefixValid()
-    {
-        return $this->prefixValid;
-    }
-
-    /**
-     * Sets the agreement
-     *
-     * @param int $agreement
-     * @return $this
-     */
-    public function setIsPrefixValid($prefixValid)
-    {
-        $this->prefixValid = $prefixValid;
+        $this->redirectUrl = $url;
         return $this;
     }
 }

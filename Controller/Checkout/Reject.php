@@ -13,8 +13,7 @@ class Reject extends AbstractController
     /**
      * Dispatch request
      *
-     * @return ResultInterface|ResponseInterface
-     * @throws NotFoundException
+     * @return void
      */
     public function execute()
     {
@@ -24,6 +23,7 @@ class Reject extends AbstractController
 
     /**
      * Returns action name which requires redirect
+     *
      * @return string|null
      */
     public function getRedirectActionName()

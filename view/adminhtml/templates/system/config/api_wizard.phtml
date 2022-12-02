@@ -9,7 +9,7 @@
         <a id="easycredit-verify-credentials"
             class="action-default"
             href="#">
-            <?= $block->escapeHtml($block->getButtonLabel()); ?>
+            <?php echo $block->escapeHtml($block->getButtonLabel()); ?>
         </a>
     </div>
 </div>
@@ -21,50 +21,43 @@
         'mage/storage',
         "mage/translate",
         "domReady!"
-    ], function ($, alert, storage) {
+    ], function ($, alertModal, storage) {
 
 
         function easyCreditVerifyCredentials () {
-            var apiKeySelector = "<?= $block->escapeHtml($block->getApiKeySelector()); ?>",
-                apiTokenSelector= "<?= $block->escapeHtml($block->getApiTokenSelector()); ?>",
+            var apiKeySelector = "<?php echo $block->escapeHtml($block->getApiKeySelector()); ?>",
+                apiTokenSelector = "<?php echo $block->escapeHtml($block->getApiTokenSelector()); ?>",
+                apiSignatureSelector = "<?php echo $block->escapeHtml($block->getApiSignatureSelector()); ?>",
                 apiKey= $('input[data-ui-id="' + apiKeySelector + '"]').val(),
                 apiToken = $('input[data-ui-id="' + apiTokenSelector + '"]').val(),
-                serviceUrl = "<?= $block->escapeHtml($block->getServiceUrl()); ?>";
+                apiSignature = $('input[data-ui-id="' + apiSignatureSelector + '"]').val(),
+                serviceUrl = "<?php echo $block->escapeHtml($block->getServiceUrl()); ?>";
 
             if (apiKey.length === 0 || apiToken.length === 0) {
-                alert({content: $.mage.__("Please insert Api Key and Token")});
+                alertModal({content: '<?php echo __("Please insert Api Key and Token") ?>'});
                 return;
             }
 
-            storage['<?= $block->escapeHtml($block->getServiceMethod()); ?>'](
-                serviceUrl + '?apiKey=' + encodeURIComponent(apiKey) + '&apiToken=' + encodeURIComponent(apiToken)
-            ).done(
-                function (response) {
-                    if (response === true) {
-                        alert({
-                            content: $.mage.__([
-                                'Credentials are valid.',
-                                'After saving the configuration the extension is ready for operation.'
-                            ].join(' '))
-                        });
-                    } else {
-                        alert({
-                            content: $.mage.__([
-                                'Credentials incorrect.',
-                                'Please review the inserted values and try again.'
-                            ].join(' '))
-                        });
-                    }
-                }
-            ).fail(
-                function (response) {
-                    alert({content: $.mage.__("Error verifying credentials. Please try again later.")});
-                }
-            );
+            
+            return storage['<?php echo $block->escapeHtml($block->getServiceMethod()); ?>'](
+                serviceUrl + '?apiKey=' + encodeURIComponent(apiKey) + 
+                    '&apiToken=' + encodeURIComponent(apiToken) + 
+                    '&apiSignature=' + encodeURIComponent(apiSignature)
+            ).done(function (response) {
+                alertModal({
+                    content: '<?php echo __('Credentials are valid. After saving the configuration the extension is ready for operation.') ?>'
+                });
+            }).fail(function (response) {
+                var message = response.responseJSON.message;
+                alertModal({content: $.mage.__(message)});
+            });
         }
 
         $("#easycredit-verify-credentials").click(function() {
-            easyCreditVerifyCredentials();
+            $(this).attr('disabled', true);
+            easyCreditVerifyCredentials().always(function(){
+                $(this).attr('disabled', false);
+            }.bind(this));
             return false;
         });
     });

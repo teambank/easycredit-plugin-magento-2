@@ -4,7 +4,7 @@
         <section id="payment">
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <label>easyCredit-Ratenkauf</label>
+                <label><![CDATA[<easycredit-logo></easycredit-logo>]]></label>
                 <comment><![CDATA[
                     Bieten Sie Ihren Kunden die Möglichkeit der Ratenzahlung mit easyCredit-Ratenkauf.<br />
                     Einfach. Fair. In Raten zahlen.<br /><br />
@@ -42,8 +42,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="widget_enabled" translate="label comment" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Show Model Calculation</label>
+                    <label>Show model calculation at product detail page</label>
                     <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show model calculation in cart</label>
+                    <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="remove_interest" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -57,18 +62,20 @@
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
                     <field id="api_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>API Key</label>
+                        <label>Webshop-ID</label>
                     </field>
                     <field id="api_token" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Token</label>
                     </field>
+                    <field id="api_signature" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>API Signature (optional)</label>
+                    </field>
                     <field id="api_wizard" translate="button_label attribute" sortOrder="30" showInDefault="1" showInWebsite="1">
                         <attribute type="button_label">Verify Credentials with easyCredit</attribute>
 
-                        <!--Please make sure to change these two selectors if the structure of this group block or one of its ancestors is changed-->
                         <attribute type="api_key_selector">text-groups-easycredit-groups-credentials-fields-api-key-value</attribute>
                         <attribute type="api_token_selector">text-groups-easycredit-groups-credentials-fields-api-token-value</attribute>
-                        <!--End Please make sure to change these two selectors if the structure of this group block or one of its ancestors is changed-->
+                        <attribute type="api_signature_selector">text-groups-easycredit-groups-credentials-fields-api-signature-value</attribute>
 
                         <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\ApiWizard</frontend_model>
                         <attribute type="shared">1</attribute>

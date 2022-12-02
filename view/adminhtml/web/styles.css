@@ -1,7 +1,14 @@
 .easycredit-section .heading {
-  background: url('merchant-interface/img/ratenkauf-logo.svg') no-repeat 0 50% / 18rem auto; 
   padding-left: 20rem;
+}
+.easycredit-section .heading easycredit-logo {
+  position:absolute;
+  margin-left: -20rem;
 }
 .easycredit-section .button-container {
   float: right;
+}
+
+#easycredit-verify-credentials {
+  margin-top:10px;
 }

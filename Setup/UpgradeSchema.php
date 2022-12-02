@@ -33,7 +33,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
         foreach ($packages as $package) {
-            if ($package->getName() == 'ratenkaufbyeasycredit/php-sdk') {
+            if ($package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
                 return $package;
             }
         }
@@ -42,15 +42,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * Upgrades DB schema
      *
-     * @param SchemaSetupInterface $setup
-     * @param ModuleContextInterface $context
+     * @param  SchemaSetupInterface   $setup
+     * @param  ModuleContextInterface $context
      * @return void
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $package = $this->getApiLibraryPackage();
         if (!$package) {
-            throw new \Exception('Please run "composer require ratenkaufbyeasycredit/php-sdk"');
+            throw new \Exception('Please run "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
         }
 
         if (!$context->getVersion()) {
@@ -223,21 +223,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
         }
 
         // version check for manual installations
-        if (version_compare($context->getVersion(), '1.3.3') >= 0
-            && version_compare($package->getVersion(), '1.4.0', '<')
+        if (version_compare($context->getVersion(), '2.0.0') >= 0
+            && version_compare($package->getVersion(), '1.3.4', '<')
         ) {
-            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.4.0, run: "composer require ratenkaufbyeasycredit/php-sdk"');
-        }
-
-        if (version_compare($context->getVersion(), '1.3.9','<')) {
-            $setup->getConnection()
-                ->query("UPDATE {$setup->getTable('core_config_data')} Set value = REPLACE(value, 'ratenkauf by easyCredit','easyCredit-Ratenkauf') WHERE path = 'payment/easycredit/title';");
-        }
-
-        if (version_compare($context->getVersion(), '1.3.9',"<")
-            && version_compare($package->getVersion(), '1.6.3', '<')
-        ) {
-            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.6.3 with composer');
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require ratenkaufbyeasycredit/php-sdk"');
         }
     }
 }

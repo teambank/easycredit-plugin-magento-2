@@ -7,78 +7,176 @@
 
 namespace Netzkollektiv\EasyCredit\Helper;
 
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Store\Model\ScopeInterface;
+use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
+use Netzkollektiv\EasyCredit\Logger\Logger;
+use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class Data extends AbstractHelper
 {
-    protected $checkoutSession;
+    /**
+     * @var CheckoutSession
+     */ 
+    private $checkoutSession;
 
-    protected $config;
-    protected $logger;
+    /**
+     * @var StorageFactory
+     */
+    private $storageFactory;
 
-    protected $installmentValues;
+    /**
+     * @var Logger
+     */
+    private $logger;
+
+    /**
+     * @var Api\Service\TransactionApiFactory
+     */
+    private $transactionApiFactory;
+
+    /**
+     * @var Api\Service\WebshopApiFactory
+     */
+    private $webshopApiFactory;
+
+    /**
+     * @var Api\Service\InstallmentplanApiFactory
+     */
+    private $installmentplanApiFactory;
+
+    /**
+     * @var Api\Integration\CheckoutFactory
+     */
+    private $checkoutFactory;
+
+    /**
+     * @var Api\Integration\Util\AddressValidator
+     */
+    private $addressValidator;
+
+    /**
+     * @var Api\Integration\Util\PrefixConverter
+     */
+    private $prefixConverter;
+
+    /**
+     * @var Api\Integration\CheckoutFactory
+     */
+    private $checkout;
 
     public function __construct(
         Context $context,
         CheckoutSession $checkoutSession,
-        CartRepositoryInterface $quoteRepository,
-        \Netzkollektiv\EasyCredit\BackendApi\Config $config,
-        \Netzkollektiv\EasyCredit\BackendApi\Logger $logger
+        ScopeConfigInterface $scopeConfig,
+        StorageFactory $storageFactory,
+        Logger $logger,
+        Api\Service\TransactionApiFactory $transactionApiFactory,
+        Api\Service\WebshopApiFactory $webshopApiFactory,
+        Api\Service\InstallmentplanApiFactory $installmentplanApiFactory,
+        Api\Integration\CheckoutFactory $checkoutFactory,
+        Api\Integration\Util\AddressValidator $addressValidator,
+        Api\Integration\Util\PrefixConverter $prefixConverter
     ) {
         parent::__construct(
             $context
         );
 
-        $this->installmentValues = [];
         $this->checkoutSession = $checkoutSession;
-        $this->quoteRepository = $quoteRepository;
-        $this->config = $config;
+        $this->scopeConfig = $scopeConfig;
+        $this->storageFactory = $storageFactory;
         $this->logger = $logger;
+
+        $this->transactionApiFactory = $transactionApiFactory;
+        $this->webshopApiFactory = $webshopApiFactory;
+        $this->installmentplanApiFactory = $installmentplanApiFactory;
+
+        $this->checkoutFactory = $checkoutFactory;
+        $this->addressValidator = $addressValidator;
+        $this->prefixConverter = $prefixConverter;
+    }
+
+    public function getConfigValue($key)
+    {
+        return $this->scopeConfig
+            ->getValue('payment/easycredit/credentials/' . $key, ScopeInterface::SCOPE_STORE);
+    }
+
+    private function getConfig()
+    {
+        return Api\Configuration::getDefaultConfiguration()
+            ->setHost('https://ratenkauf.easycredit.de')
+            ->setUsername($this->getConfigValue('api_key'))
+            ->setPassword($this->getConfigValue('api_token'))
+            ->setAccessToken($this->getConfigValue('api_signature'));
+    }
+
+    private function getClient()
+    {
+        $stack = HandlerStack::create();
+        $stack->push(
+            Middleware::log(
+                $this->logger,
+                new MessageFormatter(MessageFormatter::DEBUG),
+            )
+        );
+        return new \GuzzleHttp\Client(
+            [
+            'handler' => $stack
+            ]
+        );
     }
 
     public function getCheckout($quote = null)
     {
         if (!isset($this->checkout)) {
-            $client = new \Netzkollektiv\EasyCreditApi\Client(
-                $this->config,
-                new \Netzkollektiv\EasyCreditApi\Client\HttpClientFactory(),
-                $this->logger
+            $args = [
+                'client' => $this->getClient(),
+                'config' => $this->getConfig()
+            ];
+
+            $webshopApi = $this->webshopApiFactory->create($args);
+            $transactionApi = $this->transactionApiFactory->create($args);
+            $installmentplanApi = $this->installmentplanApiFactory->create($args);
+
+            $storage = $this->storageFactory->create(
+                [
+                'payment' => ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment()
+                ]
             );
 
-	    $payment = ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment();
-            $this->checkout = new \Netzkollektiv\EasyCreditApi\Checkout(
-                $client,
-                new \Netzkollektiv\EasyCredit\BackendApi\Storage($payment)
+            $this->checkout = $this->checkoutFactory->create(
+                [
+                'webshopApi' => $webshopApi,
+                'transactionApi' => $transactionApi,
+                'installmentplanApi' => $installmentplanApi,
+                'storage' => $storage,
+                'addressValidator' => $this->addressValidator,
+                'prefixConverter' => $this->prefixConverter,
+                'logger' => $this->logger
+                ]
             );
         }
         return $this->checkout;
     }
 
-    public function getMerchantClient()
+    public function getTransactionApi(): Api\Service\TransactionApi
     {
-        return new \Netzkollektiv\EasyCreditApi\Merchant(
-            $this->config,
-            new \Netzkollektiv\EasyCreditApi\Client\HttpClientFactory(),
-            $this->logger
-        );
-    }
+        $client = $this->getClient();
+        $config = clone $this->getConfig();
+        $config->setHost('https://partner.easycredit-ratenkauf.de');
 
-    public function formatPaymentPlan($paymentPlan) {
-        $paymentPlan = \json_decode((string)$paymentPlan);
-        if (!\is_object($paymentPlan)) {
-            return '';
-        }
-
-        return \sprintf('%d Raten à %0.2f€ (%d x %0.2f€, %d x %0.2f€)',
-            (int)   $paymentPlan->anzahlRaten,
-            (float) $paymentPlan->betragRate,
-            (int)   $paymentPlan->anzahlRaten - 1,
-            (float) $paymentPlan->betragRate,
-            1,
-            (float) $paymentPlan->betragLetzteRate
+        return $this->transactionApiFactory->create(
+            [
+            'client' => $client,
+            'config' => $config
+            ]
         );
     }
 }

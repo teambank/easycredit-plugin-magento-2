@@ -17,17 +17,22 @@ interface TransactionsInterface
 
     /**
      * @api
+     * @param  string $transactionId
      * @return mixed
      */
-    public function getTransaction();
+    public function getTransaction($transactionId);
 
     /**
      * @api
-     * @param int $transactionId
-     * @param string $status
-     * @param string $amount
-     * @param string $date
-     * @return bool
+     * @param  string $transactionId
+     * @return mixed
      */
-    public function saveTransaction();
+    public function captureTransaction($transactionId);
+
+    /**
+     * @api
+     * @param  string $transactionId
+     * @return mixed
+     */
+    public function refundTransaction($transactionId);
 }

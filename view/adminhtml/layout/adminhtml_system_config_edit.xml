@@ -3,4 +3,9 @@
     <head>
         <css src="Netzkollektiv_EasyCredit::styles.css"/>
     </head>
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Netzkollektiv\EasyCredit\Block\Adminhtml\Merchant\Config" name="easycredit-merchant-config" template="Netzkollektiv_EasyCredit::head/components.phtml" />
+        </referenceContainer>
+    </body>
 </page>

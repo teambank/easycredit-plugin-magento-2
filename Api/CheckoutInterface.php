@@ -9,18 +9,17 @@ namespace Netzkollektiv\EasyCredit\Api;
 
 interface CheckoutInterface
 {
-
     /**
      * @api
-     * @param string $prefix
-     * @return bool
-     */
-    public function isPrefixValid($prefix);
-
-    /**
-     * @api
-     * @param string $cartId
+     * @param  string $cartId
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
     public function getCheckoutData($cartId);
+
+    /**
+     * @api
+     * @param  string $cartId
+     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
+     */
+    public function start($cartId);
 }

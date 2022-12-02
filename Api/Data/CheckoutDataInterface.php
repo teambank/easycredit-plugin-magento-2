@@ -12,45 +12,28 @@ interface CheckoutDataInterface
     /**
      * Gets the error message
      *
-     * @return string|null Error Message
+     * @return string
      */
-    public function getErrorMessage();
+    public function getErrorMessage() : ?string;
 
     /**
      * Sets the error message
      *
-     * @param int $message
-     * @return $this
+     * @return self
      */
-    public function setErrorMessage($message);
+    public function setErrorMessage(string $message) : self;
 
     /**
-     * Gets the agreement
+     * Gets the redirect url
      *
-     * @return string|null Agreement
+     * @return string
      */
-    public function getAgreement();
+    public function getRedirectUrl() : ?string;
 
     /**
-     * Sets the agreement
+     * Sets the redirect url
      *
-     * @param int $agreement
-     * @return $this
+     * @return self
      */
-    public function setAgreement($agreement);
-
-    /**
-     * Prefix valid
-     *
-     * @return boolean
-     */
-    public function getIsPrefixValid();
-
-    /**
-     * Prefix valid
-     *
-     * @param boolean $prefixValid
-     * @return $this
-     */
-    public function setIsPrefixValid($prefixValid);
+    public function setRedirectUrl(string $url) : self;
 }

@@ -15,9 +15,9 @@
                     <div class="box-content">
                         <address>
                             <?php echo $block->escapeHtml(
-                                $block->renderAddress($block->getShippingAddress()),
-                                ['br']
-                            );?>
+    $block->renderAddress($block->getShippingAddress()),
+    ['br']
+);?>
                         </address>
                     </div>
                 </div>
@@ -27,9 +27,9 @@
                 <div class="box-content">
                     <address>
                         <?php echo $block->escapeHtml(
-                            $block->renderAddress($block->getBillingAddress()),
-                            ['br']
-                        );?>
+                                $block->renderAddress($block->getBillingAddress()),
+                                ['br']
+                            );?>
                     </address>
                 </div>
             </div>
@@ -40,9 +40,8 @@
             <div class="box box-easycredit-payment-method">
                 <strong class="box-title"><span><?php echo $block->escapeHtml(__('Payment Method')); ?></span></strong>
                 <div class="box-content">
-                    <div class="easycredit-logo"><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></div>
-                    <strong>Einfach. Fair. In Raten zahlen.</strong><br />
-                    <?php echo $block->getPaymentPlan(); ?>
+                    <easycredit-checkout-label><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></easycredit-checkout-label>
+                    <easycredit-checkout payment-plan="<?php echo $block->escapeHtml($block->getPaymentPlan()); ?>"></easycredit-checkout>
                 </div>
             </div>
             <div class="box box-order-shipping-method">

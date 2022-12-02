@@ -5,18 +5,16 @@
  * @see \Magento\Payment\Block\Info
  */
 $specificInfo = $block->getSpecificInformation();
-$title = $block->escapeHtml($block->getMethod()->getTitle());
 ?>
 
 <dl class="payment-method">
-    <dt class="title"><?= /* @noEscape */ $title; ?></dt>
-    <strong>Einfach. Fair. In Raten zahlen.</strong><br />
-
-    <?php echo $this->getPaymentPlan(); ?>
-
-    <?php if ($this->getInfo()->getAdditionalInformation('is_captured')) : ?>
+    <p>
+        <easycredit-checkout-label><?php echo $block->escapeHtml($block->getMethod()->getTitle()); ?></easycredit-checkout-label>  
+    </p>
     <p><strong>Transaktions-Nr:</strong> <?php echo $this->escapeHtml($this->getInfo()->getAdditionalInformation('transaction_id')); ?></p>
-    <?php endif; ?>
+
+    <easycredit-checkout payment-plan="<?php echo $block->escapeHtml($block->getPaymentPlan()); ?>"></easycredit-checkout>
+
 </dl>
 
-<?= $block->getChildHtml()?>
+<?php echo $block->getChildHtml()?>

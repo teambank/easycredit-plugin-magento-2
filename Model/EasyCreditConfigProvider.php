@@ -10,35 +10,42 @@ namespace Netzkollektiv\EasyCredit\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Magento\Framework\UrlInterface;
+use Psr\Log\LoggerInterface;
+
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 class EasyCreditConfigProvider implements ConfigProviderInterface
 {
-    /**
-     * @var \Magento\Payment\Model\Method\AbstractMethod[]
-     */
-    private $method;
-
     /**
      * @var Escaper
      */
     private $escaper;
 
-    private $easyCreditCheckout;
+    /**
+     * @var EasyCreditHelper
+     */
+    private $easyCreditHelper;
 
     /**
-     * @param PaymentHelper $paymentHelper
-     * @param Escaper $escaper
+     * @var UrlInterface
      */
+    private $urlBuilder;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
-        PaymentHelper $paymentHelper,
         Escaper $escaper,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
-        \Psr\Log\LoggerInterface $logger
+        UrlInterface $urlBuilder,
+        EasyCreditHelper $easyCreditHelper,
+        LoggerInterface $logger
     ) {
-        $this->method = $paymentHelper->getMethodInstance(Payment::CODE);
         $this->escaper = $escaper;
         $this->urlBuilder = $urlBuilder;
+        $this->easyCreditHelper = $easyCreditHelper;
         $this->logger = $logger;
     }
 
@@ -50,11 +57,14 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
         $config['payment'][Payment::CODE] = '';
         try {
             $config['payment'][Payment::CODE] = [
+                'apiKey'                => $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('api_key')),
                 'redirectUrl'           => $this->urlBuilder->getUrl('easycredit/checkout/start'),
-                'defaultErrorMessage'   => implode(' ', [
+                'defaultErrorMessage'   => implode(
+                    ' ', [
                     'easyCredit-Ratenkauf ist derzeit nicht verfügbar.',
                     'Bitte versuchen Sie es später erneut.'
-                ])
+                    ]
+                )
             ];
         } catch (\Exception $e) {
             $this->logger->critical($e);

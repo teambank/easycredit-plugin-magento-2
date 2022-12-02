@@ -9,6 +9,7 @@ namespace Netzkollektiv\EasyCredit\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class PpPlugin extends \Magento\Framework\View\Element\Template
 {
@@ -16,17 +17,19 @@ class PpPlugin extends \Magento\Framework\View\Element\Template
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param array $data
+     * @var CheckoutSession
      */
+    private $checkoutSession;
+
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
+        CheckoutSession $checkoutSession,
         array $data = []
     ) {
+        $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $context->getScopeConfig();
         parent::__construct($context, $data);
     }
@@ -37,5 +40,11 @@ class PpPlugin extends \Magento\Framework\View\Element\Template
             'payment/easycredit/credentials/api_key',
             ScopeInterface::SCOPE_STORE
         );
+    }
+
+    public function getGrandTotal(): float
+    {
+        $totals = $this->checkoutSession->getQuote()->getTotals();
+        return $totals['grand_total']->getValue();
     }
 }

@@ -17,7 +17,7 @@ class Details extends \Magento\Checkout\Block\Cart\Totals
     /**
      * @var Address
      */
-    protected $_address;
+    private $_address;
 
     /**
      * Return review shipping address

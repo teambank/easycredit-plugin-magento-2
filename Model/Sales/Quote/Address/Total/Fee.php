@@ -13,31 +13,6 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     protected $_code = 'easycredit';
 
-    /**
-     * @var CheckoutSession
-     */
-    protected $checkoutSession;
-
-    /**
-     * @var \Magento\Quote\Model\QuoteValidator|null
-     */
-    protected $_quoteValidator = null;
-
-    /**
-     * Fee constructor.
-     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
-     * @param CheckoutSession $checkoutSession
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Quote\Model\QuoteValidator $quoteValidator,
-        CheckoutSession $checkoutSession,
-        array $data = []
-    ) {
-        $this->_quoteValidator = $quoteValidator;
-        $this->checkoutSession = $checkoutSession;
-    }
-
     public function collect(
         \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
@@ -80,18 +55,18 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Clear easycredit related total values in address
      *
-     * @param \Magento\Quote\Model\Quote\Address\Total
+     * @param  \Magento\Quote\Model\Quote\Address\Total $total
      * @return void
      */
-    protected function clearValues(\Magento\Quote\Model\Quote\Address\Total $total)
+    private function clearValues(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         $total->setTotalAmount('easycredit', 0);
         $total->setBaseTotalAmount('easycredit', 0);
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param  \Magento\Quote\Model\Quote               $quote
+     * @param  \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      */
     public function fetch(

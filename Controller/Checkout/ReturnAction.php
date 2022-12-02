@@ -7,30 +7,38 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\NotFoundException;
-
 use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Logger\Logger;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 class ReturnAction extends AbstractController
 {
-
     /**
      * @var CartRepositoryInterface
      */
     private $quoteRepository;
 
+    /**
+     * @var EasyCreditHelper
+     */
+    private $easyCreditHelper;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
+
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
-        \Psr\Log\LoggerInterface $logger
+        CartRepositoryInterface $quoteRepository,
+        EasyCreditHelper $easyCreditHelper,
+        Logger $logger
     ) {
         $this->quoteRepository = $quoteRepository;
-        $this->easyCreditCheckout = $easyCreditHelper->getCheckout();
+        $this->easyCreditHelper = $easyCreditHelper;
         $this->logger = $logger;
 
         parent::__construct($context, $checkoutSession, $customerUrl);
@@ -39,25 +47,25 @@ class ReturnAction extends AbstractController
     /**
      * Dispatch request
      *
-     * @return ResultInterface|ResponseInterface
-     * @throws NotFoundException
+     * @return void
      */
     public function execute()
     {
         try {
             $this->_validateQuote();
 
-            if (!$this->easyCreditCheckout->isApproved()) {
+            $this->easyCreditHelper->getCheckout()->loadTransaction();
+
+            if (!$this->easyCreditHelper->getCheckout()->isApproved()) {
                 throw new TransactionNotApprovedException(__('transaction not approved'));
             }
-
-            $this->easyCreditCheckout->loadFinancingInformation();
 
             $quote = $this->checkoutSession->getQuote();
             $payment = $quote->getPayment();
             $paymentAdditionalInformation = $payment->getAdditionalInformation();
 
-            $payment->save();
+            $payment->save(); // @phpstan-ignore-line 
+
             $quote->setTotalsCollectedFlag(false);
             $quote->collectTotals();
 
@@ -67,16 +75,16 @@ class ReturnAction extends AbstractController
             $this->quoteRepository->save($quote);
 
             $this->_redirect('easycredit/checkout/review');
-            return;
         } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('Unable to validate easyCredit Payment. (Return)'));
+            $this->messageManager->addErrorMessage(__('Unable to validate easyCredit Payment.'));
             $this->logger->critical($e);
+            $this->_redirect('checkout/cart');
         }
-        $this->_redirect('checkout/cart');
     }
 
     /**
      * Returns action name which requires redirect
+     *
      * @return string|null
      */
     public function getRedirectActionName()

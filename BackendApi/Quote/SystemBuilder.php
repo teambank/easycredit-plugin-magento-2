@@ -7,14 +7,17 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
-class System implements \Netzkollektiv\EasyCreditApi\SystemInterface
+class SystemBuilder
 {
+    private $productMetadata;
+    private $moduleResource;
+
     public function __construct(
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Framework\Module\ResourceInterface $moduleResource
     ) {
         $this->productMetadata = $productMetadata;
-        $this->_moduleResource = $moduleResource;
+        $this->moduleResource = $moduleResource;
     }
 
     public function getSystemVendor()
@@ -29,11 +32,16 @@ class System implements \Netzkollektiv\EasyCreditApi\SystemInterface
 
     public function getModuleVersion()
     {
-        return $this->_moduleResource->getDbVersion('Netzkollektiv_EasyCredit');
+        return $this->moduleResource->getDbVersion('Netzkollektiv_EasyCredit');
     }
 
-    public function getIntegration()
+    public function build()
     {
-        return 'PAYMENT_PAGE';
+        return new \Teambank\RatenkaufByEasyCreditApiV3\Model\Shopsystem(
+            [
+            'shopSystemManufacturer' => implode(' ', [$this->getSystemVendor(),$this->getSystemVersion()]),
+            'shopSystemModuleVersion' => $this->getModuleVersion()
+            ]
+        );
     }
 }

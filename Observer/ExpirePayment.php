@@ -12,32 +12,30 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
-
+use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Model\Payment;
 
 class ExpirePayment implements ObserverInterface
 {
 
     /**
-     * @var CartRepositoryInterface
+     * @var EasyCreditHelper
      */
-    private $quoteRepository;
+    private $easyCreditHelper;
+
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var QuoteBuilder
      */
-    protected $messageManager;
+    private $easyCreditQuoteBuilder;
 
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
-        ManagerInterface $messageManager,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
-        \Netzkollektiv\EasyCredit\BackendApi\Quote $easyCreditQuote
+        EasyCreditHelper $easyCreditHelper,
+        QuoteBuilder $easyCreditQuoteBuilder
     ) {
-        $this->quoteRepository = $quoteRepository;
-        $this->messageManager = $messageManager;
         $this->easyCreditHelper = $easyCreditHelper;
-        $this->easyCreditQuote = $easyCreditQuote;
+        $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
     }
 
     public function execute(Observer $observer)
@@ -47,7 +45,7 @@ class ExpirePayment implements ObserverInterface
         /**
          * @var Quote $quote
          */
-        $quote = $event->getQuote();
+        $quote = $event->getData('quote');
 
         $amount = $quote->getGrandTotal();
 
@@ -59,13 +57,15 @@ class ExpirePayment implements ObserverInterface
             return;
         }
 
-        $checkout = $this->easyCreditHelper->getCheckout($quote);
-        $ecQuote = $this->easyCreditQuote->setQuote($quote);
-        if (!$checkout->isAmountValid($ecQuote)
-            || !$checkout->verifyAddressNotChanged($ecQuote)
-            || !$checkout->sameAddresses($ecQuote)
-        ) {
-            $quote->getPayment()->unsAdditionalInformation()->save();
+        $checkout = $this->easyCreditHelper
+            ->getCheckout($quote);
+
+        $ecQuote = $this->easyCreditQuoteBuilder
+            ->setQuote($quote)
+            ->build();
+
+        if (!$checkout->isValid($ecQuote)) {
+            $checkout->clear();
         }
     }
 }

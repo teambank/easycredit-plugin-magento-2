@@ -21,12 +21,12 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action i
     /**
      * @var \Magento\Customer\Model\Url
      */
-    protected $_customerUrl;
+    private $_customerUrl;
 
     /**
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Checkout\Model\Session       $checkoutSession
+     * @param \Magento\Customer\Model\Url           $customerUrl
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -52,6 +52,7 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action i
 
     /**
      * Returns a list of action flags [flag_key] => boolean
+     *
      * @return array
      */
     public function getActionFlagList()
@@ -61,6 +62,7 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action i
 
     /**
      * Returns before_auth_url redirect parameter for customer session
+     *
      * @return string|null
      */
     public function getCustomerBeforeAuthUrl()
@@ -70,6 +72,7 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action i
 
     /**
      * Returns login url parameter for redirect
+     *
      * @return string|null
      */
     public function getLoginUrl()
@@ -79,6 +82,7 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action i
 
     /**
      * Returns action name which requires redirect
+     *
      * @return string|null
      */
     public function getRedirectActionName()

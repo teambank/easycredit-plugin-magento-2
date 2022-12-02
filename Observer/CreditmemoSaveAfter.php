@@ -15,7 +15,7 @@ class CreditmemoSaveAfter implements ObserverInterface
 {
 
     /**
-     * @param Observer $observer
+     * @param  Observer $observer
      * @return void
      */
     public function execute(Observer $observer)

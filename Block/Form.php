@@ -17,22 +17,22 @@ class Form extends \Magento\Payment\Block\Form
     /**
      * @var \Magento\Framework\View\LayoutInterface
      */
-    protected $layout;
+    private $layout;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var DataHelper $dataHelper
      */
-    protected $dataHelper;
+    private $dataHelper;
 
     /**
      * @var CheckoutSession
      */
-    protected $checkoutSession;
+    private $checkoutSession;
 
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -49,15 +49,6 @@ class Form extends \Magento\Payment\Block\Form
             $data
         );
         $this->setTemplate('easycredit/form.phtml');
-    }
-
-    public function _construct()
-    {
-        $methodTitle = $this->layout->createBlock('core/template')
-            ->setMethodBlock($this)
-            ->setTemplate('easycredit/method_title.phtml');
-        $this->setMethodTitle('')
-            ->setMethodLabelAfterHtml($methodTitle->toHtml());
     }
 
     public function getStoreName()

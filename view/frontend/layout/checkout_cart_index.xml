@@ -19,5 +19,12 @@
                 </argument>
             </arguments>
         </referenceBlock>
+        <referenceContainer name="checkout.cart.methods">
+            <block class="Netzkollektiv\EasyCredit\Block\PpPlugin"
+                   name="easycredit.pp-plugin"
+                   template="Netzkollektiv_EasyCredit::easycredit/pp-plugin-cart.phtml"
+                   ifconfig="payment/easycredit/widget_cart_enabled">
+            </block>
+        </referenceContainer>
     </body>
 </page>

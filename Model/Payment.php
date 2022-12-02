@@ -10,6 +10,14 @@ namespace Netzkollektiv\EasyCredit\Model;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Sales\Model\Order;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\DataObject;
+use Magento\Quote\Api\Data\PaymentInterface;
+
+use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
+use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 use Netzkollektiv\EasyCredit\Block\Info;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
@@ -31,6 +39,13 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      * @var string
      */
     protected $_infoBlockType = Info::class;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_canOrder = true;
 
     /**
      * Payment Method feature
@@ -70,9 +85,9 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_isGateway = true;
 
     /**
-     * @var \Netzkollektiv\EasyCreditApi\Checkout
+     * @var \Netzkollektiv\EasyCredit\Helper\Data
      */
-    protected $easyCreditCheckout;
+    protected $easyCreditHelper;
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -89,6 +104,8 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      */
     private $eventDispatcher;
 
+    protected $timezone;
+
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
@@ -104,8 +121,7 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->easyCreditCheckout = $easyCreditHelper->getCheckout();
-        $this->easyCreditMerchant = $easyCreditHelper->getMerchantClient();
+        $this->easyCreditHelper = $easyCreditHelper;
 
         $this->urlBuilder = $urlBuilder;
         $this->scopeConfig = $scopeConfig;
@@ -141,25 +157,25 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
      * Get config payment action url
      * Used to universalize payment actions when processing payment place
      *
-     * @return string
+     * @return     string
      * @api
      * @deprecated 100.2.0
      */
     public function getConfigPaymentAction()
     {
-        return self::ACTION_AUTHORIZE;
+        return self::ACTION_ORDER;
     }
 
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         DataObject|InfoInterface $payment
+     * @param                                         float                    $amount
+     * @return                                        $this
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 100.2.0
+     * @deprecated                                    100.2.0
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -172,12 +188,12 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 
             $this->_getTransaction($txId);
 
-            $this->easyCreditMerchant->cancelOrder(
-                $txId,
-                $payment->getAmountAuthorized() > $amount ? 'WIDERRUF_TEILWEISE' : 'WIDERRUF_VOLLSTAENDIG',
-                $this->timezone->date(),
-                $amount
-            );
+            $this->easyCreditHelper
+                ->getTransactionApi()
+                ->apiMerchantV3TransactionTransactionIdRefundPost(
+                    $txId,
+                    new RefundRequest(['value' => $amount])
+                );
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
@@ -186,45 +202,51 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * {inheritdoc}
-     * @param DataObject $data
+     *
+     * @param  DataObject $data
      * @return $this
      */
-    public function assignData(\Magento\Framework\DataObject $data)
+    public function assignData(DataObject $data)
     {
-        $this->eventDispatcher->dispatch(
-            'payment_method_assign_data_' . $this->getCode(),
-            [
-                'method' => $this,
-                'data' => $data
-            ]
-        );
+        $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        if (!is_object($additionalData)) {
+            $additionalData = new DataObject($additionalData ?: []);
+        }
 
-        return $this;
+        $this->getInfoInstance()->setAdditionalInformation('duration', $additionalData->getDuration());
+
+        return parent::assignData($data);
     }
 
     /**
      * Capture payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         DataObject|InfoInterface $payment
+     * @param                                         float                    $amount
+     * @return                                        $this
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 100.2.0
+     * @deprecated                                    100.2.0
      */
     public function capture(InfoInterface $payment, $amount)
     {
         if (!$this->canCapture()) {
             throw new LocalizedException(__('Capture action is not available.'));
         }
-
+        
         try {
             $txId = $payment->getAdditionalInformation('transaction_id');
 
             $this->_getTransaction($txId);
 
-            $this->easyCreditMerchant->confirmShipment($txId);
+            $this->easyCreditHelper
+                ->getTransactionApi()
+                ->apiMerchantV3TransactionTransactionIdCapturePost(
+                    $txId,
+                    new CaptureRequest([])
+                );
+
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
         }
@@ -233,11 +255,20 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
 
     protected function _getTransaction($txId)
     {
-        $transaction = $this->easyCreditMerchant->getTransaction($txId);
-        if (count($transaction) !== 1) {
-            throw new TransactionNotFoundException('Payment transaction not found. 
-            It can take up to 24 hours until the transaction is available in the merchant portal. 
-            If you still want to create the invoice immediately, please use "Capture Offline".');
+        try { 
+            $transaction = $this->easyCreditHelper
+                ->getTransactionApi()
+                ->apiMerchantV3TransactionTransactionIdGet($txId);
+        } catch (ApiException $e) {
+            throw new TransactionNotFoundException(
+                'Payment transaction not found. 
+                It can take up to 24 hours until the transaction is available in the merchant portal. 
+                If you still want to create the invoice immediately, please use "Capture Offline".'
+            );
+        } catch (\Exception $e) {
+            throw new TransactionNotFoundException(
+                'An error occured when searching the transaction.'
+            );
         }
         return $transaction;
     }
@@ -245,26 +276,29 @@ class Payment extends \Magento\Payment\Model\Method\AbstractMethod
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\DataObject|InfoInterface $payment
-     * @param float $amount
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param                                         DataObject|InfoInterface $payment
+     * @param                                         float                    $amount
+     * @return                                        $this
+     * @throws                                        \Magento\Framework\Exception\LocalizedException
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 100.2.0
+     * @deprecated                                    100.2.0
      */
-    public function authorize(InfoInterface $payment, $amount)
+    public function order(InfoInterface $payment, $amount)
     {
-        if (!$this->canAuthorize()) {
+        if (!$this->canOrder()) {
             throw new \Magento\Framework\Exception\LocalizedException(__('The authorize action is not available.'));
         }
 
         try {
-            $this->easyCreditCheckout->capture(null, $payment->getOrder()->getIncrementId());
+            if (!$this->easyCreditHelper->getCheckout()->authorize($payment->getOrder()->getIncrementId())
+            ) {
+                throw new \Exception('Transaction could not be authorized');
+            }
             $payment->setTransactionId(
                 $payment->getAdditionalInformation('transaction_id')
-            );
-            $payment->setIsTransactionClosed(false);
+            )->setIsTransactionClosed(false)
+                ->setIsTransactionPending(true);
         } catch (\Exception $e) {
             throw new LocalizedException(__($e->getMessage()));
         }

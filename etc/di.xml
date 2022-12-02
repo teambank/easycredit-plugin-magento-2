@@ -2,38 +2,26 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <preference for="Netzkollektiv\EasyCredit\Api\TransactionsInterface" 
-               type="Netzkollektiv\EasyCredit\Service\V1\Transactions" />
+               type="Netzkollektiv\EasyCredit\Service\Transactions" />
     <preference for="Netzkollektiv\EasyCredit\Api\CheckoutInterface"
-               type="Netzkollektiv\EasyCredit\Service\V1\Checkout" />
+               type="Netzkollektiv\EasyCredit\Service\Checkout" />
     <preference for="Netzkollektiv\EasyCredit\Api\VerifyCredentialsInterface" 
-               type="Netzkollektiv\EasyCredit\Service\V1\VerifyCredentials" />
+               type="Netzkollektiv\EasyCredit\Service\VerifyCredentials" />
     <preference for="Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface" 
                type="Netzkollektiv\EasyCredit\Api\CheckoutData" />
 
-    <preference for="Netzkollektiv\EasyCreditApi\CheckoutInterface" type="Netzkollektiv\EasyCreditApi\Checkout" />
-    <preference for="Netzkollektiv\EasyCreditApi\Config" type="Netzkollektiv\EasyCredit\BackendApi\Config" />
-    <preference for="Netzkollektiv\EasyCreditApi\LoggerInterface" type="Netzkollektiv\EasyCredit\BackendApi\Logger" />
-    <preference for="Netzkollektiv\EasyCreditApi\StorageInterface" type="Netzkollektiv\EasyCredit\BackendApi\Storage" />
-    <preference for="Netzkollektiv\EasyCreditApi\Rest\QuoteInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote" />
-    <preference for="Netzkollektiv\EasyCreditApi\CacheInterface" type="Netzkollektiv\EasyCredit\BackendApi\Cache" />
-    <preference for="Netzkollektiv\EasyCreditApi\Rest\CustomerInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote\Customer" />
-    <preference for="Netzkollektiv\EasyCreditApi\Rest\ItemInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote\Item" />
-    <preference for="Netzkollektiv\EasyCreditApi\Rest\AddressInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote\Address" />
-    <preference for="Netzkollektiv\EasyCreditApi\Rest\ShippingAddressInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote\ShippingAddress" />
-    <preference for="Netzkollektiv\EasyCreditApi\SystemInterface" type="Netzkollektiv\EasyCredit\BackendApi\Quote\System" />
-
-    <virtualType name="EasyCreditLogger" type="Magento\Framework\Logger\Monolog">
+    <type name="Netzkollektiv\EasyCredit\Logger\Logger">
         <arguments>
+            <argument name="name" xsi:type="string">Netzkollektiv_EasyCredit</argument>
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Netzkollektiv\EasyCredit\Logger\Handler</item>
-                <item name="debug" xsi:type="object">Netzkollektiv\EasyCredit\Logger\Handler</item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 
-    <type name="Netzkollektiv\EasyCredit\BackendApi\Logger">
+    <type name="Netzkollektiv\EasyCredit\Logger\Handler">
         <arguments>
-            <argument name="logger" xsi:type="object">EasyCreditLogger</argument>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
 

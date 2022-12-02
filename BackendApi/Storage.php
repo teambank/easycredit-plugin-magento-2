@@ -7,29 +7,47 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi;
 
-class Storage implements \Netzkollektiv\EasyCreditApi\StorageInterface
+use Magento\Quote\Model\Quote\Payment;
+use Netzkollektiv\EasyCredit\Logger\Logger;
+
+use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+
+class Storage implements Api\Integration\StorageInterface
 {
-    protected $_payment;
+    /**
+     * @var Payment
+     */
+    private $payment;
+
+    /**
+     * @var Logger
+     */
+    private $logger;
 
     public function __construct(
-        \Magento\Quote\Model\Quote\Payment $payment
+        Payment $payment,
+        Logger $logger
     ) {
-        $this->_payment = $payment;
+        $this->payment = $payment;
+        $this->logger = $logger;
     }
 
     public function set($key, $value)
     {
-        $this->_payment->setAdditionalInformation($key, $value);
+        $this->logger->debug('set('.$key.', '.$value.')');
+        $this->payment->setAdditionalInformation($key, $value);
         return $this;
     }
 
     public function get($key)
     {
-        return $this->_payment->getAdditionalInformation($key);
+        $this->logger->debug('get('.$key.') => '.$this->payment->getAdditionalInformation($key));
+        return $this->payment->getAdditionalInformation($key);
     }
 
     public function clear()
     {
-        $this->_payment->unsAdditionalInformation()->save();
+        $this->logger->debug('clear');
+        $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line 
     }
 }

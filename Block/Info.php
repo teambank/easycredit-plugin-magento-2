@@ -8,14 +8,21 @@
 namespace Netzkollektiv\EasyCredit\Block;
 
 use Magento\Payment\Block\Info as PaymentInfo;
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Magento\Framework\View\Element\Template\Context;
 
 class Info extends PaymentInfo
 {
     protected $_template = 'Netzkollektiv_EasyCredit::easycredit/info.phtml';
 
+    /**
+     * @var EasyCreditHelper
+     */
+    private $easyCreditHelper;
+
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
+        Context $context,
+        EasyCreditHelper $easyCreditHelper,
         array $data = []
     ) {
         $this->easyCreditHelper = $easyCreditHelper;
@@ -24,6 +31,7 @@ class Info extends PaymentInfo
 
     /**
      * Render as PDF
+     *
      * @return string
      */
     public function toPdf()
@@ -32,7 +40,13 @@ class Info extends PaymentInfo
         return $this->toHtml();
     }
 
-    public function getPaymentPlan() {
-        return $this->easyCreditHelper->formatPaymentPlan($this->getInfo()->getAdditionalInformation('payment_plan'));
+
+    public function getPaymentPlan()
+    {
+        $summary = \json_decode((string) $this->getInfo()->getAdditionalInformation('summary'));
+        if ($summary === false || $summary === null) {
+            return null;
+        }
+        return json_encode($summary);
     }
 }

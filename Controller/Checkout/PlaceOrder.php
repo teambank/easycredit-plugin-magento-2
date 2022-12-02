@@ -7,7 +7,8 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-use Magento\Framework\App\ResponseInterface;
+use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 class PlaceOrder extends AbstractController
 {
@@ -15,99 +16,82 @@ class PlaceOrder extends AbstractController
     /**
      * @var \Magento\Customer\Model\Session
      */
-    protected $session;
+    private $customerSession;
 
     /**
      * Checkout data
      *
      * @var \Magento\Checkout\Helper\Data
      */
-    protected $checkoutData;
+    private $checkoutData;
 
     /**
      * @var \Magento\Quote\Api\CartManagementInterface
      */
-    protected $cartManagement;
+    private $cartManagement;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     * @var QuoteBuilder
      */
-    protected $orderRepository;
+    private $easyCreditQuoteBuilder;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
+     * @var EasyCreditHelper
      */
-    protected $orderSender;
+    private $easyCreditHelper;
+
+    /**
+     * @var \Netzkollektiv\EasyCredit\Logger\Logger
+     */
+    private $logger;
 
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Url $customerUrl,
         \Magento\Customer\Model\Session $customerSession,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
-        \Netzkollektiv\EasyCredit\BackendApi\Quote $easyCreditQuote,
-        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
-        \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
+        EasyCreditHelper $easyCreditHelper,
+        QuoteBuilder $easyCreditQuoteBuilder,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Psr\Log\LoggerInterface $logger
+        \Netzkollektiv\EasyCredit\Logger\Logger $logger
     ) {
         $this->customerSession = $customerSession;
-        $this->easyCreditCheckout = $easyCreditHelper->getCheckout();
-        $this->easyCreditQuote = $easyCreditQuote;
-        $this->orderRepository = $orderRepository;
-        $this->orderSender = $orderSender;
+        $this->easyCreditHelper = $easyCreditHelper;
+        $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
         $this->cartManagement = $cartManagement;
         $this->checkoutData = $checkoutData;
         $this->logger = $logger;
+
         parent::__construct($context, $checkoutSession, $customerUrl);
     }
 
     /**
      * Dispatch request
      *
-     * @return \Magento\Framework\Controller\ResultInterface|ResponseInterface
-     * @throws \Magento\Framework\Exception\NotFoundException
+     * @return void
      */
     public function execute()
     {
-        if (!$this->easyCreditCheckout->isInitialized()) {
+        $ecCheckout = $this->easyCreditHelper->getCheckout();
+        if (!$ecCheckout->isInitialized()) {
             $this->messageManager->addErrorMessage(
                 __('Unable to finish easyCredit Checkout. Please restart payment process.')
             );
             $this->_redirect('checkout/cart');
-            return null;
+            return;
         }
 
-        if (!$this->easyCreditCheckout->verifyAddressNotChanged($this->easyCreditQuote)) {
+        $ecQuote = $this->easyCreditQuoteBuilder->build();
+
+        if (!$ecCheckout->isValid($ecQuote)) {
             $this->messageManager->addErrorMessage(
-                __("Unable to finish easyCredit Checkout. 
-                Shipping address has been changed. Please restart payment procedure.")
+                __("Unable to finish easyCredit Checkout. Validation failed.")
             );
+
+            $ecCheckout->clear();
             $this->_redirect('checkout/cart');
-            return null;
-        }
-
-        if (!$this->easyCreditCheckout->sameAddresses($this->easyCreditQuote)) {
-            $this->messageManager->addErrorMessage(
-                __("Unable to finish easyCredit Checkout. Shipping address and billing address are not identical. 
-                Please restart payment procedure.")
-            );
-            $this->_redirect('checkout/cart');
-            return null;
-        }
-
-        if (!$this->easyCreditCheckout->isAmountValid($this->easyCreditQuote)) {
-            $this->logger->debug('Unable to finish easyCredit Checkout. 
-                Amounts changed. Please restart payment procedure.');
-
-            $this->easyCreditCheckout->clear();
-
-            $this->messageManager->addErrorMessage(
-                __('Unable to finish easyCredit Checkout. Amounts changed. Please restart payment procedure.')
-            );
-            $this->_redirect('checkout/cart');
-            return null;
+            return;
         }
 
         $quote = $this->checkoutSession->getQuote();
@@ -116,10 +100,10 @@ class PlaceOrder extends AbstractController
             if (!$this->checkoutData->isAllowedGuestCheckout($quote)) {
                 $this->messageManager->addErrorMessage(__('Guest checkout is not allowed.'));
                 $this->_redirect('checkout/cart');
-                return null;
+                return;
             }
 
-            $quote->setCustomerId(null)
+            $quote->setCustomerId(0)
                 ->setCustomerEmail($quote->getBillingAddress()->getEmail())
                 ->setCustomerIsGuest(true)
                 ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
@@ -127,15 +111,12 @@ class PlaceOrder extends AbstractController
 
         try {
             $orderId = $this->cartManagement->placeOrder($quote->getId());
-            $order = $this->orderRepository->get($orderId);
-            $this->orderSender->send($order);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->logger->error($e->getMessage());
             $this->messageManager->addErrorMessage(__($e->getMessage()));
             $this->_redirect('easycredit/checkout/cancel');
         }
 
         $this->_redirect('checkout/onepage/success');
-
-        return null;
     }
 }

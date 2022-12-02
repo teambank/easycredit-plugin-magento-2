@@ -10,80 +10,85 @@
 namespace Netzkollektiv\EasyCredit\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Address\Rate;
+
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 /**
  * Class Review
+ * 
  * @package Netzkollektiv\EasyCredit\Block\Checkout
  * @method setPlaceOrderUrl(string $url)
  * @method getPlaceOrderUrl()
+ * @method setPaymentMethodTitle(string $title)
+ * @method getPaymentMethodTitle()
+ * @method setShippingRateRequired(bool $required)
+ * @method getShippingRateRequired()
+ * @method setShippingRateGroups(array $groups)
+ * @method getShippingRateGroups()
+ * @method setShippingMethodSubmitUrl(string $url)
+ * @method getShippingMethodSubmitUrl()
  */
-class Review extends \Magento\Framework\View\Element\Template
+class Review extends Template
 {
     /**
      * @var \Magento\Quote\Model\Quote
      */
-    protected $_quote;
+    private $quote;
 
     /**
      * @var \Magento\Quote\Model\Quote\Address
      */
-    protected $_address;
+    private $address;
 
     /**
      * @var \Magento\Customer\Model\Address\Config
      */
-    protected $_addressConfig;
+    private $addressConfig;
 
     /**
      * Currently selected shipping rate
      *
      * @var Rate
      */
-    protected $_currentShippingRate = null;
+    private $currentShippingRate = null;
 
     /**
      * EasyCredit controller path
      *
      * @var string
      */
-    protected $_controllerPath = 'easycredit/checkout';
+    private $controllerPath = 'easycredit/checkout';
 
     /**
      * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxHelper;
+    private $taxHelper;
 
     /**
      * @var PriceCurrencyInterface
      */
-    protected $priceCurrency;
+    private $priceCurrency;
 
     /**
-     * @var Netzkollektiv\EasyCredit\Helper\Data
+     * @var EasyCreditHelper
      */
-    protected $easycreditHelper;
+    private $easycreditHelper;
 
-    /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Tax\Helper\Data $taxHelper
-     * @param \Magento\Customer\Model\Address\Config $addressConfig
-     * @param \Netzkollektiv\EasyCredit\Helper\Data $easycreditHelper
-     * @param PriceCurrencyInterface $priceCurrency
-     * @param array $data
-     */
+
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Model\Address\Config $addressConfig,
-        \Netzkollektiv\EasyCredit\Helper\Data $easycreditHelper,
+        EasyCreditHelper $easycreditHelper,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->_taxHelper = $taxHelper;
-        $this->_addressConfig = $addressConfig;
-        $this->_easycreditHelper = $easycreditHelper;
+        $this->taxHelper = $taxHelper;
+        $this->addressConfig = $addressConfig;
+        $this->easycreditHelper = $easycreditHelper;
         parent::__construct($context, $data);
     }
 
@@ -95,7 +100,7 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
-        $this->_quote = $quote;
+        $this->quote = $quote;
         return $this;
     }
 
@@ -106,7 +111,7 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function getBillingAddress()
     {
-        return $this->_quote->getBillingAddress();
+        return $this->quote->getBillingAddress();
     }
 
     /**
@@ -116,10 +121,10 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function getShippingAddress()
     {
-        if ($this->_quote->getIsVirtual()) {
+        if ($this->quote->getIsVirtual()) {
             return false;
         }
-        return $this->_quote->getShippingAddress();
+        return $this->quote->getShippingAddress();
     }
 
     /**
@@ -131,7 +136,7 @@ class Review extends \Magento\Framework\View\Element\Template
     public function renderAddress($address)
     {
         /** @var \Magento\Customer\Block\Address\Renderer\RendererInterface $renderer */
-        $renderer = $this->_addressConfig->getFormatByCode('html')->getRenderer();
+        $renderer = $this->addressConfig->getFormatByCode('html')->getRenderer();
         $addressData = \Magento\Framework\Convert\ConvertArray::toFlatArray($address->getData());
         return $renderer->renderArray($addressData);
     }
@@ -180,11 +185,11 @@ class Review extends \Magento\Framework\View\Element\Template
         } else {
             $price = $this->_getShippingPrice(
                 $rate->getPrice(),
-                $this->_taxHelper->displayShippingPriceIncludingTax()
+                $this->taxHelper->displayShippingPriceIncludingTax()
             );
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
-            if ($incl != $price && $this->_taxHelper->displayShippingBothPrices()) {
+            if ($incl != $price && $this->taxHelper->displayShippingBothPrices()) {
                 $renderedInclTax = sprintf($inclTaxFormat, $this->escapeHtml(__('Incl. Tax')), $incl);
             }
         }
@@ -198,7 +203,7 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function getCurrentShippingRate()
     {
-        return $this->_currentShippingRate;
+        return $this->currentShippingRate;
     }
 
     /**
@@ -230,7 +235,7 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     public function setControllerPath($prefix)
     {
-        $this->_controllerPath = $prefix;
+        $this->controllerPath = $prefix;
     }
 
     /**
@@ -240,9 +245,9 @@ class Review extends \Magento\Framework\View\Element\Template
      * @param bool $isInclTax
      * @return string
      */
-    protected function _getShippingPrice($price, $isInclTax)
+    private function _getShippingPrice($price, $isInclTax)
     {
-        return $this->_formatPrice($this->_taxHelper->getShippingPrice($price, $isInclTax, $this->_address));
+        return $this->_formatPrice($this->taxHelper->getShippingPrice($price, $isInclTax, $this->address));
     }
 
     /**
@@ -251,13 +256,13 @@ class Review extends \Magento\Framework\View\Element\Template
      * @param float $price
      * @return string
      */
-    protected function _formatPrice($price)
+    private function _formatPrice($price)
     {
         return $this->priceCurrency->convertAndFormat(
             $price,
             true,
             PriceCurrencyInterface::DEFAULT_PRECISION,
-            $this->_quote->getStore()
+            $this->quote->getStore()
         );
     }
 
@@ -269,23 +274,23 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     protected function _beforeToHtml()
     {
-        $methodInstance = $this->_quote->getPayment()->getMethodInstance();
+        $methodInstance = $this->quote->getPayment()->getMethodInstance();
         $this->setPaymentMethodTitle($methodInstance->getTitle());
 
         $this->setShippingRateRequired(true);
-        if ($this->_quote->getIsVirtual()) {
+        if ($this->quote->getIsVirtual()) {
             $this->setShippingRateRequired(false);
         } else {
             // prepare shipping rates
-            $this->_address = $this->_quote->getShippingAddress();
-            $groups = $this->_address->getGroupedAllShippingRates();
-            if ($groups && $this->_address) {
+            $this->address = $this->quote->getShippingAddress();
+            $groups = $this->address->getGroupedAllShippingRates();
+            if ($groups && $this->address) {
                 $this->setShippingRateGroups($groups);
                 // determine current selected code & name
                 foreach ($groups as $code => $rates) {
                     foreach ($rates as $rate) {
-                        if ($this->_address->getShippingMethod() == $rate->getCode()) {
-                            $this->_currentShippingRate = $rate;
+                        if ($this->address->getShippingMethod() == $rate->getCode()) {
+                            $this->currentShippingRate = $rate;
                             break 2;
                         }
                     }
@@ -294,21 +299,24 @@ class Review extends \Magento\Framework\View\Element\Template
 
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
-                $this->getUrl("{$this->_controllerPath}/saveShippingMethod", ['_secure' => true])
+                $this->getUrl("{$this->controllerPath}/saveShippingMethod", ['_secure' => true])
             )->setCanEditShippingAddress(false)
             ->setCanEditShippingMethod(false);
         }
 
         $this->setPlaceOrderUrl(
-            $this->getUrl("{$this->_controllerPath}/placeOrder", ['_secure' => true])
+            $this->getUrl("{$this->controllerPath}/placeOrder", ['_secure' => true])
         );
 
         return parent::_beforeToHtml();
     }
 
-    public function getPaymentPlan() {
-        return $this->_easycreditHelper->formatPaymentPlan(
-            $this->_quote->getPayment()->getAdditionalInformation('payment_plan')
-        );
+    public function getPaymentPlan()
+    {
+        $summary = \json_decode((string) $this->quote->getPayment()->getAdditionalInformation('summary'));
+        if ($summary === false || $summary === null) {
+            return null;
+        }
+        return json_encode($summary);
     }
 }

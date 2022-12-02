@@ -3,54 +3,30 @@
  * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block
  */
 if (!$block->getApiKey()) {
-  return;
+    return;
 }
 ?>
-<div id="easycredit-popup"></div>
-
-<?php /** * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block */ ?> <script>
+<?php /**
+       * * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block 
+       */ ?>
+<script>
     require([
         "jquery",
-        "Magento_Ui/js/modal/modal",
         "mage/translate",
         "domReady!",
-        "easycreditWidget"
     ], function ($, modal) {
         $(function() {
-
-            var easycreditModal = modal({
-                autoOpen:false,
-                innerScroll: false,
-                responsive: true,
-                type: 'popup',
-                title: 'easyCredit-Ratenkauf',
-                buttons: []
-            }, $('#easycredit-popup'));
-
             $('.product-info-main .price-box').each(function(){
                 var me = this;
                 var amount = function() {
                     return $(me).find('*[data-price-type="finalPrice"]').data('price-amount');
                 }();
 
-                $(this).rkPaymentPage({
-                    webshopId : '<?= $block->escapeHtml($block->getApiKey()); ?>',
-                    amount: amount,
-                    modal: function(element, content, opts) {
-                        var wrappedContent = $('<div class="easycredit-embed-responsive">'+content+'</div>')
-                            .css('height','700px');
-
-                        if (wrappedContent.prop('outerHTML') !== $('#easycredit-popup').html()) {
-                            $('#easycredit-popup')
-                                .html(wrappedContent);
-                        }
-                        
-                        $('#easycredit-popup')
-                            .modal('openModal')
-                            .closest('.modal-inner-wrap')
-                            .css({'max-width':'700px'});
-                    }
-                });
+                $(this).append(['<easycredit-widget', 
+                    'webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"',
+                    'amount="'+amount+'"',
+                '/>'].join(' '));
             });
         });
-    });</script>
+    });
+</script>

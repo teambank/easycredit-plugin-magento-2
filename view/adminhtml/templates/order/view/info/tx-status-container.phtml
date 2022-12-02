@@ -1,6 +1,6 @@
 <tr>
-    <th><?= $block->escapeHtml(__('Payment Status')) ?></th>
+    <th><?php echo $block->escapeHtml(__('Payment Status')) ?></th>
     <td><span id="payment_status">
-        <?= $block->getChildHtml(); ?>
+        <?php echo $block->getChildHtml(); ?>
     </span></td>
 </tr>

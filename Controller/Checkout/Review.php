@@ -15,6 +15,10 @@ class Review extends AbstractController
      */
     protected $view;
 
+    protected $easyCreditCheckout;
+
+    protected $logger;
+
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -31,8 +35,7 @@ class Review extends AbstractController
     /**
      * Dispatch request
      *
-     * @return ResultInterface|ResponseInterface
-     * @throws NotFoundException
+     * @return void
      */
     public function execute()
     {
@@ -47,10 +50,12 @@ class Review extends AbstractController
 
             $this->_view->loadLayout();
             $reviewBlock = $this->_view->getLayout()->getBlock('easycredit.checkout.review');
-            $reviewBlock->setQuote($this->checkoutSession->getQuote());
-            $reviewBlock->getChildBlock('details')->setQuote($this->checkoutSession->getQuote());
-            if ($reviewBlock->getChildBlock('shipping_method')) {
-                $reviewBlock->getChildBlock('shipping_method')->setQuote($this->checkoutSession->getQuote());
+            if ($reviewBlock instanceof \Magento\Framework\View\Element\BlockInterface) {
+                $reviewBlock->setQuote($this->checkoutSession->getQuote());
+                $reviewBlock->getChildBlock('details')->setQuote($this->checkoutSession->getQuote());
+                if ($reviewBlock->getChildBlock('shipping_method')) {
+                    $reviewBlock->getChildBlock('shipping_method')->setQuote($this->checkoutSession->getQuote());
+                }
             }
             $this->_view->renderLayout();
 

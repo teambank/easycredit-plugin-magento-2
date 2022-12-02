@@ -9,16 +9,15 @@ namespace Netzkollektiv\EasyCredit\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 
-class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
+class RemoveInterest implements ObserverInterface
 {
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig)
     {
@@ -26,7 +25,7 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
     }
 
     /**
-     * @param Observer $observer
+     * @param  Observer $observer
      * @return void
      */
     public function execute(Observer $observer)
@@ -34,12 +33,12 @@ class SalesEventQuoteSubmitBeforeObserver implements ObserverInterface
         $event = $observer->getEvent();
 
         /**
-         * @var $order \Magento\Sales\Model\Order
+         * @var \Magento\Sales\Model\Order $order
          */
         $order = $event->getData('order');
 
         /**
-         * @var $quote \Magento\Quote\Model\Quote
+         * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $event->getData('quote');
         $paymentMethod = $quote->getPayment()->getMethod();

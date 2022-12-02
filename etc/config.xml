@@ -13,6 +13,7 @@
                 <specificcountry>DE</specificcountry>
                 <payment_action>authorize_capture</payment_action>
                 <widget_enabled>1</widget_enabled>
+                <widget_cart_enabled>1</widget_cart_enabled>
                 <remove_interest>1</remove_interest>
             </easycredit>
         </payment>

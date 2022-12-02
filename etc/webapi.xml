@@ -6,12 +6,6 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/easycredit/checkout/prefix-valid" method="POST">
-        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="isPrefixValid"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
     <route url="/V1/easycredit/checkout/data/:cartId" method="GET">
         <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="getCheckoutData"/>
         <resources>
@@ -27,20 +21,41 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+    <route url="/V1/easycredit/checkout/start" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="start"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/easycredit/checkout/start/:cartId" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="start"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
     <route url="/V1/easycredit/transactions" method="GET">
         <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="getTransactions"/>
         <resources>
             <resource ref="Magento_Sales::sales"/>
         </resources>
     </route>
-    <route url="/V1/easycredit/transaction" method="GET">
+    <route url="/V1/easycredit/transaction/:transactionId" method="GET">
         <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="getTransaction"/>
         <resources>
             <resource ref="Magento_Sales::sales"/>
         </resources>
     </route>
-    <route url="/V1/easycredit/transactions" method="POST">
-        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="saveTransaction"/>
+    <route url="/V1/easycredit/transaction/:transactionId/capture" method="POST">
+        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="captureTransaction"/>
+        <resources>
+            <resource ref="Magento_Sales::sales"/>
+        </resources>
+    </route>
+    <route url="/V1/easycredit/transaction/:transactionId/refund" method="POST">
+        <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="refundTransaction"/>
         <resources>
             <resource ref="Magento_Sales::sales"/>
         </resources>

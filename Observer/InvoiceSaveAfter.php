@@ -15,7 +15,7 @@ class InvoiceSaveAfter implements ObserverInterface
 {
 
     /**
-     * @param Observer $observer
+     * @param  Observer $observer
      * @return void
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
@@ -25,7 +25,7 @@ class InvoiceSaveAfter implements ObserverInterface
         /**
          * @var Invoice $invoice
          */
-        $invoice = $event->getInvoice();
+        $invoice = $event->getData('invoice');
 
         if ($invoice->getBaseEasycreditAmount()) {
             $order = $invoice->getOrder();
