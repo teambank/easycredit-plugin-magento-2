@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v2.0.1
+------
+
+* es werden nur korrekte Anreden bei der Initialisierung übergeben
+
 v2.0.0
 ------
 

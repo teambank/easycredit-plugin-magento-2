@@ -10,6 +10,7 @@ namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 use Magento\Customer\Model\Session as CustomerSession;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
 
 class CustomerBuilder
 {
@@ -18,10 +19,12 @@ class CustomerBuilder
 
     public function __construct(
         CustomerSession $customerSession,
-        EasyCreditHelper $easyCreditHelper
+        EasyCreditHelper $easyCreditHelper,
+        PrefixConverter $prefixConverter
     ) {
         $this->customerSession = $customerSession;
         $this->easyCreditHelper = $easyCreditHelper;
+        $this->prefixConverter = $prefixConverter;
     }
 
     public function build($quote)
@@ -34,7 +37,7 @@ class CustomerBuilder
 
         return new Api\Model\Customer(
             [
-            'gender' => $customer->getPrefix(),
+            'gender' => $this->prefixConverter->convert($customer->getPrefix()),
             'firstName' => $customer->getFirstname(),
             'lastName' => $customer->getLastname(),
             'birthDate' => $customer->getDob(),
