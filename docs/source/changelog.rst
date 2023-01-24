@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v2.0.2
+------
+
+* das Checkout-Widget verwendet nun `base_grand_total` als Betrag (siehe auch Magento #34649)
+* die API-Library wurde aktualisiert auf v1.3.5
+
 v2.0.1
 ------
 

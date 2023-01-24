@@ -79,7 +79,7 @@ define(
                     return this;
                 },
                 getAmount: ko.computed(function () {
-                    return (quote.totals()) ? quote.totals().grand_total : 0;
+                    return (quote.totals()) ? quote.totals().base_grand_total : 0;
                 }),
                 getData: function () {
                     var data = {
