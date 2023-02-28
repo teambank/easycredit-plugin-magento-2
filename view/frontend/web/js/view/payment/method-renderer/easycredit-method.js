@@ -194,6 +194,11 @@ define(
                 },
                 handlePaymentConfirm: function () {
                     onHydrated('easycredit-checkout', function(){
+                        if ($('easycredit-checkout').data('submitEventBound')) {
+                          return true;
+                        }
+                        $('easycredit-checkout').data('submitEventBound', true);
+
                         $('easycredit-checkout').submit(function(e){
                             if (!additionalValidators.validate()) {
                                 $('easycredit-checkout')

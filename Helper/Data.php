@@ -7,9 +7,6 @@
 
 namespace Netzkollektiv\EasyCredit\Helper;
 
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -119,17 +116,8 @@ class Data extends AbstractHelper
 
     private function getClient()
     {
-        $stack = HandlerStack::create();
-        $stack->push(
-            Middleware::log(
-                $this->logger,
-                new MessageFormatter(MessageFormatter::DEBUG),
-            )
-        );
-        return new \GuzzleHttp\Client(
-            [
-            'handler' => $stack
-            ]
+        return new \Teambank\RatenkaufByEasyCreditApiV3\Client(
+            $this->logger
         );
     }
 
