@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v2.0.3
+------
+
+* statt Guzzle wird aus Kompatibilitätsgründen der interne Client verwendet
+* Verbesserung der Kompatiblität mit Amasty Checkout (verhindert doppeltes Binding des Submit-Events)
+
 v2.0.2
 ------
 
