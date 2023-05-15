@@ -9,6 +9,7 @@ namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Magento\Checkout\Model\Type\Onepage;
 
 class PlaceOrder extends AbstractController
 {
@@ -97,16 +98,13 @@ class PlaceOrder extends AbstractController
         $quote = $this->checkoutSession->getQuote();
 
         if (!$this->customerSession->isLoggedIn()) {
-            if (!$this->checkoutData->isAllowedGuestCheckout($quote)) {
-                $this->messageManager->addErrorMessage(__('Guest checkout is not allowed.'));
-                $this->_redirect('checkout/cart');
-                return;
+            if ($this->checkoutData->isAllowedGuestCheckout($quote)) {
+                $quote->setCheckoutMethod(Onepage::METHOD_GUEST);
+            } else {
+                $quote->setCheckoutMethod(Onepage::METHOD_REGISTER);
             }
-
-            $quote->setCustomerId(0)
-                ->setCustomerEmail($quote->getBillingAddress()->getEmail())
-                ->setCustomerIsGuest(true)
-                ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
+        } else {
+            $quote->setCheckoutMethod(Onepage::METHOD_CUSTOMER);
         }
 
         try {
