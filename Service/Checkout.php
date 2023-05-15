@@ -90,7 +90,7 @@ class Checkout implements CheckoutInterface
     /**
      * @throws LocalizedException
      */
-    private function _validateQuote()
+    private function _validateQuote() : void
     {
         $quote = $this->checkoutSession->getQuote();
 
