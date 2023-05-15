@@ -7,4 +7,6 @@ parameters:
   reportUnmatchedIgnoredErrors: false
   #checkGenericClassInNonGenericObjectType: false
   scanDirectories:
-    - ../../../../vendor
+    - %rootDir%/../../../vendor
+  extdn:
+    setTemplateDisallowedForBlockClasses: false

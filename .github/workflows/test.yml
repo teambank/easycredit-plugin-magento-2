@@ -83,7 +83,7 @@ jobs:
           composer require bitexpert/phpstan-magento -W
 
           cd vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2
-          php ../../bin/phpstan analyze .
+          php /opt/magento/vendor/bin/phpstan analyze .
 #      - name: Coding Style
 #        run: |
 #          cd $PLUGIN_DIR
