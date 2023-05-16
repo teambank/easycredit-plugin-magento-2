@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v2.0.4
+------
+
+* Anpassung des Checkout-Verhaltens für eine bessere Kompatibilität mit unterschiedlichen Einstellungen
+* Änderungen zur PHP 8.2 Kompatiblität
+* die API-Library wurde aktualisiert auf v1.3.7
+
 v2.0.3
 ------
 

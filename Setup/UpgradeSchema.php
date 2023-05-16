@@ -11,6 +11,7 @@ use Magento\Framework\Composer\ComposerFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Composer\Package\CompletePackageInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
@@ -29,15 +30,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->composerFactory = $composerFactory;
     }
 
-    public function getApiLibraryPackage() : string | null
+    public function getApiLibraryPackage() : CompletePackageInterface | null
     {
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
+        /** @var CompletePackageInterface $package */
         foreach ($packages as $package) {
-            if ($package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
+            if ($package instanceof CompletePackageInterface && $package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
                 return $package;
             }
-	}
-	return null;
+	    }
+	    return null;
     }
 
     /**

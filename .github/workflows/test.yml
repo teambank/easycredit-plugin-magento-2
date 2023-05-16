@@ -3,7 +3,7 @@ name: Test
 on:
   push:
     branches:
-    - 'automate'
+    - '*'
 
 jobs:
   ci:
@@ -13,6 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - magento-version: '2.4.5'
+            php-version: 8.1
           - magento-version: '2.4.6'
             php-version: 8.2
 
@@ -37,10 +39,6 @@ jobs:
         ports:
           - 9200:9200
 
-    env:
-      PLUGIN_DIR: /plugins/EasyCreditRatenkauf
-      SW_DIR: /opt/shopware
-      
     steps:
       - name: Install PHP
         uses: shivammathur/setup-php@master
@@ -63,7 +61,6 @@ jobs:
           git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 /opt/magento
           cd /opt/magento
           composer install
-          #composer require bitexpert/phpstan-magento
           php bin/magento setup:install --base-url=http://localhost/ \
           --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root --admin-firstname=Admin \
           --admin-lastname=Istrator --admin-email=admin@magneto.com --admin-user=admin \
