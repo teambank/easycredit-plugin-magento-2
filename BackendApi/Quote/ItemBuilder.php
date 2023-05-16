@@ -25,7 +25,7 @@ class ItemBuilder
     }
 
     /**
-     * @param  $categoryIds
+     * @param array $categoryIds
      * @return array|bool|null|string
      */
     private function getDeepestCategoryName($categoryIds)
@@ -60,7 +60,7 @@ class ItemBuilder
         return $skus;
     }
 
-    public function build($item)
+    public function build($item): Api\Model\ShoppingCartInformationItem
     {
         return new Api\Model\ShoppingCartInformationItem(
             [

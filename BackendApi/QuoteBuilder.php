@@ -271,7 +271,7 @@ class QuoteBuilder
                     ->setAddress(new Api\Model\InvoiceAddress())
                     ->build($this->getQuote()->getBillingAddress()),
                 'shippingAddress' => $this->addressBuilder
-                    ->setAddress(new Api\Model\InvoiceAddress())
+                    ->setAddress(new Api\Model\ShippingAddress())
                     ->build($this->getQuote()->getShippingAddress()),
                 'shoppingCartInformation' => $this->getItems()
                 ]

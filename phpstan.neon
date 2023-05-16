@@ -1,3 +1,12 @@
+includes:
+    - %rootDir%/../../bitexpert/phpstan-magento/extension.neon
 parameters:
+  paths:
+    - %currentWorkingDirectory%
   level: 1
-  checkGenericClassInNonGenericObjectType: false
+  reportUnmatchedIgnoredErrors: false
+  #checkGenericClassInNonGenericObjectType: false
+  scanDirectories:
+    - %rootDir%/../../../vendor
+  extdn:
+    setTemplateDisallowedForBlockClasses: false

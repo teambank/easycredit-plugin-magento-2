@@ -66,7 +66,7 @@ class Data extends AbstractHelper
     /**
      * @var Api\Integration\CheckoutFactory
      */
-    private $checkout;
+    private $checkout = null;
 
     public function __construct(
         Context $context,
@@ -123,7 +123,7 @@ class Data extends AbstractHelper
 
     public function getCheckout($quote = null)
     {
-        if (!isset($this->checkout)) {
+        if (null === $this->checkout) {
             $args = [
                 'client' => $this->getClient(),
                 'config' => $this->getConfig()

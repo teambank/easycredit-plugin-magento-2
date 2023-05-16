@@ -7,17 +7,21 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
+use Magento\Quote\Model\Quote\Address;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\InvoiceAddress;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\ShippingAddress;
+
 class AddressBuilder
 {
-    private $address = null;
+    private InvoiceAddress | ShippingAddress $address;
 
-    public function setAddress($address)
+    public function setAddress(InvoiceAddress | ShippingAddress $address)
     {
         $this->address = $address;
         return $this;
     }
 
-    public function build($address)
+    public function build(Address $address) : InvoiceAddress | ShippingAddress
     {
         $this->address['firstName'] = $address->getFirstname();
         $this->address['lastName'] = $address->getLastname();

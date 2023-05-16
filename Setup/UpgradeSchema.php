@@ -29,14 +29,15 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->composerFactory = $composerFactory;
     }
 
-    public function getApiLibraryPackage()
+    public function getApiLibraryPackage() : string | null
     {
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
         foreach ($packages as $package) {
             if ($package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
                 return $package;
             }
-        }
+	}
+	return null;
     }
 
     /**

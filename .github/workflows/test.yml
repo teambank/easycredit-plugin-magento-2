@@ -1,0 +1,90 @@
+name: Test
+
+on:
+  push:
+    branches:
+    - 'automate'
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 15
+      fail-fast: false
+      matrix:
+        include:
+          - magento-version: '2.4.6'
+            php-version: 8.2
+
+    name: Magento ${{ matrix.magento-version }}
+
+    services:
+      mysql:
+        image: mysql:8.0.20
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+      elasticsearch:
+        image: elasticsearch:7.17.10
+        env:
+          discovery.type: single-node
+        options: >-
+          --health-cmd "curl http://localhost:9200/_cluster/health"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 9200:9200
+
+    env:
+      PLUGIN_DIR: /plugins/EasyCreditRatenkauf
+      SW_DIR: /opt/shopware
+      
+    steps:
+      - name: Install PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, gd, bcmath, ctype, curl, dom, hash, iconv, intl, openssl, simplexml, soap, xsl, zip
+          tools: composer:v2.1
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Debug
+        run: |
+          php -v
+          php -m
+          composer -V
+          env
+          curl http://localhost:9200
+      - name: Setup Magento 2
+        run: |
+          mysql -u root --password=root -h 127.0.0.1 -e 'CREATE DATABASE IF NOT EXISTS magento;'
+          git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 /opt/magento
+          cd /opt/magento
+          composer install
+          #composer require bitexpert/phpstan-magento
+          php bin/magento setup:install --base-url=http://localhost/ \
+          --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root --admin-firstname=Admin \
+          --admin-lastname=Istrator --admin-email=admin@magneto.com --admin-user=admin \
+          --admin-password=admin1234578! --language=de_DE --currency=EUR --timezone=Europe/Berlin \
+          --search-engine=elasticsearch7 --elasticsearch-host=localhost \
+          --elasticsearch-port=9200
+
+          composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 dev-${GITHUB_REF##*/}
+
+          php bin/magento setup:upgrade
+          php bin/magento setup:di:compile
+          php bin/magento cache:clean
+
+      - name: Static Analyze
+        run: |
+          cd /opt/magento
+          composer require bitexpert/phpstan-magento -W
+
+          cd vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2
+          php /opt/magento/vendor/bin/phpstan analyze .
+#      - name: Coding Style
+#        run: |
+#          cd $PLUGIN_DIR
+#          php vendor/bin/ecs check --config=ecs.php
