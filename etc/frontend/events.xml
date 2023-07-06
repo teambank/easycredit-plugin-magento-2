@@ -13,4 +13,7 @@
     <event name="sales_order_invoice_save_after">
         <observer name="easycredit_ssales_order_creditmemo_save_after" instance="Netzkollektiv\EasyCredit\Observer\InvoiceSaveAfter"/>
     </event>
+    <event name="shortcut_buttons_container">
+        <observer name="easycredit_shortcuts" instance="Netzkollektiv\EasyCredit\Observer\AddEasyCreditShortcuts"/>
+    </event>
 </config>

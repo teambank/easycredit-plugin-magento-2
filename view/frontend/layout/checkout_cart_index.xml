@@ -20,7 +20,7 @@
             </arguments>
         </referenceBlock>
         <referenceContainer name="checkout.cart.methods">
-            <block class="Netzkollektiv\EasyCredit\Block\PpPlugin"
+            <block class="Netzkollektiv\EasyCredit\Block\Ui\Widget"
                    name="easycredit.pp-plugin"
                    template="Netzkollektiv_EasyCredit::easycredit/pp-plugin-cart.phtml"
                    ifconfig="payment/easycredit/widget_cart_enabled">

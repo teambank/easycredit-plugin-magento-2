@@ -1,0 +1,12 @@
+<easycredit-express-button
+    webshop-id="<?= /* @noEscape */ $block->getApiKey(); ?>"
+    amount="<?= /* @noEscape */ $block->getGrandTotal(); ?>"
+    full-width="true" 
+    data-mage-init='{
+        "Netzkollektiv_EasyCredit/js/view/express": { 
+            "quoteId": "<?= /* @noEscape */ $block->getQuoteId(); ?>",
+            "isInCatalogProduct": "<?= /* @noEscape */ $block->getIsInCatalogProduct(); ?>",
+            "isShoppingCart": "<?= /* @noEscape */ $block->getIsShoppingCart(); ?>"
+        }
+    }'
+></easycredit-express-button>

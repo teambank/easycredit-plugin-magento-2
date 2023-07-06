@@ -30,11 +30,30 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+    <route url="/V1/easycredit/checkout/express/" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="start"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+            <parameter name="express" force="true">true</parameter>
+        </data>
+    </route>
     <route url="/V1/easycredit/checkout/start/:cartId" method="GET">
         <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="start"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
+    </route>
+    <route url="/V1/easycredit/checkout/express/:cartId" method="GET">
+        <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="start"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+        <data>
+            <parameter name="express" force="true">true</parameter>
+        </data>
     </route>
     <route url="/V1/easycredit/transactions" method="GET">
         <service class="Netzkollektiv\EasyCredit\Api\TransactionsInterface" method="getTransactions"/>

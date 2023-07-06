@@ -20,6 +20,8 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Customer\Model\Address\Config as AddressConfig;
 
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
@@ -163,6 +165,9 @@ class Review extends Template
      */
     public function renderShippingRateOption($rate, $format = '%s - %s%s', $inclTaxFormat = ' (%s %s)'): string
     {
+        if (!$rate) {
+            return '';
+        }
         $renderedInclTax = '';
         if ($rate->getErrorMessage()) {
             $price = $rate->getErrorMessage();

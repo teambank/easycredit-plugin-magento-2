@@ -5,7 +5,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Netzkollektiv\EasyCredit\Block;
+namespace Netzkollektiv\EasyCredit\Block\Ui;
 
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
@@ -25,7 +25,6 @@ class PpPlugin extends Template
         CheckoutSession $checkoutSession,
         array $data = []
     ) {
-        $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $context->getScopeConfig();
         parent::__construct($context, $data);
     }
@@ -38,7 +37,7 @@ class PpPlugin extends Template
         );
     }
 
-    public function getGrandTotal(): float
+    public function getGrandTotal(): ?float
     {
         $totals = $this->checkoutSession->getQuote()->getTotals();
         return $totals['grand_total']->getValue();
