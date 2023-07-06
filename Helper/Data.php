@@ -95,16 +95,16 @@ class Data extends AbstractHelper
     public function getConfigValue(string $key)
     {
         return $this->scopeConfig
-            ->getValue('payment/easycredit/credentials/' . $key, ScopeInterface::SCOPE_STORE);
+            ->getValue('payment/easycredit/' . $key, ScopeInterface::SCOPE_STORE);
     }
 
     private function getConfig()
     {
         return Api\Configuration::getDefaultConfiguration()
             ->setHost('https://ratenkauf.easycredit.de')
-            ->setUsername($this->getConfigValue('api_key'))
-            ->setPassword($this->getConfigValue('api_token'))
-            ->setAccessToken($this->getConfigValue('api_signature'));
+            ->setUsername($this->getConfigValue('credentials/api_key'))
+            ->setPassword($this->getConfigValue('credentials/api_token'))
+            ->setAccessToken($this->getConfigValue('credentials/api_signature'));
     }
 
     private function getClient(): Client

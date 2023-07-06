@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Netzkollektiv\EasyCredit\Block\Marketing"
+                    name="easycredit.marketing.card"
+                    template="Netzkollektiv_EasyCredit::easycredit/marketing/card.phtml"
+                    ifconfig="payment/easycredit/marketing/card/card_enabled"
+                    before="-">
+            </block>
+        </referenceContainer>
+    </body>
+</page>

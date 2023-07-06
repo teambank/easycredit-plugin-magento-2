@@ -46,7 +46,7 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
         $config['payment'][Payment::CODE] = '';
         try {
             $config['payment'][Payment::CODE] = [
-                'apiKey'                => $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('api_key')),
+                'apiKey'                => $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('credentials/api_key')),
                 'redirectUrl'           => $this->urlBuilder->getUrl('easycredit/checkout/start'),
                 'defaultErrorMessage'   => implode(
                     ' ', [
