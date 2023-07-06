@@ -5,31 +5,22 @@
  * file that was distributed with this source code.
  */
 
-namespace Netzkollektiv\EasyCredit\Block;
+namespace Netzkollektiv\EasyCredit\Block\Ui;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\View\Element\Template\Context;
 
-class PpPlugin extends \Magento\Framework\View\Element\Template
+class Widget extends \Magento\Framework\View\Element\Template
 {
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
+    protected ScopeConfigInterface $scopeConfig;
 
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        CheckoutSession $checkoutSession,
+        Context $context,
+        protected CheckoutSession $checkoutSession,
         array $data = []
     ) {
-        $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $context->getScopeConfig();
         parent::__construct($context, $data);
     }
@@ -42,7 +33,7 @@ class PpPlugin extends \Magento\Framework\View\Element\Template
         );
     }
 
-    public function getGrandTotal(): float
+    public function getGrandTotal(): ?float
     {
         $totals = $this->checkoutSession->getQuote()->getTotals();
         return $totals['grand_total']->getValue();

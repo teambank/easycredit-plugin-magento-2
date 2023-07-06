@@ -1,9 +1,15 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_order_invoice_save_after">
-        <observer name="sales_order_invoice_save_after" instance="Netzkollektiv\EasyCredit\Observer\InvoiceSaveAfter"/>
+        <observer name="easycredit_sales_order_invoice_save_after" instance="Netzkollektiv\EasyCredit\Observer\InvoiceSaveAfter"/>
     </event>
     <event name="sales_order_creditmemo_save_after">
-        <observer name="sales_order_creditmemo_save_after" instance="Netzkollektiv\EasyCredit\Observer\CreditmemoSaveAfter"/>
+        <observer name="easycredit_sales_order_creditmemo_save_after" instance="Netzkollektiv\EasyCredit\Observer\CreditmemoSaveAfter"/>
+    </event>
+    <event name="controller_action_predispatch_checkout_cart_add">
+        <observer name="easycredit_controller_action_predispatch_checkout_cart_add" instance="Netzkollektiv\EasyCredit\Observer\ProductAddToCartBefore" />
+    </event>
+    <event name="checkout_cart_add_product_complete">
+        <observer name="easycredit_checkout_cart_add_product_complete" instance="Netzkollektiv\EasyCredit\Observer\ProductAddToCartComplete"/>
     </event>
 </config>

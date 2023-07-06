@@ -13,15 +13,15 @@ use Teambank\RatenkaufByEasyCreditApiV3\Model\ShippingAddress;
 
 class AddressBuilder
 {
-    private InvoiceAddress | ShippingAddress $address;
+    private $address;
 
-    public function setAddress(InvoiceAddress | ShippingAddress $address)
+    public function setAddress($address)
     {
         $this->address = $address;
         return $this;
     }
 
-    public function build(Address $address) : InvoiceAddress | ShippingAddress
+    public function build(Address $address)
     {
         $this->address['firstName'] = $address->getFirstname();
         $this->address['lastName'] = $address->getLastname();

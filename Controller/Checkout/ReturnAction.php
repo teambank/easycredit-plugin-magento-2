@@ -11,37 +11,34 @@ use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Customer\Model\Url;
+use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
+use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
 class ReturnAction extends AbstractController
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl,
-        CartRepositoryInterface $quoteRepository,
-        EasyCreditHelper $easyCreditHelper,
-        Logger $logger
+        Context $context,
+        CheckoutSession $checkoutSession,
+        Url $customerUrl,
+        private CartRepositoryInterface $quoteRepository,
+        private EasyCreditHelper $easyCreditHelper,
+        private QuoteBuilder $easyCreditQuoteBuilder,
+        private Logger $logger,
+        private StorageFactory $storageFactory,
     ) {
-        $this->quoteRepository = $quoteRepository;
-        $this->easyCreditHelper = $easyCreditHelper;
-        $this->logger = $logger;
-
         parent::__construct($context, $checkoutSession, $customerUrl);
+    }
+
+    private function getStorage() {
+        return $this->storageFactory->create(
+            [
+            'payment' => $this->checkoutSession->getQuote()->getPayment()
+            ]
+        );
     }
 
     /**
@@ -54,10 +51,17 @@ class ReturnAction extends AbstractController
         try {
             $this->_validateQuote();
 
-            $this->easyCreditHelper->getCheckout()->loadTransaction();
+            $checkout = $this->easyCreditHelper->getCheckout();
+            $transaction = $checkout->loadTransaction();
 
-            if (!$this->easyCreditHelper->getCheckout()->isApproved()) {
+            if (!$checkout->isApproved()) {
                 throw new TransactionNotApprovedException(__('transaction not approved'));
+            }
+
+            if ($this->getStorage()->get('express')) {
+                $this->importExpressCheckoutData($transaction);
+                $this->getStorage()->set('express', false);
+                $checkout->finalizeExpress($this->easyCreditQuoteBuilder->build());
             }
 
             $quote = $this->checkoutSession->getQuote();
@@ -90,5 +94,32 @@ class ReturnAction extends AbstractController
     public function getRedirectActionName()
     {
         return 'return';
+    }
+
+    protected function importExpressCheckoutData(TransactionInformation $transaction) {
+        $customer = $transaction->getTransaction()->getCustomer();
+        $contact = $customer->getContact();
+        $address = $transaction->getTransaction()->getOrderDetails()->getShippingAddress();
+
+        $quote = $this->checkoutSession->getQuote();
+
+        $address = [
+            'email' => $contact->getEmail(),
+            'prefix' => $customer->getGender(),
+            'middlename' => null,
+            'suffix' => null,
+            'firstname' => $address->getFirstname(),
+            'lastname' => $address->getLastname(),
+            'street' => $address->getAddress(),
+            'street2' => null,
+            'postcode' => $address->getZip(),
+            'city' => $address->getCity(),
+            'country_id' => $address->getCountry(),
+            'region' => null,
+            'telephone' => $contact->getMobilePhoneNumber(),
+        ];
+
+        $quote->getBillingAddress()->addData($address);
+        $quote->getShippingAddress()->addData($address);
     }
 }

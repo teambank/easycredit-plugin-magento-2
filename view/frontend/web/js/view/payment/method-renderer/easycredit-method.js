@@ -13,19 +13,11 @@ define(
         'mage/storage',
         'Magento_Checkout/js/model/url-builder',
         'Magento_Checkout/js/model/full-screen-loader',
-        'uiRegistry'
+        'uiRegistry',
+        'Netzkollektiv_EasyCredit/js/view/component-utils'
     ],
-    function (ko, $, Component, paymentMethods, customer, setPaymentInformation, selectBillingAddress, additionalValidators, customerData, quote, storage, urlBuilder, fullScreenLoader, registry) {
+    function (ko, $, Component, paymentMethods, customer, setPaymentInformation, selectBillingAddress, additionalValidators, customerData, quote, storage, urlBuilder, fullScreenLoader, registry, componentUtils) {
         'use strict';
-
-        var onHydrated = function (selector, cb) {    
-            window.setTimeout(function() {
-                if (!document.querySelector(selector) || !document.querySelector(selector).classList.contains('hydrated')) {
-                    return onHydrated(selector, cb);
-                }
-                cb();
-            }, 50)
-        };
 
         return Component.extend(
             {
@@ -193,7 +185,7 @@ define(
                     return true;
                 },
                 handlePaymentConfirm: function () {
-                    onHydrated('easycredit-checkout', function(){
+                    componentUtils.onHydrated('easycredit-checkout', function(){
                         if ($('easycredit-checkout').data('submitEventBound')) {
                           return true;
                         }

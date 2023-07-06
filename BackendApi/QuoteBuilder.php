@@ -28,119 +28,25 @@ use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class QuoteBuilder
 {
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
-
-    /**
-     * @var CustomerSession
-     */
-    private $customerSession;
-
-    /**
-     * @var OrderCollection
-     */
-    private $salesOrderCollection;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
-     * @var Category
-     */
-    private $categoryResource;
-
-    /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
-
-    /**
-     * @var ResourceInterface
-     */
-    private $moduleResource;
-
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
-
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
-
-    /**
-     * @var StorageFactory
-     */
-    private $storageFactory;
-
-    /**
-     * @var AddressBuilder
-     */
-    private $addressBuilder;
-
-    /**
-     * @var ItemBuilder
-     */
-    private $itemBuilder;
-
-    /**
-     * @var SystemBuilder
-     */
-    private $systemBuilder;
-
-    /**
-     * @var CustomerBuilder
-     */
-    private $customerBuilder;
-
-    /**
-     * @var Quote
-     */
     private $quote;
 
     public function __construct(
-        CheckoutSession $checkoutSession,
-        CustomerSession $customerSession,
-        OrderCollection $salesOrderCollection,
-        StoreManagerInterface $storeManager,
-        Category $categoryResource,
-        ProductMetadataInterface $productMetadata,
-        ResourceInterface $moduleResource,
-        EasyCreditHelper $easyCreditHelper,
-        ScopeConfigInterface $scopeConfig,
-        UrlInterface $url,
-        StorageFactory $storageFactory,
-        AddressBuilder $addressBuilder,
-        ItemBuilder $itemBuilder,
-        SystemBuilder $systemBuilder,
-        CustomerBuilder $customerBuilder
+        private CheckoutSession $checkoutSession,
+        private CustomerSession $customerSession,
+        private OrderCollection $salesOrderCollection,
+        private StoreManagerInterface $storeManager,
+        private Category $categoryResource,
+        private ProductMetadataInterface $productMetadata,
+        private ResourceInterface $moduleResource,
+        private EasyCreditHelper $easyCreditHelper,
+        private ScopeConfigInterface $scopeConfig,
+        private UrlInterface $url,
+        private StorageFactory $storageFactory,
+        private AddressBuilder $addressBuilder,
+        private ItemBuilder $itemBuilder,
+        private SystemBuilder $systemBuilder,
+        private CustomerBuilder $customerBuilder
     ) {
-        $this->customerSession = $customerSession;
-        $this->checkoutSession = $checkoutSession;
-        $this->salesOrderCollection = $salesOrderCollection;
-        $this->storeManager = $storeManager;
-        $this->categoryResource = $categoryResource;
-        $this->productMetadata = $productMetadata;
-        $this->moduleResource = $moduleResource;
-        $this->easyCreditHelper = $easyCreditHelper;
-        $this->scopeConfig = $scopeConfig;
-        $this->url = $url;
-        $this->storageFactory = $storageFactory;
-
-        $this->addressBuilder = $addressBuilder;
-        $this->itemBuilder = $itemBuilder;
-        $this->systemBuilder = $systemBuilder;
-        $this->customerBuilder = $customerBuilder;
     }
 
     public function setQuote($quote)
@@ -231,6 +137,14 @@ class QuoteBuilder
         return \DateTime::createFromFormat('Y-m-d H:i:s', $this->getQuote()->getCustomer()->getCreatedAt());
     }
 
+    private function isExpress() {
+        return $this->storageFactory->create(
+            [
+            'payment' => $this->getQuote()->getPayment()
+            ]
+        )->get('express');
+    }
+
     private function getRedirectLinks()
     {
         $storage = $this->storageFactory->create(
@@ -267,10 +181,10 @@ class QuoteBuilder
                 'orderValue' => $this->getGrandTotal(),
                 'orderId' => $this->getId(),
                 'numberOfProductsInShoppingCart' => count($this->getQuote()->getAllVisibleItems()),
-                'invoiceAddress' => $this->addressBuilder
+                'invoiceAddress' => $this->isExpress() ? null : $this->addressBuilder
                     ->setAddress(new Api\Model\InvoiceAddress())
                     ->build($this->getQuote()->getBillingAddress()),
-                'shippingAddress' => $this->addressBuilder
+                'shippingAddress' => $this->isExpress() ? null : $this->addressBuilder
                     ->setAddress(new Api\Model\ShippingAddress())
                     ->build($this->getQuote()->getShippingAddress()),
                 'shoppingCartInformation' => $this->getItems()

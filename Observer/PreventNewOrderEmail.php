@@ -47,11 +47,6 @@ class PreventNewOrderEmail implements ObserverInterface
             return;
         }
 
-        $removeInterest = $this->scopeConfig->getValue(
-            'payment/easycredit/remove_interest',
-            ScopeInterface::SCOPE_STORE
-        );
-
         $order->setCanSendNewEmailFlag(false);
     }
 }

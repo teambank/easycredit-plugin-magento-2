@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Netzkollektiv\EasyCredit\Api\CheckoutInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 
@@ -22,50 +23,15 @@ use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
-
-    /**
-     * @var QuoteBuilder
-     */
-    private $easyCreditQuoteBuilder;
-
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
-
-    /**
-     * @var CheckoutDataInterface
-     */
-    private $checkoutData;
-
-    /**
-     * @var Logger
-     */
-    private $logger;
-
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
-        CheckoutSession $checkoutSession,
-        EasyCreditHelper $easyCreditHelper,
-        CheckoutDataInterface $checkoutData,
-        QuoteBuilder $easyCreditQuoteBuilder,
-        Logger $logger
+        private CartRepositoryInterface $quoteRepository,
+        private CheckoutSession $checkoutSession,
+        private EasyCreditHelper $easyCreditHelper,
+        private CheckoutDataInterface $checkoutData,
+        private QuoteBuilder $easyCreditQuoteBuilder,
+        private Logger $logger,
+        private StorageFactory $storageFactory
     ) {
-        $this->quoteRepository = $quoteRepository;
-        $this->checkoutSession = $checkoutSession;
-        $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
-        $this->easyCreditHelper = $easyCreditHelper;
-        $this->checkoutData = $checkoutData;
-        $this->logger = $logger;
     }
 
     /**
@@ -99,16 +65,31 @@ class Checkout implements CheckoutInterface
         }
     }
 
+    private function getStorage () {
+        return $this->storageFactory->create(
+            [
+            'payment' => $this->checkoutSession->getQuote()->getPayment()
+            ]
+        );
+    }
+
     /**
      * @api
      * @param  string $cartId
+     * @param  boolean $express
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId)
+    public function start($cartId, $express = false)
     {
         try {
             try {
                 $this->_validateQuote();
+
+                if ($express) {
+                    $this->getStorage()->clear();
+                    $this->getStorage()->set('express', true);
+                    $this->prepareExpressCheckout();
+                }
 
                 $ecQuote = $this->easyCreditQuoteBuilder->build();
                 $this->easyCreditHelper->getCheckout()->start(
@@ -116,7 +97,6 @@ class Checkout implements CheckoutInterface
                 );
 
                 $quote = $this->checkoutSession->getQuote();
-
                 $quote->getPayment()->save(); // @phpstan-ignore-line
                 $quote->collectTotals();
                 $this->quoteRepository->save($quote);
@@ -129,13 +109,14 @@ class Checkout implements CheckoutInterface
                 if ($response === null || !isset($response->violations)) {
                     throw new \Exception('violations could not be parsed');
                 }
+
                 $messages = [];
                 foreach ($response->violations as $violation) {
-                    $messages[] = $violation->message;
+                    $messages[] = implode(': ',[$violation->field, $violation->message]);
                 }
 
                 throw new WebapiException(
-                    __(implode(' ', $messages)), 
+                    __(implode(', ', $messages)), 
                     0, 
                     WebapiException::HTTP_FORBIDDEN
                 );
@@ -151,5 +132,22 @@ class Checkout implements CheckoutInterface
             );
         }
         return $this->checkoutData;
+    }
+
+    protected function prepareExpressCheckout () {
+        $quote = $this->checkoutSession->getQuote();
+        $shippingAddress = $quote->getShippingAddress();
+
+        if ($shippingAddress->getCountryId() === null) {
+            $shippingAddress->setCountryId('DE');
+        }
+        $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
+        $shippingMethod = current($shippingAddress->getAllShippingRates());
+
+        if ($shippingMethod) {
+            $shippingAddress->setShippingMethod($shippingMethod->getCode());
+            $shippingAddress->collectShippingRates();
+        }
+        $this->quoteRepository->save($quote);
     }
 }

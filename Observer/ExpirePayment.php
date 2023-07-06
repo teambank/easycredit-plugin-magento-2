@@ -47,8 +47,6 @@ class ExpirePayment implements ObserverInterface
          */
         $quote = $event->getData('quote');
 
-        $amount = $quote->getGrandTotal();
-
         if ($quote->getPayment()->getMethod() != Payment::CODE) {
             return;
         }

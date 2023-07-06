@@ -12,6 +12,9 @@ namespace Netzkollektiv\EasyCredit\Block\Checkout;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Customer\Model\Address\Config as AddressConfig;
 
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
@@ -43,11 +46,6 @@ class Review extends Template
     private $address;
 
     /**
-     * @var \Magento\Customer\Model\Address\Config
-     */
-    private $addressConfig;
-
-    /**
      * Currently selected shipping rate
      *
      * @var Rate
@@ -61,34 +59,14 @@ class Review extends Template
      */
     private $controllerPath = 'easycredit/checkout';
 
-    /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    private $taxHelper;
-
-    /**
-     * @var PriceCurrencyInterface
-     */
-    private $priceCurrency;
-
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easycreditHelper;
-
-
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Tax\Helper\Data $taxHelper,
-        \Magento\Customer\Model\Address\Config $addressConfig,
-        EasyCreditHelper $easycreditHelper,
-        PriceCurrencyInterface $priceCurrency,
+        Context $context,
+        private TaxHelper $taxHelper,
+        private AddressConfig $addressConfig,
+        private EasyCreditHelper $easycreditHelper,
+        private PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
-        $this->priceCurrency = $priceCurrency;
-        $this->taxHelper = $taxHelper;
-        $this->addressConfig = $addressConfig;
-        $this->easycreditHelper = $easycreditHelper;
         parent::__construct($context, $data);
     }
 
@@ -179,6 +157,9 @@ class Review extends Template
      */
     public function renderShippingRateOption($rate, $format = '%s - %s%s', $inclTaxFormat = ' (%s %s)')
     {
+        if (!$rate) {
+            return '';
+        }
         $renderedInclTax = '';
         if ($rate->getErrorMessage()) {
             $price = $rate->getErrorMessage();
