@@ -11,7 +11,8 @@
     "docs": "yarn docs:build:html; yarn docs:deploy",
     "phpcs": "vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml --error-severity=10 --ignore-annotations app/code/Netzkollektiv/EasyCredit/",
     "phpcbf" : "vendor/bin/phpcbf --extensions=php,phtml app/code/Netzkollektiv/EasyCredit/ --ignore=docs/* -v",
-    "phpstan": "vendor/bin/phpstan analyse app/code/Netzkollektiv/EasyCredit/ -c  app/code/Netzkollektiv/EasyCredit/phpstan.neon"
+    "phpstan": "vendor/bin/phpstan analyse app/code/Netzkollektiv/EasyCredit/ -c  app/code/Netzkollektiv/EasyCredit/phpstan.neon",
+    "rector": "vendor/bin/rector -c app/code/Netzkollektiv/EasyCredit/rector.php process"
   },
   "author": "NETZKOLLEKTIV",
   "license": "MIT"

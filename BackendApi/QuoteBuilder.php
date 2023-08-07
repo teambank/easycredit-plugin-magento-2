@@ -7,6 +7,9 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi;
 
+use Magento\Store\Model\ScopeInterface;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\ShoppingCartInformationItem;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\RedirectLinks;
 use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -28,85 +31,27 @@ use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class QuoteBuilder
 {
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
-    /**
-     * @var CustomerSession
-     */
-    private $customerSession;
+    private CustomerSession $customerSession;
 
-    /**
-     * @var OrderCollection
-     */
-    private $salesOrderCollection;
+    private OrderCollection $salesOrderCollection;
 
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+    private ScopeConfigInterface $scopeConfig;
 
-    /**
-     * @var Category
-     */
-    private $categoryResource;
+    private UrlInterface $url;
 
-    /**
-     * @var ProductMetadataInterface
-     */
-    private $productMetadata;
+    private StorageFactory $storageFactory;
 
-    /**
-     * @var ResourceInterface
-     */
-    private $moduleResource;
+    private AddressBuilder $addressBuilder;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private ItemBuilder $itemBuilder;
 
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private SystemBuilder $systemBuilder;
 
-    /**
-     * @var UrlInterface
-     */
-    private $url;
+    private CustomerBuilder $customerBuilder;
 
-    /**
-     * @var StorageFactory
-     */
-    private $storageFactory;
-
-    /**
-     * @var AddressBuilder
-     */
-    private $addressBuilder;
-
-    /**
-     * @var ItemBuilder
-     */
-    private $itemBuilder;
-
-    /**
-     * @var SystemBuilder
-     */
-    private $systemBuilder;
-
-    /**
-     * @var CustomerBuilder
-     */
-    private $customerBuilder;
-
-    /**
-     * @var Quote
-     */
-    private $quote;
+    private ?Quote $quote = null;
 
     public function __construct(
         CheckoutSession $checkoutSession,
@@ -128,11 +73,6 @@ class QuoteBuilder
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
         $this->salesOrderCollection = $salesOrderCollection;
-        $this->storeManager = $storeManager;
-        $this->categoryResource = $categoryResource;
-        $this->productMetadata = $productMetadata;
-        $this->moduleResource = $moduleResource;
-        $this->easyCreditHelper = $easyCreditHelper;
         $this->scopeConfig = $scopeConfig;
         $this->url = $url;
         $this->storageFactory = $storageFactory;
@@ -143,17 +83,18 @@ class QuoteBuilder
         $this->customerBuilder = $customerBuilder;
     }
 
-    public function setQuote($quote)
+    public function setQuote(?Quote $quote)
     {
         $this->quote = $quote;
         return $this;
     }
 
-    public function getQuote()
+    public function getQuote(): ?Quote
     {
-        if (!$this->quote) {
+        if (!$this->quote instanceof Quote) {
             $this->quote = $this->checkoutSession->getQuote();
         }
+
         return $this->quote;
     }
 
@@ -164,22 +105,30 @@ class QuoteBuilder
 
     private function getShippingMethod()
     {
-        $shippingMethod = '';
-        if ($this->getQuote()->getShippingAddress()) {
-            $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
-        }
+        $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
+
         if ($this->getIsClickAndCollect()) {
             $shippingMethod = '[Selbstabholung] ' . $shippingMethod;
         }
-        return $shippingMethod;
+        if ($shippingMethod !== '') {
+            return $shippingMethod;
+        }
+
+        return '';
     }
 
-    private function getIsClickAndCollect()
+    private function getIsClickAndCollect(): bool
     {
-        if ($this->getQuote()->getShippingAddress() && $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod()) {
-            return $shippingMethod === $this->scopeConfig->getValue('payment/easycredit/clickandcollect/shipping_method', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        if (!$this->getQuote()->getShippingAddress()) {
+            return false;
         }
-        return false;
+
+        $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
+        if ($shippingMethod === '' || $shippingMethod === null) {
+            return false;
+        }
+
+        return $shippingMethod === $this->scopeConfig->getValue('payment/easycredit/clickandcollect/shipping_method', ScopeInterface::SCOPE_STORE);
     }
 
     private function getGrandTotal()
@@ -187,7 +136,10 @@ class QuoteBuilder
         return $this->getQuote()->getGrandTotal();
     }
 
-    private function getItems()
+    /**
+     * @return ShoppingCartInformationItem[]
+     */
+    private function getItems(): array
     {
         $items = [];
         foreach ($this->getQuote()->getAllVisibleItems() as $item) {
@@ -195,12 +147,8 @@ class QuoteBuilder
                 $item
             );
         }
+
         return $items;
-    }
-
-    private function _getItems($items)
-    {
-
     }
 
     private function getDuration(): ?string
@@ -217,6 +165,7 @@ class QuoteBuilder
         if (!$this->customerSession->isLoggedIn()) {
             return 0;
         }
+
         return $this->salesOrderCollection
             ->addFieldToSelect('*')
             ->addFieldToFilter('customer_id', $this->getQuote()->getCustomer()->getId())
@@ -228,10 +177,11 @@ class QuoteBuilder
         if (!$this->customerSession->isLoggedIn()) {
             return null;
         }
+
         return \DateTime::createFromFormat('Y-m-d H:i:s', $this->getQuote()->getCustomer()->getCreatedAt());
     }
 
-    private function getRedirectLinks()
+    private function getRedirectLinks(): RedirectLinks
     {
         $storage = $this->storageFactory->create(
             [
@@ -266,7 +216,7 @@ class QuoteBuilder
                 [
                 'orderValue' => $this->getGrandTotal(),
                 'orderId' => $this->getId(),
-                'numberOfProductsInShoppingCart' => count($this->getQuote()->getAllVisibleItems()),
+                'numberOfProductsInShoppingCart' => is_countable($this->getQuote()->getAllVisibleItems()) ? count($this->getQuote()->getAllVisibleItems()) : 1,
                 'invoiceAddress' => $this->addressBuilder
                     ->setAddress(new Api\Model\InvoiceAddress())
                     ->build($this->getQuote()->getBillingAddress()),

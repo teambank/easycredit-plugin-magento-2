@@ -19,16 +19,10 @@ use Netzkollektiv\EasyCredit\Model\Payment;
 class ExpirePayment implements ObserverInterface
 {
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
 
-    /**
-     * @var QuoteBuilder
-     */
-    private $easyCreditQuoteBuilder;
+    private QuoteBuilder $easyCreditQuoteBuilder;
 
     public function __construct(
         EasyCreditHelper $easyCreditHelper,
@@ -38,7 +32,7 @@ class ExpirePayment implements ObserverInterface
         $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
     }
 
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
         $event = $observer->getEvent();
 
@@ -47,7 +41,7 @@ class ExpirePayment implements ObserverInterface
          */
         $quote = $event->getData('quote');
 
-        $amount = $quote->getGrandTotal();
+        $quote->getGrandTotal();
 
         if ($quote->getPayment()->getMethod() != Payment::CODE) {
             return;

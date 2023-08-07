@@ -13,8 +13,9 @@ use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class ItemBuilder
 {
-    private $_categoryResource;
-    private $_storeManager;
+    private CategoryResource $_categoryResource;
+
+    private StoreManagerInterface $_storeManager;
 
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -30,7 +31,7 @@ class ItemBuilder
      */
     private function getDeepestCategoryName($categoryIds)
     {
-        if (is_array($categoryIds) && count($categoryIds) > 0) {
+        if (is_array($categoryIds) && $categoryIds !== []) {
             $categoryId = end($categoryIds);
             return $this->_categoryResource->getAttributeRawValue(
                 $categoryId,
@@ -38,6 +39,7 @@ class ItemBuilder
                 $this->_storeManager->getStore()->getId()
             );
         }
+
         return null;
     }
 
@@ -57,6 +59,7 @@ class ItemBuilder
                 ]
             );
         }
+
         return $skus;
     }
 

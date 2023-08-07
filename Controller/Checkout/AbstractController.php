@@ -7,31 +7,24 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Framework\Exception\LocalizedException;
 
-abstract class AbstractController extends \Magento\Framework\App\Action\Action implements RedirectLoginInterface
+abstract class AbstractController extends Action implements RedirectLoginInterface
 {
 
-    /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
+    protected Session $checkoutSession;
 
-    /**
-     * @var \Magento\Customer\Model\Url
-     */
-    private $_customerUrl;
+    private Url $_customerUrl;
 
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Checkout\Model\Session       $checkoutSession
-     * @param \Magento\Customer\Model\Url           $customerUrl
-     */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl
+        Context $context,
+        Session $checkoutSession,
+        Url $customerUrl
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->_customerUrl = $customerUrl;

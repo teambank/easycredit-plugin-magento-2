@@ -7,6 +7,10 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
+use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Url;
+use Netzkollektiv\EasyCredit\Model\Payment;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
@@ -14,25 +18,16 @@ use Magento\Quote\Api\CartRepositoryInterface;
 
 class ReturnAction extends AbstractController
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
+    private CartRepositoryInterface $quoteRepository;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl,
+        Context $context,
+        Session $checkoutSession,
+        Url $customerUrl,
         CartRepositoryInterface $quoteRepository,
         EasyCreditHelper $easyCreditHelper,
         Logger $logger
@@ -69,25 +64,23 @@ class ReturnAction extends AbstractController
             $quote->setTotalsCollectedFlag(false);
             $quote->collectTotals();
 
-            $payment->setMethod(\Netzkollektiv\EasyCredit\Model\Payment::CODE);
+            $payment->setMethod(Payment::CODE);
             $payment->setAdditionalInformation($paymentAdditionalInformation);
 
             $this->quoteRepository->save($quote);
 
             $this->_redirect('easycredit/checkout/review');
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage(__('Unable to validate easyCredit Payment.'));
-            $this->logger->critical($e);
+            $this->logger->critical($exception);
             $this->_redirect('checkout/cart');
         }
     }
 
     /**
      * Returns action name which requires redirect
-     *
-     * @return string|null
      */
-    public function getRedirectActionName()
+    public function getRedirectActionName(): string
     {
         return 'return';
     }

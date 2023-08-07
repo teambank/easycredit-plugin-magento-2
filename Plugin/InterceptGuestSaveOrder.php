@@ -7,13 +7,14 @@
 
 namespace Netzkollektiv\EasyCredit\Plugin;
 
+use Magento\Checkout\Model\GuestPaymentInformationManagement;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Netzkollektiv\EasyCredit\Model\Payment;
 
 class InterceptGuestSaveOrder
 {
     public function aroundSavePaymentInformationAndPlaceOrder(
-        \Magento\Checkout\Model\GuestPaymentInformationManagement $subject,
+        GuestPaymentInformationManagement $subject,
         callable $proceed,
         ...$args
     ) {
@@ -24,9 +25,10 @@ class InterceptGuestSaveOrder
             }
         }
 
-        if ($paymentMethod === null || $paymentMethod->getMethod() !== Payment::CODE) {
+        if (!$paymentMethod instanceof PaymentInterface || $paymentMethod->getMethod() !== Payment::CODE) {
             return $proceed(...$args);
         }
+
         $subject->savePaymentInformation(...$args);
     }
 }

@@ -11,12 +11,12 @@ Zur Nutzung von **easyCredit-Ratenkauf für Magento 2.x** benötigen Sie:
 Versionskompatibilität
 ----------------------
 
-Das Plugin hat neben Magento 2.x keine weiteren Abhängigkeiten. Es wurde für die folgenden Versionen unter PHP 7 getestet:
 
-* 2.0.x
-* 2.1.x
-* 2.2.x
-* 2.3.x
+Das Plugin hat neben Magento 2.x keine weiteren Abhängigkeiten. Es wurde für die folgenden Versionen unter PHP 8 getestet:
+
+* 2.4.x
+
+Ältere Versionen von Magento 2 werden nicht mehr aktiv getestet. Wird noch PHP < 7.4 oder eine ältere Version von Magento verwendet, versuchen Sie bitte die v1.3.10 der Extension zu installieren.
 
 Zugangsdaten für "easyCredit-Ratenkauf"
 ------------------------------------------

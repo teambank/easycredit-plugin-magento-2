@@ -30,7 +30,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->composerFactory = $composerFactory;
     }
 
-    public function getApiLibraryPackage() : CompletePackageInterface | null
+    public function getApiLibraryPackage() : ?CompletePackageInterface
     {
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
         /** @var CompletePackageInterface $package */

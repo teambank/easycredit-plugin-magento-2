@@ -7,6 +7,12 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
+use Magento\Customer\Model\Session;
+use Magento\Quote\Api\CartManagementInterface;
+use Netzkollektiv\EasyCredit\Logger\Logger;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Url;
+use Magento\Framework\Exception\LocalizedException;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Magento\Checkout\Model\Type\Onepage;
@@ -14,48 +20,31 @@ use Magento\Checkout\Model\Type\Onepage;
 class PlaceOrder extends AbstractController
 {
 
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    private $customerSession;
+    private Session $customerSession;
 
     /**
      * Checkout data
-     *
-     * @var \Magento\Checkout\Helper\Data
      */
-    private $checkoutData;
+    private \Magento\Checkout\Helper\Data $checkoutData;
 
-    /**
-     * @var \Magento\Quote\Api\CartManagementInterface
-     */
-    private $cartManagement;
+    private CartManagementInterface $cartManagement;
 
-    /**
-     * @var QuoteBuilder
-     */
-    private $easyCreditQuoteBuilder;
+    private QuoteBuilder $easyCreditQuoteBuilder;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var \Netzkollektiv\EasyCredit\Logger\Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Customer\Model\Session $customerSession,
+        Url $customerUrl,
+        Session $customerSession,
         EasyCreditHelper $easyCreditHelper,
         QuoteBuilder $easyCreditQuoteBuilder,
-        \Magento\Quote\Api\CartManagementInterface $cartManagement,
+        CartManagementInterface $cartManagement,
         \Magento\Checkout\Helper\Data $checkoutData,
-        \Netzkollektiv\EasyCredit\Logger\Logger $logger
+        Logger $logger
     ) {
         $this->customerSession = $customerSession;
         $this->easyCreditHelper = $easyCreditHelper;
@@ -69,10 +58,8 @@ class PlaceOrder extends AbstractController
 
     /**
      * Dispatch request
-     *
-     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $ecCheckout = $this->easyCreditHelper->getCheckout();
         if (!$ecCheckout->isInitialized()) {
@@ -109,9 +96,9 @@ class PlaceOrder extends AbstractController
 
         try {
             $orderId = $this->cartManagement->placeOrder($quote->getId());
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->logger->error($e->getMessage());
-            $this->messageManager->addErrorMessage(__($e->getMessage()));
+        } catch (LocalizedException $localizedException) {
+            $this->logger->error($localizedException->getMessage());
+            $this->messageManager->addErrorMessage(__($localizedException->getMessage()));
             $this->_redirect('easycredit/checkout/cancel');
         }
 

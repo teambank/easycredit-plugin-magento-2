@@ -7,28 +7,24 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Checkout\Review;
 
+use Magento\Checkout\Block\Cart\Totals;
 use Magento\Sales\Model\Order\Address;
 
 /**
  * EasyCredit Review block
  */
-class Details extends \Magento\Checkout\Block\Cart\Totals
+class Details extends Totals
 {
-    /**
-     * @var Address
-     */
-    private $_address;
+    private ?\Magento\Quote\Model\Quote\Address $_address = null;
 
     /**
      * Return review shipping address
      *
-     * @return Address
+     * @return Address|null
      */
-    public function getAddress()
+    public function getAddress(): ?\Magento\Quote\Model\Quote\Address
     {
-        if (empty($this->_address)) {
-            $this->_address = $this->getQuote()->getShippingAddress();
-        }
+
         return $this->_address;
     }
 

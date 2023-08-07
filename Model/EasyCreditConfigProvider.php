@@ -17,25 +17,13 @@ use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 class EasyCreditConfigProvider implements ConfigProviderInterface
 {
-    /**
-     * @var Escaper
-     */
-    private $escaper;
+    private Escaper $escaper;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
+    private UrlInterface $urlBuilder;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         Escaper $escaper,
@@ -54,6 +42,7 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $config = [];
         $config['payment'][Payment::CODE] = '';
         try {
             $config['payment'][Payment::CODE] = [
@@ -66,9 +55,10 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
                     ]
                 )
             ];
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
         }
+
         return $config;
     }
 }

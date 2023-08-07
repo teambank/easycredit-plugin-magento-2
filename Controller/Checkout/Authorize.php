@@ -8,6 +8,10 @@
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
 
+use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Url;
+use Netzkollektiv\EasyCredit\Model\Payment;
 use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment\Transaction;
@@ -24,41 +28,23 @@ use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 class Authorize extends AbstractController
 {
-    /**
-     * @var OrderFactory
-     */
-    private $orderFactory;
+    private OrderFactory $orderFactory;
 
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
+    private OrderRepository $orderRepository;
 
-    /**
-     * @var OrderSender
-     */
-    private $orderSender;
+    private OrderSender $orderSender;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
+        Context $context,
+        Session $checkoutSession,
+        Url $customerUrl,
+        OrderFactory $orderFactory,
         ScopeConfigInterface $scopeConfig,
         EasyCreditHelper $easyCreditHelper,
         OrderRepository $orderRepository,
@@ -124,19 +110,19 @@ class Authorize extends AbstractController
 
         try {
             $this->orderSender->send($order);
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
         }
     }
 
-    private function setNewOrderState($order)
+    private function setNewOrderState($order): void
     {
-        if (! $order instanceof \Magento\Sales\Model\Order) {
+        if (! $order instanceof Order) {
             return;
         }
 
         $paymentMethod = $order->getPayment()->getMethod();
-        if ($paymentMethod !== \Netzkollektiv\EasyCredit\Model\Payment::CODE) {
+        if ($paymentMethod !== Payment::CODE) {
             return;
         }
 
@@ -145,6 +131,7 @@ class Authorize extends AbstractController
         if (empty($newOrderState)) {
             $newOrderState = Order::STATE_PROCESSING;
         }
+
         $order->setState($newOrderState)
             ->setStatus($newOrderState);
     }

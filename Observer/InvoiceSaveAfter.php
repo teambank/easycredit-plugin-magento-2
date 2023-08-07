@@ -14,11 +14,7 @@ use Magento\Sales\Model\Order\Invoice;
 class InvoiceSaveAfter implements ObserverInterface
 {
 
-    /**
-     * @param  Observer $observer
-     * @return void
-     */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer): void
     {
         $event = $observer->getEvent();
 

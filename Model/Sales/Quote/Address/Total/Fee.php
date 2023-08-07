@@ -7,23 +7,28 @@
 
 namespace Netzkollektiv\EasyCredit\Model\Sales\Quote\Address\Total;
 
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Framework\Phrase;
 use Magento\Checkout\Model\Session as CheckoutSession;
 
-class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
+class Fee extends AbstractTotal
 {
     protected $_code = 'easycredit';
 
     public function collect(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        ShippingAssignmentInterface $shippingAssignment,
+        Total $total
     ) {
         parent::collect($quote, $shippingAssignment, $total);
 
         $this->clearValues($total);
 
         $items = $shippingAssignment->getItems();
-        if (!count($items)) {
+        if ($items === []) {
             return $this;
         }
 
@@ -54,43 +59,39 @@ class Fee extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
     /**
      * Clear easycredit related total values in address
-     *
-     * @param  \Magento\Quote\Model\Quote\Address\Total $total
-     * @return void
      */
-    private function clearValues(\Magento\Quote\Model\Quote\Address\Total $total)
+    private function clearValues(Total $total): void
     {
         $total->setTotalAmount('easycredit', 0);
         $total->setBaseTotalAmount('easycredit', 0);
     }
 
     /**
-     * @param  \Magento\Quote\Model\Quote               $quote
-     * @param  \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      */
     public function fetch(
-        \Magento\Quote\Model\Quote $quote,
-        \Magento\Quote\Model\Quote\Address\Total $total
+        Quote $quote,
+        Total $total
     ) {
         $result = null;
 
         $amount = $total->getEasycreditAmount();
 
         if ($amount != 0) {
-            $result = [
+            return [
                 'code' => 'easycredit',
                 'title' => __('Interest'),
                 'value' => $amount
             ];
         }
+
         return $result;
     }
 
     /**
      * Get Subtotal label
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getLabel()
     {

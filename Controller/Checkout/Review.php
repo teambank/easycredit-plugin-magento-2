@@ -7,24 +7,32 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Checkout;
+use Magento\Framework\App\ViewInterface;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Checkout\Model\Session;
+use Magento\Customer\Model\Url;
+use Netzkollektiv\EasyCredit\Helper\Data;
+use Magento\Framework\View\Element\BlockInterface;
 class Review extends AbstractController
 {
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var ViewInterface
      */
     protected $view;
 
-    protected $easyCreditCheckout;
+    protected ?Checkout $easyCreditCheckout;
 
-    protected $logger;
+    protected LoggerInterface $logger;
 
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Url $customerUrl,
-        \Netzkollektiv\EasyCredit\Helper\Data $easyCreditHelper,
-        \Psr\Log\LoggerInterface $logger
+        Context $context,
+        Session $checkoutSession,
+        Url $customerUrl,
+        Data $easyCreditHelper,
+        LoggerInterface $logger
     ) {
         parent::__construct($context, $checkoutSession, $customerUrl);
 
@@ -34,10 +42,8 @@ class Review extends AbstractController
 
     /**
      * Dispatch request
-     *
-     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         try {
             $this->_validateQuote();
@@ -50,20 +56,22 @@ class Review extends AbstractController
 
             $this->_view->loadLayout();
             $reviewBlock = $this->_view->getLayout()->getBlock('easycredit.checkout.review');
-            if ($reviewBlock instanceof \Magento\Framework\View\Element\BlockInterface) {
+            if ($reviewBlock instanceof BlockInterface) {
                 $reviewBlock->setQuote($this->checkoutSession->getQuote());
                 $reviewBlock->getChildBlock('details')->setQuote($this->checkoutSession->getQuote());
                 if ($reviewBlock->getChildBlock('shipping_method')) {
                     $reviewBlock->getChildBlock('shipping_method')->setQuote($this->checkoutSession->getQuote());
                 }
             }
+
             $this->_view->renderLayout();
 
             return;
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             $this->messageManager->addErrorMessage(__('Unable to initialize easyCredit Checkout review.'));
-            $this->logger->critical($e);
+            $this->logger->critical($exception);
         }
+
         $this->messageManager->addErrorMessage(__('Unable to initialize easyCredit Checkout review.'));
         $this->_redirect('checkout/cart');
     }

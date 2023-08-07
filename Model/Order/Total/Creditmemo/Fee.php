@@ -7,11 +7,12 @@
 
 namespace Netzkollektiv\EasyCredit\Model\Order\Total\Creditmemo;
 
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal;
 
 class Fee extends AbstractTotal
 {
-    public function collect(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
+    public function collect(Creditmemo $creditmemo)
     {
         $order = $creditmemo->getOrder();
 

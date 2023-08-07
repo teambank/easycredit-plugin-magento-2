@@ -7,6 +7,8 @@
 
 namespace Netzkollektiv\EasyCredit\Block;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as DataHelper;
@@ -14,36 +16,15 @@ use Netzkollektiv\EasyCredit\Helper\Data as DataHelper;
 class Form extends \Magento\Payment\Block\Form
 {
 
-    /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    private $layout;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var DataHelper $dataHelper
-     */
-    private $dataHelper;
-
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
+        Context $context,
         DataHelper $dataHelper,
         CheckoutSession $checkoutSession,
         array $data = []
     ) {
-        $this->layout = $context->getLayout();
         $this->scopeConfig = $context->getScopeConfig();
-        $this->dataHelper = $dataHelper;
-        $this->checkoutSession = $checkoutSession;
         parent::__construct(
             $context,
             $data
@@ -55,7 +36,7 @@ class Form extends \Magento\Payment\Block\Form
     {
         $name = $this->getMethod()->getConfigData('store_name');
         $name = trim($name);
-        if (!empty($name)) {
+        if ($name !== '') {
             return $name;
         }
 

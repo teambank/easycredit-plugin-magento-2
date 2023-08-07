@@ -7,23 +7,19 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\Merchant;
 
+use Magento\Backend\Block\Template;
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Model\Auth\Session as AdminSession;
 use Magento\Integration\Model\Oauth\TokenFactory;
 
-class Config extends \Magento\Backend\Block\Template
+class Config extends Template
 {
-    /**
-     * @var TokenFactory 
-     */
-    private $tokenFactory;
+    private TokenFactory $tokenFactory;
 
-    /**
-     * @var AdminSession 
-     */
-    private $adminSession;
+    private AdminSession $adminSession;
 
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        Context $context,
         TokenFactory $tokenFactory,
         AdminSession $adminSession,
         array $data = []

@@ -7,23 +7,19 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\Order\View\Info;
 
+use Magento\Backend\Block\Template;
+use Magento\Framework\Registry;
+use Magento\Backend\Block\Template\Context;
+use Magento\Sales\Model\Order;
 use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
 
-class Transaction extends \Magento\Backend\Block\Template
+class Transaction extends Template
 {
-    /**
-     * @var \Magento\Framework\Registry
-     */
-    private $registry;
+    private Registry $registry;
 
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry             $registry
-     * @param array                                   $data
-     */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->registry = $registry;
@@ -39,14 +35,14 @@ class Transaction extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
         return $this->registry->registry('current_order');
     }
 
-    public function getCreatedAtFormatted()
+    public function getCreatedAtFormatted(): string
     {
         $date = new \DateTime($this->getOrder()->getCreatedAt());
         return $date->format('Y-m-d');

@@ -12,10 +12,8 @@ class Cancel extends AbstractController
 
     /**
      * Dispatch request
-     *
-     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $this->messageManager->addErrorMessage(__('easyCredit payment was canceled.'));
         $this->_redirect('checkout/cart');
@@ -23,10 +21,8 @@ class Cancel extends AbstractController
 
     /**
      * Returns action name which requires redirect
-     *
-     * @return string|null
      */
-    public function getRedirectActionName()
+    public function getRedirectActionName(): string
     {
         return 'cancel';
     }

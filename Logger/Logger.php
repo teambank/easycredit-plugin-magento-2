@@ -1,6 +1,7 @@
 <?php
 namespace Netzkollektiv\EasyCredit\Logger;
 
-class Logger extends \Magento\Framework\Logger\Monolog
+use Magento\Framework\Logger\Monolog;
+class Logger extends Monolog
 {
 }

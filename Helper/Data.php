@@ -7,6 +7,13 @@
 
 namespace Netzkollektiv\EasyCredit\Helper;
 
+use Teambank\RatenkaufByEasyCreditApiV3\Service\TransactionApiFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Service\WebshopApiFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Service\InstallmentplanApiFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\CheckoutFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\AddressValidator;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
+use Teambank\RatenkaufByEasyCreditApiV3\Client;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -18,55 +25,41 @@ use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class Data extends AbstractHelper
 {
-    /**
-     * @var CheckoutSession
-     */ 
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
-    /**
-     * @var StorageFactory
-     */
-    private $storageFactory;
+    private StorageFactory $storageFactory;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     /**
      * @var Api\Service\TransactionApiFactory
      */
-    private $transactionApiFactory;
+    private TransactionApiFactory $transactionApiFactory;
 
     /**
      * @var Api\Service\WebshopApiFactory
      */
-    private $webshopApiFactory;
+    private WebshopApiFactory $webshopApiFactory;
 
     /**
      * @var Api\Service\InstallmentplanApiFactory
      */
-    private $installmentplanApiFactory;
+    private InstallmentplanApiFactory $installmentplanApiFactory;
 
     /**
      * @var Api\Integration\CheckoutFactory
      */
-    private $checkoutFactory;
+    private CheckoutFactory $checkoutFactory;
 
     /**
      * @var Api\Integration\Util\AddressValidator
      */
-    private $addressValidator;
+    private AddressValidator $addressValidator;
 
     /**
      * @var Api\Integration\Util\PrefixConverter
      */
-    private $prefixConverter;
-
-    /**
-     * @var Api\Integration\CheckoutFactory
-     */
-    private $checkout = null;
+    private PrefixConverter $prefixConverter;
 
     public function __construct(
         Context $context,
@@ -99,7 +92,7 @@ class Data extends AbstractHelper
         $this->prefixConverter = $prefixConverter;
     }
 
-    public function getConfigValue($key)
+    public function getConfigValue(string $key)
     {
         return $this->scopeConfig
             ->getValue('payment/easycredit/credentials/' . $key, ScopeInterface::SCOPE_STORE);
@@ -114,16 +107,15 @@ class Data extends AbstractHelper
             ->setAccessToken($this->getConfigValue('api_signature'));
     }
 
-    private function getClient()
+    private function getClient(): Client
     {
-        return new \Teambank\RatenkaufByEasyCreditApiV3\Client(
+        return new Client(
             $this->logger
         );
     }
 
     public function getCheckout($quote = null)
     {
-        if (null === $this->checkout) {
             $args = [
                 'client' => $this->getClient(),
                 'config' => $this->getConfig()
@@ -139,7 +131,7 @@ class Data extends AbstractHelper
                 ]
             );
 
-            $this->checkout = $this->checkoutFactory->create(
+            return $this->checkoutFactory->create(
                 [
                 'webshopApi' => $webshopApi,
                 'transactionApi' => $transactionApi,
@@ -150,8 +142,6 @@ class Data extends AbstractHelper
                 'logger' => $this->logger
                 ]
             );
-        }
-        return $this->checkout;
     }
 
     public function getTransactionApi(): Api\Service\TransactionApi

@@ -7,6 +7,8 @@
 
 namespace Netzkollektiv\EasyCredit\Service;
 
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Webapi\Rest\Request;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
@@ -17,25 +19,16 @@ use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 class Transactions implements TransactionsInterface
 {
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var \Magento\Framework\App\ResponseInterface
-     */
-    private $response;
+    private ResponseInterface $response;
 
-    /**
-     * @var \Magento\Framework\Webapi\Rest\Request
-     */
-    private $request;
+    private Request $request;
 
     public function __construct(
         EasyCreditHelper $easyCreditHelper,
-        \Magento\Framework\Webapi\Rest\Request $request,
-        \Magento\Framework\App\ResponseInterface $response
+        Request $request,
+        ResponseInterface $response
     ) {
         $this->request = $request;
         $this->response = $response;
@@ -59,7 +52,7 @@ class Transactions implements TransactionsInterface
     /**
      * @api
      */
-    public function getTransactions()
+    public function getTransactions(): void
     {
         try {
             $transactionIds = $this->request->getParam('ids');
@@ -84,7 +77,7 @@ class Transactions implements TransactionsInterface
     /**
      * @api
      */
-    public function getTransaction($transactionId)
+    public function getTransaction($transactionId): void
     {
         try {
             $response = $this->easyCreditHelper
@@ -107,7 +100,7 @@ class Transactions implements TransactionsInterface
     /**
      * @api
      */
-    public function captureTransaction($transactionId)
+    public function captureTransaction($transactionId): void
     {
         try {
             $bodyParams = $this->request->getBodyParams();;
@@ -134,7 +127,7 @@ class Transactions implements TransactionsInterface
     /**
      * @api
      */
-    public function refundTransaction($transactionId)
+    public function refundTransaction($transactionId): void
     {
         try {
             $bodyParams = $this->request->getBodyParams();;

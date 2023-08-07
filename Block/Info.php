@@ -15,17 +15,11 @@ class Info extends PaymentInfo
 {
     protected $_template = 'Netzkollektiv_EasyCredit::easycredit/info.phtml';
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
-
     public function __construct(
         Context $context,
         EasyCreditHelper $easyCreditHelper,
         array $data = []
     ) {
-        $this->easyCreditHelper = $easyCreditHelper;
         parent::__construct($context, $data);
     }
 
@@ -43,10 +37,11 @@ class Info extends PaymentInfo
 
     public function getPaymentPlan()
     {
-        $summary = \json_decode((string) $this->getInfo()->getAdditionalInformation('summary'));
+        $summary = \json_decode((string) $this->getInfo()->getAdditionalInformation('summary'), null, 512, JSON_THROW_ON_ERROR);
         if ($summary === false || $summary === null) {
             return null;
         }
-        return json_encode($summary);
+
+        return json_encode($summary, JSON_THROW_ON_ERROR);
     }
 }

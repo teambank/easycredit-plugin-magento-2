@@ -19,15 +19,9 @@ use Teambank\RatenkaufByEasyCreditApiV3\Integration\ApiCredentialsNotActiveExcep
 class VerifyCredentials implements VerifyCredentialsInterface
 {
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
         EasyCreditHelper $easyCreditHelper,

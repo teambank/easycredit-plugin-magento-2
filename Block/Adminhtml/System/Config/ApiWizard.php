@@ -7,15 +7,18 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config;
 
-class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+class ApiWizard extends Field
 {
     /**
      * Path to block template
      */
-    const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+    public const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
 
-    const REST_INTERNAL_VERIFY_CREDENTIALS = 'rest/V1/easycredit/verify/credentials';
-    const REST_INTERNAL_VERIFY_CREDENTIALS_METHOD = 'get';
+    public const REST_INTERNAL_VERIFY_CREDENTIALS = 'rest/V1/easycredit/verify/credentials';
+
+    public const REST_INTERNAL_VERIFY_CREDENTIALS_METHOD = 'get';
 
     /**
      * Set template to itself
@@ -27,6 +30,7 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
         if (!$this->getTemplate()) {
             $this->setTemplate(self::WIZARD_TEMPLATE);
         }
+
         parent::_prepareLayout();
         return $this;
     }
@@ -34,10 +38,9 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Unset some non-related element parameters
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         return parent::render($element);
@@ -46,10 +49,9 @@ class ApiWizard extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Get the button and scripts contents
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $originalData = $element->getOriginalData();
         $this->addData(

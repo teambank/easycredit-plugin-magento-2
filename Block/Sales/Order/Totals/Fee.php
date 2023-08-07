@@ -7,17 +7,19 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Sales\Order\Totals;
 
-class Fee extends \Magento\Framework\View\Element\Template
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\DataObjectFactory;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Block\Adminhtml\Order\Totals;
+use Magento\Framework\DataObject;
+class Fee extends Template
 {
 
-    /**
-     * @var \Magento\Framework\DataObjectFactory
-     */
-    protected $dataObjectFactory;
+    protected DataObjectFactory $dataObjectFactory;
 
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\DataObjectFactory $dataObjectFactory,
+        Context $context,
+        DataObjectFactory $dataObjectFactory,
         array $data = []
     ) {
         $this->dataObjectFactory = $dataObjectFactory;
@@ -46,12 +48,13 @@ class Fee extends \Magento\Framework\View\Element\Template
     public function initTotals()
     {
         /**
-          * @var \Magento\Sales\Block\Adminhtml\Order\Totals $parent
-        */
+         * @var Totals $parent
+         */
         $parent = $this->getParentBlock();
-        if (!$parent instanceof \Magento\Sales\Block\Adminhtml\Order\Totals) {
+        if (!$parent instanceof Totals) {
             return $this;
         }
+
         $source = $parent->getSource();
 
         $amount = $source->getEasycreditAmount();
@@ -61,7 +64,7 @@ class Fee extends \Magento\Framework\View\Element\Template
             return $this;
         }
 
-        $total = new \Magento\Framework\DataObject(
+        $total = new DataObject(
             [
             'code'  => 'easycredit_amount',
             'value' => $amount,

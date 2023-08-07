@@ -7,14 +7,16 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
+use Teambank\RatenkaufByEasyCreditApiV3\Model\Customer;
 use Magento\Customer\Model\Session as CustomerSession;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
 
 class CustomerBuilder
 {
-    private $customerSession;
-    private $prefixConverter;
+    private CustomerSession $customerSession;
+
+    private PrefixConverter $prefixConverter;
 
     public function __construct(
         CustomerSession $customerSession,
@@ -24,13 +26,9 @@ class CustomerBuilder
         $this->prefixConverter = $prefixConverter;
     }
 
-    public function build($quote)
+    public function build($quote): Customer
     {
-        if ($this->customerSession->isLoggedIn()) {
-            $customer = $quote->getCustomer();
-        } else {
-            $customer = $quote->getShippingAddress();
-        }
+        $customer = $this->customerSession->isLoggedIn() ? $quote->getCustomer() : $quote->getShippingAddress();
 
         return new Api\Model\Customer(
             [

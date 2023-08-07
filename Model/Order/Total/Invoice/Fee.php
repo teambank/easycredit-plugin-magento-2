@@ -7,9 +7,11 @@
 
 namespace Netzkollektiv\EasyCredit\Model\Order\Total\Invoice;
 
-class Fee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
+use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
+use Magento\Sales\Model\Order\Invoice;
+class Fee extends AbstractTotal
 {
-    public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
+    public function collect(Invoice $invoice)
     {
         $order = $invoice->getOrder();
 

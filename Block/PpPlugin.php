@@ -7,25 +7,21 @@
 
 namespace Netzkollektiv\EasyCredit\Block;
 
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 
-class PpPlugin extends \Magento\Framework\View\Element\Template
+class PpPlugin extends Template
 {
 
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
+        Context $context,
         CheckoutSession $checkoutSession,
         array $data = []
     ) {

@@ -7,28 +7,24 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset;
 
+use Magento\Config\Block\System\Config\Form\Fieldset;
+use Magento\Config\Model\Config;
+use Magento\Backend\Block\Context;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\View\Helper\Js;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 /**
  * Fieldset renderer for easyCredit-Ratenkauf
  */
-class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
+class Payment extends Fieldset
 {
-    /**
-     * @var \Magento\Config\Model\Config
-     */
-    protected $_backendConfig;
+    protected Config $_backendConfig;
 
-    /**
-     * @param \Magento\Backend\Block\Context      $context
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\View\Helper\Js   $jsHelper
-     * @param \Magento\Config\Model\Config        $backendConfig
-     * @param array                               $data
-     */
     public function __construct(
-        \Magento\Backend\Block\Context $context,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\View\Helper\Js $jsHelper,
-        \Magento\Config\Model\Config $backendConfig,
+        Context $context,
+        Session $authSession,
+        Js $jsHelper,
+        Config $backendConfig,
         array $data = []
     ) {
         $this->_backendConfig = $backendConfig;
@@ -38,7 +34,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Add custom css class
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
     protected function _getFrontendClass($element)
@@ -50,13 +46,13 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Check whether current payment method is enabled
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return bool
      */
     protected function _isPaymentEnabled($element)
     {
         $groupConfig = $element->getGroup();
-        $activityPaths = isset($groupConfig['activity_path']) ? $groupConfig['activity_path'] : [];
+        $activityPaths = $groupConfig['activity_path'] ?? [];
 
         if (!is_array($activityPaths)) {
             $activityPaths = [$activityPaths];
@@ -74,7 +70,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Return header title part of html for payment solution
      *
-     * @param                                   \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return                                  string
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -85,8 +81,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         $groupConfig = $element->getGroup();
 
         $htmlId = $element->getHtmlId();
-        $html .= '<div class="button-container"><button type="button"' .
-            ' class="button action-configure' .
+        $html .= '<div class="button-container"><button type="button" class="button action-configure' .
             '" data-test-id="easycredit-config-button" id="' .
             $htmlId .
             '-head" onclick="window.easyCreditToggleSolution.call(this, \'' .
@@ -105,6 +100,7 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
                 'Learn More'
             ) . '</a>';
         }
+
         if (!empty($groupConfig['demo_url'])) {
             $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">' . __(
                 'View Demo'
@@ -117,16 +113,16 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
         if ($element->getComment()) {
             $html .= '<span class="heading-intro">' . $element->getComment() . '</span>';
         }
-        $html .= '<div class="config-alt"></div>';
-        $html .= '</div></div>';
 
-        return $html;
+        $html .= '<div class="config-alt"></div>';
+
+        return $html . '</div></div>';
     }
 
     /**
      * Return header comment part of html for payment solution
      *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -138,17 +134,17 @@ class Payment extends \Magento\Config\Block\System\Config\Form\Fieldset
     /**
      * Get collapsed state on-load
      *
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return                                        false
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _isCollapseState($element)
+    protected function _isCollapseState($element): bool
     {
         return false;
     }
 
     /**
-     * @param                                         \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return                                        string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

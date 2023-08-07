@@ -12,10 +12,8 @@ class Reject extends AbstractController
 
     /**
      * Dispatch request
-     *
-     * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $this->messageManager->addErrorMessage(__('Unfortunately, easyCredit payment cannot be offered.'));
         $this->_redirect('checkout/cart');
@@ -23,10 +21,8 @@ class Reject extends AbstractController
 
     /**
      * Returns action name which requires redirect
-     *
-     * @return string|null
      */
-    public function getRedirectActionName()
+    public function getRedirectActionName(): string
     {
         return 'reject';
     }

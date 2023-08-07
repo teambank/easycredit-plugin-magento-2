@@ -22,35 +22,17 @@ use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
 {
-    /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
+    private CartRepositoryInterface $quoteRepository;
 
-    /**
-     * @var CheckoutSession
-     */
-    private $checkoutSession;
+    private CheckoutSession $checkoutSession;
 
-    /**
-     * @var QuoteBuilder
-     */
-    private $easyCreditQuoteBuilder;
+    private QuoteBuilder $easyCreditQuoteBuilder;
 
-    /**
-     * @var EasyCreditHelper
-     */
-    private $easyCreditHelper;
+    private EasyCreditHelper $easyCreditHelper;
 
-    /**
-     * @var CheckoutDataInterface
-     */
-    private $checkoutData;
+    private CheckoutDataInterface $checkoutData;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
         CartRepositoryInterface $quoteRepository,
@@ -71,17 +53,16 @@ class Checkout implements CheckoutInterface
     /**
      * @api
      * @param  string $cartId
-     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function getCheckoutData($cartId)
+    public function getCheckoutData($cartId): CheckoutDataInterface
     {
         try {
             $ecQuote = $this->easyCreditQuoteBuilder->build();
             $this->easyCreditHelper->getCheckout()->isAvailable(
                 $ecQuote
             );
-        } catch (\Exception $e) {
-            $this->checkoutData->setErrorMessage($e->getMessage());
+        } catch (\Exception $exception) {
+            $this->checkoutData->setErrorMessage($exception->getMessage());
         }
 
         return $this->checkoutData;
@@ -102,9 +83,8 @@ class Checkout implements CheckoutInterface
     /**
      * @api
      * @param  string $cartId
-     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId)
+    public function start($cartId): CheckoutDataInterface
     {
         try {
             try {
@@ -125,10 +105,11 @@ class Checkout implements CheckoutInterface
                     $this->checkoutData->setRedirectUrl($url);
                 }
             } catch (ApiException $e) {
-                $response = json_decode((string) $e->getResponseBody());
+                $response = json_decode((string) $e->getResponseBody(), null, 512, JSON_THROW_ON_ERROR);
                 if ($response === null || !isset($response->violations)) {
-                    throw new \Exception('violations could not be parsed');
+                    throw new \Exception('violations could not be parsed', $e->getCode(), $e);
                 }
+
                 $messages = [];
                 foreach ($response->violations as $violation) {
                     $messages[] = $violation->message;
@@ -150,6 +131,7 @@ class Checkout implements CheckoutInterface
                 WebapiException::HTTP_FORBIDDEN
             );
         }
+
         return $this->checkoutData;
     }
 }

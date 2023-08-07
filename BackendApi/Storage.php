@@ -14,15 +14,9 @@ use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class Storage implements Api\Integration\StorageInterface
 {
-    /**
-     * @var Payment
-     */
-    private $payment;
+    private Payment $payment;
 
-    /**
-     * @var Logger
-     */
-    private $logger;
+    private Logger $logger;
 
     public function __construct(
         Payment $payment,
@@ -45,7 +39,7 @@ class Storage implements Api\Integration\StorageInterface
         return $this->payment->getAdditionalInformation($key);
     }
 
-    public function clear()
+    public function clear(): void
     {
         $this->logger->debug('clear');
         $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line 
