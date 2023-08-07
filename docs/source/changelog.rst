@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v2.0.5
+------
+
+* verbessert die Kompatibilität mit PHP 7.4
+* behebt einen Fehler, bei dem eingeloggte Kunden keine Bestellung mit aktivierten Bestellbedingungen aufgeben konnten 
+
 v2.0.4
 ------
 
