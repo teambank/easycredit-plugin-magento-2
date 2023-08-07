@@ -1,7 +1,10 @@
 .payment-method.payment-method-easycredit .payment-method-title .label[for="easycredit"] {
-     display: inline-flex;
-     flex-flow: row wrap;
-     justify-content: flex-start;
+    display: inline-flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+}
+.payment-method.payment-method-easycredit .checkout-agreements {
+    display:none;
 }
 .easycredit-review .block .columns {
     display: flex;

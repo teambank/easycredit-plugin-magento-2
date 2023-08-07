@@ -17,7 +17,6 @@ class Fee extends Template
 
     public function __construct(
         Context $context,
-        DataObjectFactory $dataObjectFactory,
         array $data = []
     ) {
         parent::__construct(

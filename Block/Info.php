@@ -17,7 +17,6 @@ class Info extends PaymentInfo
 
     public function __construct(
         Context $context,
-        EasyCreditHelper $easyCreditHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);

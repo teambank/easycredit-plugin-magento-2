@@ -67,7 +67,6 @@ class Review extends Template
         Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
         Config $addressConfig,
-        EasyCreditHelper $easycreditHelper,
         PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {

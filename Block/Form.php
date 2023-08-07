@@ -20,8 +20,6 @@ class Form extends \Magento\Payment\Block\Form
 
     public function __construct(
         Context $context,
-        DataHelper $dataHelper,
-        CheckoutSession $checkoutSession,
         array $data = []
     ) {
         $this->scopeConfig = $context->getScopeConfig();

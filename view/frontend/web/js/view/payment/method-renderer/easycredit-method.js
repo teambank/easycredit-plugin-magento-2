@@ -194,12 +194,21 @@ define(
                 },
                 handlePaymentConfirm: function () {
                     onHydrated('easycredit-checkout', function(){
-                        if ($('easycredit-checkout').data('submitEventBound')) {
+                        var ecCheckout = $('easycredit-checkout');
+                        if (ecCheckout.data('submitEventBound')) {
                           return true;
                         }
-                        $('easycredit-checkout').data('submitEventBound', true);
+                        ecCheckout.data('submitEventBound', true);
 
-                        $('easycredit-checkout').submit(function(e){
+                        ecCheckout.submit(function(e){
+
+
+                            // check agreements, agreements are displayed at review page again
+                            ecCheckout
+                                .closest('.payment-method')
+                                .find('.checkout-agreements input[type=checkbox]')
+                                .attr('checked','checked');
+
                             if (!additionalValidators.validate()) {
                                 $('easycredit-checkout')
                                     .get(0)
