@@ -155,15 +155,15 @@ define(
                         'alert':        this.errorMessage(),
                     };
 
-                    var html = [];
-                    Object.keys(attrs).forEach(function(key, index) {
+                    var component = document.createElement("easycredit-checkout");
+                    Object.keys(attrs).forEach(function(key) {
                         var value = attrs[key];
                         if (value !== null) {
-                            html.push(key + '="' + attrs[key] + '"');                            
+                            component.setAttribute(key, attrs[key])
                         }
                     });
 
-                    this.componentHtml("<easycredit-checkout " + html.join(' ') + "></easycredit-checkout>");
+                    this.componentHtml(component.outerHTML);
                     this.handlePaymentConfirm();
                 },
                 checkAvailable: function () {
