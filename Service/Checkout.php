@@ -112,12 +112,12 @@ class Checkout implements CheckoutInterface
 
                 $messages = [];
                 foreach ($response->violations as $violation) {
-                    $messages[] = $violation->message;
+                    $messages[] = implode(': ',[$violation->field, $violation->messageDE ?? $violation->message]);
                 }
 
                 throw new WebapiException(
-                    __(implode(' ', $messages)), 
-                    0, 
+                    __(implode(', ', $messages)),
+                    0,
                     WebapiException::HTTP_FORBIDDEN
                 );
             }
