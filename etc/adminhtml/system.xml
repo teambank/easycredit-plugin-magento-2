@@ -6,11 +6,21 @@
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <label><![CDATA[<easycredit-logo></easycredit-logo>]]></label>
                 <comment><![CDATA[
-                    Bieten Sie Ihren Kunden die Möglichkeit der Ratenzahlung mit easyCredit-Ratenkauf.<br />
-                    Einfach. Fair. In Raten zahlen.<br /><br />
-                    <a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">zum Partnerportal</a>
-                    - <a href="https://www.easycredit-ratenkauf.de/shopsysteme.htm" target="_blank">zum Integration-Center</a>
-                    - <a href="https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/" target="_blank">zur Dokumentation</a>
+                    <div class="easycredit-marketing intro">
+                        <div class="easycredit-marketing__content">
+                            <p>
+                                Offer your customers the option of payment by instalments with easyCredit-Ratenkauf.<br />
+                                <strong>Pay in instalments with ease.</strong>
+                            </p>
+                            <ul>
+                                <li><a href="https://partner.easycredit-ratenkauf.de/registrierung/firmendaten" target="_blank">Register as trader</a></li>
+                                <li><a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">Partner portal</a></li>
+                                <li><a href="https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/" target="_blank">Documentation</a></li>
+                                <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with easyCredit-Ratenkauf</a></li>
+                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Support</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 ]]></comment>
                 <fieldset_css>complex easycredit-section</fieldset_css>
                 <attribute type="displayIn">recommended_solutions</attribute>
@@ -39,16 +49,6 @@
                 <field id="debug_logging" translate="label comment" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug Logging</label>
                     <comment><![CDATA[If activated, API call debug details will be logged to var/log/debug.log (error messages will always be logged)]]></comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="widget_enabled" translate="label comment" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Show model calculation at product detail page</label>
-                    <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Show model calculation in cart</label>
-                    <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="remove_interest" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -81,119 +81,207 @@
                         <attribute type="shared">1</attribute>
                     </field>
                 </group>
+                <group id="marketing" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Marketing</label>
+                    <comment>
+                        <![CDATA[
+                            <div class="easycredit-marketing">
+                                <div class="easycredit-marketing__grid intro">
+                                    <div class="easycredit-marketing__content">
+                                        <p>We provide you with a range of marketing components that you can easily activate in your online shop. In this way, you achieve an optimal presentation of financing via easyCredit-Ratenkauf, for higher sales and satisfied customers.</p>
+                                        <h3>Useful links</h3>
+                                        <ul>
+                                            <li><a href="https://netzkollektiv.com/docs/easycredit-ratenkauf-components/" target="_blank">Documentation</a></li>
+                                            <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with marketing components</a></li>
+                                            <li><a href="https://www.easycredit-ratenkauf.de/marketingmaterial-schulung/" target="_blank">Marketing portal</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="easycredit-marketing__image">
+                                        <div class="img"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ]]>
+                    </comment>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <attribute type="expanded">1</attribute>
+
+                    <group id="widget" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Widget</label>
+                        <comment>
+                        <![CDATA[
+                            <div class="easycredit-marketing">
+                                <div class="easycredit-marketing__grid widget">
+                                    <div class="easycredit-marketing__content">
+                                        <p>The widget component is shown on the product detail page and in the shopping cart. It calculates the lowest possible rate with which a product with a certain price can be financed. Clicking on "more info" opens the rate calculator with further details on financing. If the product price is outside the possible financing amounts, the widget indicates the minimum or maximum possible financing amount.</p>
+                                    </div>
+                                    <div class="easycredit-marketing__image bg">
+                                        <div class="img"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ]]>
+                        </comment>
+						<field id="widget_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+							<label>Show widget at product detail page</label>
+							<comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
+							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+						</field>
+						<field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+							<label>Show widget in cart</label>
+							<comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
+							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+						</field>
+                    </group>
+
+
+                    <group id="modal" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Modal</label>
+                        <comment>
+                        <![CDATA[
+                            <div class="easycredit-marketing">
+                                <div class="easycredit-marketing__grid modal">
+                                    <div class="easycredit-marketing__content">
+                                        <p>The modal component can be used to actively draw the customer's attention to the instalment purchase in the shop. A time-controlled display of the modal is possible. If the customer closes the modal, the component remembers this and prevents it from being displayed again.</p>
+                                    </div>
+                                    <div class="easycredit-marketing__image bg">
+                                        <div class="img"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ]]>
+                        </comment>
+                        <field id="modal_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Activate modal</label>
+                            <comment><![CDATA[Show modal automatically when visiting the online shop for the first time]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="modal_delay" translate="label comment" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Delay (in seconds)</label>
+                            <comment><![CDATA[Here you can specify in seconds the delay after which the modal is displayed to the customer when the page is loaded (for example "10" for 10 seconds delay).]]></comment>
+                        </field>
+                        <field id="modal_snooze_for" translate="label comment" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Reactivate after (in seconds)</label>
+                            <comment><![CDATA[Here you can specify in seconds the time after which the modal is displayed again to the customer (when the page is loaded) after he has actively closed the modal (for example "3600" for 1 hour).]]></comment>
+                        </field>
+                        <field id="modal_src" translate="label comment" type="image" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use your own image</label>
+                            <backend_model>Netzkollektiv\EasyCredit\Model\Config\Backend\Image</backend_model>
+                            <base_url type="media" scope_info="1">netzkollektiv/easycredit</base_url>
+                            <comment><![CDATA[Allowed file types: jpg, jpeg, png]]></comment>
+                        </field>
+                    </group>
+                    <group id="card" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Card</label>
+                        <comment>
+                            <![CDATA[
+                                <div class="easycredit-marketing">
+                                    <div class="easycredit-marketing__grid card">
+                                        <div class="easycredit-marketing__content">
+                                            <p>The card component can be used to replace a product within the product list with a banner to advertise the hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offering.</p>
+                                        </div>
+                                        <div class="easycredit-marketing__image bg">
+                                            <div class="img"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ]]>
+                        </comment>
+                        <field id="card_enabled" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Activate card</label>
+                            <comment><![CDATA[Show card within the product list (category)]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="card_search_enabled" translate="label comment" type="select" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Activate card (search)</label>
+                            <comment><![CDATA[Show card within search results]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="card_position" translate="label comment" type="text" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Position in product list</label>
+                        </field>
+                        <field id="card_src" translate="label comment" type="image" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use your own image</label>
+                            <backend_model>Netzkollektiv\EasyCredit\Model\Config\Backend\Image</backend_model>
+                            <base_url type="media" scope_info="1">netzkollektiv/easycredit</base_url>
+                            <comment><![CDATA[Allowed file types: jpg, jpeg, png]]></comment>
+                        </field>
+                    </group>
+                    <group id="flashbox" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Flashbox</label>
+                        <comment>
+                            <![CDATA[
+                                <div class="easycredit-marketing">
+                                    <div class="easycredit-marketing__grid flashbox">
+                                        <div class="easycredit-marketing__content">
+                                            <p>This marketing component allows a banner to be displayed at the bottom of the screen to advertise hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offer.</p>
+                                        </div>
+                                        <div class="easycredit-marketing__image bg">
+                                            <div class="img"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ]]>
+                        </comment>
+                        <field id="flashbox_enabled" translate="label comment" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Activate flashbox</label>
+                            <comment><![CDATA[Show flashbox at the bottom of the screen]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="flashbox_src" translate="label comment" type="image" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Use your own image</label>
+                            <backend_model>Netzkollektiv\EasyCredit\Model\Config\Backend\Image</backend_model>
+                            <base_url type="media" scope_info="1">netzkollektiv/easycredit</base_url>
+                            <comment><![CDATA[Allowed file types: jpg, jpeg, png]]></comment>
+                        </field>
+                    </group>
+                    <group id="bar" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Bar</label>
+                        <comment>
+                            <![CDATA[
+                                <div class="easycredit-marketing">
+                                    <div class="easycredit-marketing__grid bar">
+                                        <div class="easycredit-marketing__content">
+                                            <p>The bar component can be displayed at the top of the screen and promotes the hire purchase with short slogans. The slogans are predefined and cannot be customised.</p>
+                                        </div>
+                                        <div class="easycredit-marketing__image bg">
+                                            <div class="img"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ]]>
+                        </comment>
+                        <field id="bar_enabled" translate="label comment" type="select" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Activate bar</label>
+                            <comment><![CDATA[Show bar at the top of the screen]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                    </group>
+                </group>
                 <group id="clickandcollect" translate="label comment" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label><![CDATA[Click & Collect]]></label>
                     <comment><![CDATA[
-<div class="easycredit-click-and-collect-intro">
-    <a href="https://www.easycredit-ratenkauf.de/click-und-collect/" class="easycredit-click-and-collect-logo" target="_blank">
-        <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
-        width="200" viewBox="0 0 700.000000 394.000000"
-        preserveAspectRatio="xMidYMid meet">
-        <g transform="translate(0.000000,394.000000) scale(0.100000,-0.100000)"
-        fill="#006ab0" stroke="none">
-            <path d="M0 1970 l0 -1970 3500 0 3500 0 0 1970 0 1970 -3500 0 -3500 0 0
-            -1970z m3895 1422 c91 -74 121 -104 123 -124 3 -23 -13 -39 -124 -129 -136
-            -110 -137 -110 -178 -55 l-21 27 35 27 c19 15 46 37 60 49 l25 22 -1437 1
-            -1437 0 -15 -22 c-14 -20 -16 -161 -16 -1315 0 -1280 0 -1293 20 -1313 20 -20
-            33 -20 2565 -20 2532 0 2545 0 2565 20 20 20 20 33 20 1064 l0 1043 -23 34
-            c-28 42 -83 64 -133 54 -30 -5 -61 -30 -158 -125 -108 -106 -120 -121 -108
-            -137 30 -42 63 -126 73 -182 21 -119 -20 -246 -112 -344 -56 -59 -49 -62 -109
-            44 -88 156 -255 322 -422 420 l-91 53 56 52 c82 76 152 107 258 112 93 5 161
-            -11 227 -51 l34 -20 121 121 c129 128 181 161 251 162 91 0 176 -52 215 -133
-            21 -44 21 -44 19 -1115 -3 -1064 -3 -1071 -24 -1098 -11 -15 -33 -37 -48 -48
-            l-27 -21 -2584 0 -2584 0 -27 21 c-15 11 -37 33 -48 48 -21 27 -21 32 -24
-            1349 -2 970 1 1329 9 1350 16 38 71 84 116 96 26 7 499 11 1461 11 l1424 0
-            -54 41 c-29 23 -57 46 -62 50 -11 10 40 79 57 79 7 0 66 -44 132 -98z m-1925
-            -888 l5 -369 40 -1 c42 0 47 -7 69 -96 8 -35 -13 -47 -97 -54 -71 -6 -116 12
-            -151 59 -20 27 -21 42 -24 409 -2 237 1 385 7 391 10 10 119 36 136 33 6 -2
-            12 -138 15 -372z m1238 126 l2 -244 120 119 119 118 45 -34 c25 -19 46 -38 46
-            -44 0 -5 -45 -55 -100 -110 l-100 -101 115 -138 c94 -112 114 -142 103 -151
-            -28 -26 -120 -69 -126 -59 -4 6 -54 71 -112 144 l-105 134 -5 -129 -5 -130
-            -77 -3 -78 -3 0 425 0 425 58 11 c31 6 62 13 67 15 27 9 30 -11 33 -245z
-            m-857 211 c51 -52 33 -128 -37 -157 -63 -26 -134 24 -134 94 0 50 46 92 100
-            92 33 0 48 -6 71 -29z m1810 -95 c44 -30 69 -79 69 -139 0 -65 -13 -91 -76
-            -158 l-56 -58 53 -67 54 -66 12 29 c6 15 15 47 19 71 7 47 11 48 81 31 l45
-            -12 -5 -46 c-3 -25 -18 -74 -33 -109 l-27 -62 42 -53 c22 -30 41 -58 41 -63 0
-            -13 -66 -64 -83 -64 -9 0 -29 17 -45 37 -28 36 -31 37 -49 22 -49 -44 -106
-            -63 -193 -63 -71 0 -94 4 -135 24 -75 38 -108 86 -113 164 -2 35 1 80 7 99 11
-            34 68 94 120 127 l24 16 -40 53 c-67 89 -76 154 -31 229 58 95 218 124 319 58z
-            m-2516 -147 c31 -12 59 -28 62 -36 6 -16 -23 -87 -43 -103 -9 -8 -22 -5 -46
-            10 -21 12 -50 20 -80 20 -39 0 -50 -5 -72 -30 -31 -38 -41 -84 -39 -181 2
-            -116 38 -169 116 -169 21 0 56 9 77 20 l40 20 14 -33 c28 -68 28 -74 1 -95
-            -27 -22 -104 -42 -159 -42 -59 0 -131 28 -170 66 -52 51 -77 113 -83 210 -12
-            184 59 313 197 355 48 14 129 9 185 -12z m1272 -7 c23 -12 44 -26 48 -32 7
-            -11 -44 -110 -56 -110 -5 0 -23 9 -41 20 -43 26 -107 26 -140 1 -13 -11 -30
-            -37 -36 -59 -15 -48 -15 -174 -2 -224 21 -75 99 -99 181 -58 l40 21 19 -43
-            c29 -65 26 -76 -27 -101 -68 -30 -192 -30 -248 0 -80 43 -118 102 -136 212 -9
-            54 -9 88 0 142 22 135 83 215 191 250 45 15 162 4 207 -19z m-557 -292 l0
-            -300 -75 0 -75 0 0 240 0 239 -57 3 -58 3 -3 44 c-5 72 -8 71 138 71 l130 0 0
-            -300z m2775 32 c149 -105 265 -235 344 -383 l44 -83 -105 -101 c-77 -75 -124
-            -111 -174 -136 -65 -32 -74 -34 -174 -34 -99 0 -110 2 -172 33 -173 85 -266
-            287 -213 468 25 86 46 117 163 236 l105 107 56 -29 c31 -15 88 -50 126 -78z
-            m-2565 -914 c0 -200 4 -369 9 -377 6 -9 20 -12 40 -9 17 3 35 0 40 -6 11 -14
-            31 -108 25 -117 -9 -15 -107 -31 -147 -25 -53 9 -82 28 -104 69 -16 29 -18 71
-            -21 406 -2 235 1 378 7 384 8 8 103 33 139 36 9 1 12 -78 12 -361z m340 -13
-            l5 -370 40 0 39 0 14 -59 c14 -55 14 -60 -3 -72 -26 -19 -118 -28 -158 -15
-            -35 12 -66 40 -86 78 -8 15 -11 140 -11 402 l0 381 23 5 c82 19 104 23 117 21
-            13 -1 16 -52 20 -371z m1510 190 l0 -95 81 0 82 0 -7 -41 c-12 -73 -19 -79
-            -91 -79 l-65 0 0 -154 c0 -85 5 -167 10 -182 11 -28 23 -29 112 -8 25 6 27 3
-            39 -51 15 -69 8 -78 -79 -96 -104 -21 -176 2 -216 71 -16 28 -20 59 -24 226
-            l-5 194 -33 0 c-57 0 -64 7 -64 66 l0 54 50 0 50 0 0 73 c0 39 4 78 9 86 9 14
-            64 27 124 30 l27 1 0 -95z m-2752 -104 c47 -24 50 -36 22 -91 -26 -51 -33 -54
-            -72 -30 -38 23 -114 26 -140 6 -35 -26 -52 -86 -51 -181 0 -97 14 -141 55
-            -169 31 -22 86 -20 133 4 44 22 46 22 69 -39 16 -42 16 -45 -1 -62 -10 -10
-            -47 -26 -82 -35 -157 -40 -286 32 -327 182 -22 84 -16 208 16 282 26 59 99
-            132 152 150 53 18 176 9 226 -17z m477 10 c55 -25 93 -66 124 -131 23 -49 26
-            -67 26 -170 0 -106 -2 -120 -28 -172 -34 -69 -84 -113 -151 -133 -139 -42
-            -266 20 -317 153 -25 66 -31 210 -11 279 20 69 73 135 132 165 65 35 162 38
-            225 9z m1276 -4 c79 -42 129 -149 129 -279 l0 -58 -176 0 -176 0 6 -37 c10
-            -54 36 -86 85 -103 37 -13 47 -13 104 3 34 10 71 20 83 23 17 5 24 -3 42 -42
-            11 -27 18 -52 16 -56 -11 -17 -81 -46 -139 -58 -117 -24 -233 9 -286 83 -64
-            88 -81 257 -39 372 26 69 96 144 150 162 63 20 152 16 201 -10z m637 -6 c23
-            -12 42 -29 42 -38 0 -16 -47 -103 -55 -103 -3 0 -19 9 -37 20 -50 30 -122 27
-            -153 -6 -40 -44 -55 -154 -34 -253 20 -93 97 -127 183 -80 21 11 41 17 44 14
-            13 -13 41 -99 35 -108 -3 -5 -24 -17 -47 -27 -142 -63 -292 -17 -353 108 -26
-            52 -28 66 -28 172 0 110 2 119 33 182 53 108 126 150 252 145 53 -3 88 -10
-            118 -26z"/>
-            <path d="M5424 2428 c-56 -53 -65 -67 -62 -92 2 -23 10 -33 31 -40 25 -9 32
-            -5 92 54 70 69 84 109 46 130 -32 17 -40 13 -107 -52z"/>
-            <path d="M3970 2650 c-11 -11 -20 -33 -20 -48 0 -33 55 -122 76 -122 7 0 25
-            17 39 37 29 44 34 112 9 137 -22 23 -80 20 -104 -4z"/>
-            <path d="M3953 2298 c-53 -59 -59 -124 -14 -169 24 -24 38 -29 78 -29 57 0
-            118 32 109 56 -9 24 -130 162 -142 163 -6 1 -20 -9 -31 -21z"/>
-            <path d="M1974 1365 c-48 -74 -43 -278 8 -332 29 -31 81 -31 113 1 31 31 38
-            72 33 194 -4 127 -20 155 -91 160 -40 3 -48 0 -63 -23z"/>
-            <path d="M3262 1400 c-24 -10 -52 -64 -52 -100 0 -19 6 -20 88 -20 l89 0 -7
-            46 c-4 25 -13 52 -21 59 -19 19 -69 27 -97 15z"/>
-            </g>
-        </svg>
-    </a>
-
-    <p>
-    Sie wollen Click&Collect für den easyCredit-Ratenkauf nutzen?
-    Nichts einfacher als das! Um das Feature nutzen zu können, benötigen Sie eine ergänzende Zusatzvereinbarung zu Ihrem Factoringvertrag.
-    Sprechen Sie dazu einfach Ihren Key-Account-Manager an oder fragen Sie diesen über unser <a href="https://www.easycredit-ratenkauf.de/click-und-collect/" target="_blank">Click&Collect-Formular</a> an.
-    </p>
-    <p>
-    Wichtig für Sie ist, dass Sie bei Nutzung von Click&Collect sicherstellen müssen, dass das gekaufte Produkt ausschließlich an den Vertragspartner übergeben wird. Die Verantwortung für die korrekte Übergabe liegt bei Ihnen als Händler.
-    </p>
-    <p>Bitte stellen Sie im Folgenden die Versandart, mit der Sie Click&Collect anbieten, ein:</p>
-</div>
-<style>
-.easycredit-click-and-collect-intro p {
-  margin-bottom:10px;
-}
-.easycredit-click-and-collect-logo {
-   display:block;
-   float:right;
-   margin: 0 0 15px 15px;
-}
-
-.easycredit-click-and-collect-intro {
-  clear:both;
-}
-</style>
-]]></comment>
+                        <div class="easycredit-marketing clickandcollect">
+                            <div class="easycredit-marketing__grid">
+                                <div class="easycredit-marketing__content">
+                                    <p>
+                                        You want to use Click&Collect for easyCredit-Ratenkauf? Nothing could be simpler!
+                                        To be able to use the feature, you need an additional supplementary agreement to your factoring contract.
+                                        To do so, simply contact your key account manager or ask him via our <a href="https://www.easycredit-ratenkauf.de/click-und-collect/" target="_blank">Click&Collect form</a>.
+                                    </p>
+                                    <p>
+                                        It is important for you that when using Click&Collect you must ensure that the purchased product is handed over exclusively to the contractual partner. The responsibility for the correct handover lies with you as the merchant.
+                                    </p>
+                                    <p>
+                                        Please set the shipping method with which you offer Click&Collect in the following:
+                                    </p>
+                                </div>
+                                <div class="easycredit-marketing__image bg">
+                                    <div class="img"></div>
+                                </div>
+                            </div>
+                        </div>
+                    ]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
                     <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">

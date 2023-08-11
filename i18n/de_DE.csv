@@ -55,3 +55,256 @@
 "Payment transaction not found. It can take up to 24 hours until the transaction is available in the merchant portal. If you still want to create the invoice immediately, please use \"Capture Offline\".","Die Transaktion wurde nicht gefunden. Es kann bis zu einem Tag dauern bis die Transaktion im Händlerportal vorhanden ist. Falls Sie die Rechnung dennoch sofort erstellen möchten, benutzen Sie bitte \"Capture Offline\"."
 "Remove interest after order","Zinsen nach Bestellabschluss entfernen"
 "If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.","Wenn aktiviert, werden die Zinsen nach Abschluss der Bestellung entfernt und in der Bestellung und den Bestelldokumenten nicht mehr angezeigt."
+"
+<div class=""easycredit-marketing intro"">
+    <div class=""easycredit-marketing__content"">
+        <p>
+            Offer your customers the option of payment by instalments with easyCredit-Ratenkauf.<br />
+            <strong>Pay in instalments with ease.</strong>
+        </p>
+        <ul>
+            <li><a href=""https://partner.easycredit-ratenkauf.de/registrierung/firmendaten"" target=""_blank"">Register as trader</a></li>
+            <li><a href=""https://partner.easycredit-ratenkauf.de/portal/"" target=""_blank"">Partner portal</a></li>
+            <li><a href=""https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/"" target=""_blank"">Documentation</a></li>
+            <li><a href=""https://easycredit-demo.netzkollektiv.com/"" target=""_blank"">Demo shop with easyCredit-Ratenkauf</a></li>
+            <li><a href=""https://www.easycredit-ratenkauf.de/kontakt/"" target=""_blank"">Support</a></li>
+        </ul>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing intro"">
+    <div class=""easycredit-marketing__content"">
+        <p>
+            Bieten Sie Ihren Kunden die Möglichkeit der Ratenzahlung mit easyCredit-Ratenkauf.<br />
+            <strong>Ganz entspannt in Raten zahlen.</strong>
+        </p>
+        <ul>
+            <li><a href=""https://partner.easycredit-ratenkauf.de/registrierung/firmendaten"" target=""_blank"">Als Händler registrieren</a></li>
+            <li><a href=""https://partner.easycredit-ratenkauf.de/portal/"" target=""_blank"">Partnerportal</a></li>
+            <li><a href=""https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/"" target=""_blank"">Dokumentation</a></li>
+            <li><a href=""https://easycredit-demo.netzkollektiv.com/"" target=""_blank"">Demoshop mit easyCredit-Ratenkauf</a></li>
+            <li><a href=""https://www.easycredit-ratenkauf.de/kontakt/"" target=""_blank"">Support</a></li>
+        </ul>
+    </div>
+</div>
+"
+"Marketing","Marketing"
+"
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid intro"">
+        <div class=""easycredit-marketing__content"">
+            <p>We provide you with a range of marketing components that you can easily activate in your online shop. In this way, you achieve an optimal presentation of financing via easyCredit-Ratenkauf, for higher sales and satisfied customers.</p>
+            <h3>Useful links</h3>
+            <ul>
+                <li><a href=""https://netzkollektiv.com/docs/easycredit-ratenkauf-components/"" target=""_blank"">Documentation</a></li>
+                <li><a href=""https://easycredit-demo.netzkollektiv.com/"" target=""_blank"">Demo shop with marketing components</a></li>
+                <li><a href=""https://www.easycredit-ratenkauf.de/marketingmaterial-schulung/"" target=""_blank"">Marketing portal</a></li>
+            </ul>
+        </div>
+        <div class=""easycredit-marketing__image"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid intro"">
+        <div class=""easycredit-marketing__content"">
+            <p>Wir stellen Ihnen eine Reihe von Marketing-Komponenten zur Verfügung, die Sie ganz einfach in Ihrem Onlineshop aktivieren können. So erzielen Sie eine optimale Präsentation der Finanzierung über easyCredit-Ratenkauf, für höhere Umsätze und zufriedene Kunden.</p>
+            <h3>Hilfreiche Links</h3>
+            <ul>
+                <li><a href=""https://netzkollektiv.com/docs/easycredit-ratenkauf-components/"" target=""_blank"">Dokumentation</a></li>
+                <li><a href=""https://easycredit-demo.netzkollektiv.com/"" target=""_blank"">Demoshop mit Marketing-Komponenten</a></li>
+                <li><a href=""https://www.easycredit-ratenkauf.de/marketingmaterial-schulung/"" target=""_blank"">Marketing-Portal</a></li>
+            </ul>
+        </div>
+        <div class=""easycredit-marketing__image"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"
+"Widget","Widget",
+"
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid widget">
+        <div class="easycredit-marketing__content">
+            <p>The widget component is shown on the product detail page and in the shopping cart. It calculates the lowest possible rate with which a product with a certain price can be financed. Clicking on "more info" opens the rate calculator with further details on financing. If the product price is outside the possible financing amounts, the widget indicates the minimum or maximum possible financing amount.</p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+","
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid widget">
+        <div class="easycredit-marketing__content">
+            <p>Die Widget-Komponente wird auf der Produktdetailseite und auch im Warenkorb angezeigt. Sie berechnet die günstigstmögliche Rate mit der ein Produkt mit einem bestimmten Preis finanziert werden kann. Bei Klick auf "mehr Infos" öffnet sich der Ratenrechner mit weiteren Details zur Finanzierung. Liegt der Produktpreis außerhalb der möglichen Finanzierungsbeträge weist das Widget auf Wunsch auf den minimal oder maximal möglichen Finanzierungsbetrag hin.</p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+"
+"Modal","Modal"
+"
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid modal"">
+        <div class=""easycredit-marketing__content"">
+            <p>The modal component can be used to actively draw the customer's attention to the instalment purchase in the shop. A time-controlled display of the modal is possible. If the customer closes the modal, the component remembers this and prevents it from being displayed again.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid modal"">
+        <div class=""easycredit-marketing__content"">
+            <p>Die Modal-Komponente kann eingesetzt werden, um einen Kunden im Shop aktiv auf den Ratenkauf hinzuweisen. Ein zeitgesteuertes Einblenden des Modals ist möglich. Schliesst der Kunde das Modal, merkt die Komponente sich dies und verhindert ein weiteres Anzeigen.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"
+"Activate modal","Modal aktivieren"
+"Show modal automatically when visiting the online shop for the first time","Automatisches Anzeigen des Modals beim ersten Besuch des Online-Shops"
+"Delay (in seconds)","Verzögerung (in Millisekunden)"
+"Here you can specify in seconds the delay after which the modal is displayed to the customer when the page is loaded (for example \"10\" for 10 seconds delay).","Hier können Sie in Sekunden die Verzögerung angeben, nach welcher dem Kunden beim Laden der Seite das Modal angezeigt wird (beispielsweise \"10\" für 10 Sekunden Verzögerung)."
+"Reactivate after (in seconds)","Reaktivierung nach (in Sekunden)"
+"Here you can specify in seconds the time after which the modal is displayed again to the customer (when the page is loaded) after he has actively closed the modal (for example \"3600\" for 1 hour).","Hier können Sie in Sekunden angeben, nach welcher Zeit dem Kunden das Modal wieder angezeigt wird (beim Laden der Seite), nachdem er das Modal aktiv geschlossen hat (beispielsweise \"3600\" für 1 Stunde)."
+"Use your own image","Standard-Bild mit eigenem Bild ersetzen"
+"Allowed file types: jpg, jpeg, png","Erlaubte Dateitypen: jpg, jpeg, png"
+"Card","Card"
+"
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid card"">
+        <div class=""easycredit-marketing__content"">
+            <p>The card component can be used to replace a product within the product list with a banner to advertise the hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offering.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid card"">
+        <div class=""easycredit-marketing__content"">
+            <p>Mit der Card-Komponente kann innerhalb der Produktliste ein Produkt durch einen Banner zur Bewerbung des Ratenkaufs ersetzt werden. Der Banner zeigt ein Standardbild, das sich überschreiben lässt. So können Sie ein zu ihrem Produktangebot passendes Bild verwenden.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"
+"Activate card","Card aktivieren"
+"Show card within the product list (category)","Card innerhalb der Produktliste (Kategorie) anzeigen"
+"Activate card (search)","Card aktivieren (Suche)"
+"Show card within search results","Card in den Suchergebnissen anzeigen"
+"Position in product list","Position in der Produktliste"
+"Use your own image","Standard-Bild mit eigenem Bild ersetzen"
+"Allowed file types: jpg, jpeg, png","Erlaubte Dateitypen: jpg, jpeg, png"
+"Flashbox","Flashbox"
+"
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid flashbox"">
+        <div class=""easycredit-marketing__content"">
+            <p>This marketing component allows a banner to be displayed at the bottom of the screen to advertise hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offer.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid flashbox"">
+        <div class=""easycredit-marketing__content"">
+            <p>Mit dieser Marketing-Komponente lässt sich ein Banner zur Bewerbung des Ratenkaufs am unteren Bildschirmrand einblenden. Der Banner zeigt ein Standardbild, das sich überschreiben lässt. So können Sie ein zu ihrem Produktangebot passendes Bild verwenden.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"
+"Activate flashbox",Flashbox aktivieren"
+"Show flashbox at the bottom of the screen","Flashbox am unteren Rand des Bildschirms anzeigen"
+"Use your own image","Standard-Bild mit eigenem Bild ersetzen"
+"Allowed file types: jpg, jpeg, png","Erlaubte Dateitypen: jpg, jpeg, png"
+"Bar","Bar"
+"
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid bar"">
+        <div class=""easycredit-marketing__content"">
+            <p>The bar component can be displayed at the top of the screen and promotes the hire purchase with short slogans. The slogans are predefined and cannot be customised.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing"">
+    <div class=""easycredit-marketing__grid bar"">
+        <div class=""easycredit-marketing__content"">
+            <p>Die Bar-Komponente kann am oberen Bildschirmrand angezeigt werden und bewirbt den Ratenkauf mit kurzen Slogans. Die Slogans sind vorgegeben und können nicht angepasst werden.</p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"
+"Activate bar","Bar aktivieren"
+"Show bar at the top of the screen","Leiste am oberen Rand des Bildschirms anzeigen"
+"
+<div class=""easycredit-marketing clickandcollect"">
+    <div class=""easycredit-marketing__grid"">
+        <div class=""easycredit-marketing__content"">
+            <p>
+                You want to use Click&Collect for easyCredit-Ratenkauf? Nothing could be simpler!
+                To be able to use the feature, you need an additional supplementary agreement to your factoring contract.
+                To do so, simply contact your key account manager or ask him via our <a href=""https://www.easycredit-ratenkauf.de/click-und-collect/"" target=""_blank"">Click&Collect form</a>.
+            </p>
+            <p>
+                It is important for you that when using Click&Collect you must ensure that the purchased product is handed over exclusively to the contractual partner. The responsibility for the correct handover lies with you as the merchant.
+            </p>
+            <p>
+                Please set the shipping method with which you offer Click&Collect in the following:
+            </p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+","
+<div class=""easycredit-marketing clickandcollect"">
+    <div class=""easycredit-marketing__grid"">
+        <div class=""easycredit-marketing__content"">
+            <p>
+                Sie wollen Click&Collect für den easyCredit-Ratenkauf nutzen?
+                Nichts einfacher als das! Um das Feature nutzen zu können, benötigen Sie eine ergänzende Zusatzvereinbarung zu Ihrem Factoringvertrag.
+                Sprechen Sie dazu einfach Ihren Key-Account-Manager an oder fragen Sie diesen über unser <a href=""https://www.easycredit-ratenkauf.de/click-und-collect/"" target=""_blank"">Click&Collect-Formular</a> an.
+            </p>
+            <p>
+                Wichtig für Sie ist, dass Sie bei Nutzung von Click&Collect sicherstellen müssen, dass das gekaufte Produkt ausschließlich an den Vertragspartner übergeben wird. Die Verantwortung für die korrekte Übergabe liegt bei Ihnen als Händler.
+            </p>
+            <p>
+                Bitte stellen Sie im Folgenden die Versandart, mit der Sie Click&Collect anbieten, ein:
+            </p>
+        </div>
+        <div class=""easycredit-marketing__image bg"">
+            <div class=""img""></div>
+        </div>
+    </div>
+</div>
+"

@@ -1,0 +1,30 @@
+/* Bar */
+.page-wrapper:has( easycredit-box-top ) {
+    padding-top: 50px !important;
+}
+
+/* Card */
+easycredit-box-listing {
+    text-align: left !important;
+}
+
+.column.main > easycredit-box-listing {
+    display: none;
+}
+
+.easycredit-card-columns-adjusted {
+    display: flex !important;
+    justify-content: space-between !important;
+    flex-wrap: wrap !important;
+}
+.easycredit-card-columns-adjusted:before {
+    content: none !important;
+}
+.easycredit-card-columns-adjusted > * {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.easycredit-card-columns-adjusted::after {
+    content: '';
+    flex: auto;
+}

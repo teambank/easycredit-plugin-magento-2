@@ -4,5 +4,22 @@
         <referenceBlock name="head.additional">
             <block class="Magento\Framework\View\Element\Template" name="easycredit-ratenkauf-components" template="Netzkollektiv_EasyCredit::head/components.phtml" />
         </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block class="Netzkollektiv\EasyCredit\Block\Marketing"
+                   name="easycredit.marketing.bar"
+                   template="Netzkollektiv_EasyCredit::easycredit/marketing/bar.phtml"
+                   ifconfig="payment/easycredit/marketing/bar/bar_enabled">
+            </block>
+            <block class="Netzkollektiv\EasyCredit\Block\Marketing"
+                   name="easycredit.marketing.flashbox"
+                   template="Netzkollektiv_EasyCredit::easycredit/marketing/flashbox.phtml"
+                   ifconfig="payment/easycredit/marketing/flashbox/flashbox_enabled">
+            </block>
+            <block class="Netzkollektiv\EasyCredit\Block\Marketing"
+                   name="easycredit.marketing.modal"
+                   template="Netzkollektiv_EasyCredit::easycredit/marketing/modal.phtml"
+                   ifconfig="payment/easycredit/marketing/modal/modal_enabled">
+            </block>
+        </referenceContainer>
     </body>
 </page>
