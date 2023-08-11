@@ -9,7 +9,6 @@ namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
 class Cancel extends AbstractController
 {
-
     /**
      * Dispatch request
      */

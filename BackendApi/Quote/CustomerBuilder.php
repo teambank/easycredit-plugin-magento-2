@@ -7,10 +7,10 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
-use Teambank\RatenkaufByEasyCreditApiV3\Model\Customer;
 use Magento\Customer\Model\Session as CustomerSession;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\Customer;
 
 class CustomerBuilder
 {
@@ -32,17 +32,17 @@ class CustomerBuilder
 
         return new Api\Model\Customer(
             [
-            'gender' => $this->prefixConverter->convert($customer->getPrefix()),
-            'firstName' => $customer->getFirstname(),
-            'lastName' => $customer->getLastname(),
-            'birthDate' => $customer->getDob(),
-            'contact' => $quote->getBillingAddress()->getEmail() ? new Api\Model\Contact(
-                [
-                'email' => $quote->getBillingAddress()->getEmail()
-                ]
-            ) : null,
-            'companyName' => $quote->getShippingAddress()->getCompany()
+                'gender' => $this->prefixConverter->convert($customer->getPrefix()),
+                'firstName' => $customer->getFirstname(),
+                'lastName' => $customer->getLastname(),
+                'birthDate' => $customer->getDob(),
+                'contact' => $quote->getBillingAddress()->getEmail() ? new Api\Model\Contact(
+                    [
+                        'email' => $quote->getBillingAddress()->getEmail(),
+                    ]
+                ) : null,
+                'companyName' => $quote->getShippingAddress()->getCompany(),
             ]
-        );        
+        );
     }
 }

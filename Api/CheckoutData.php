@@ -12,14 +12,15 @@ use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 class CheckoutData implements CheckoutDataInterface
 {
     private ?string $errorMessage = null;
+
     private ?string $redirectUrl = null;
-    
+
     /**
      * Gets the error message
      *
      * @return string
      */
-    public function getErrorMessage() : ?string
+    public function getErrorMessage(): ?string
     {
         return $this->errorMessage;
     }
@@ -29,7 +30,7 @@ class CheckoutData implements CheckoutDataInterface
      *
      * @return self
      */
-    public function setErrorMessage(string $message) : self
+    public function setErrorMessage(string $message): self
     {
         $this->errorMessage = $message;
         return $this;
@@ -40,7 +41,7 @@ class CheckoutData implements CheckoutDataInterface
      *
      * @return string
      */
-    public function getRedirectUrl() : ?string
+    public function getRedirectUrl(): ?string
     {
         return $this->redirectUrl;
     }
@@ -50,7 +51,7 @@ class CheckoutData implements CheckoutDataInterface
      *
      * @return self
      */
-    public function setRedirectUrl(string $url) : self
+    public function setRedirectUrl(string $url): self
     {
         $this->redirectUrl = $url;
         return $this;

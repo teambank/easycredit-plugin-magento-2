@@ -7,12 +7,14 @@
 
 namespace Netzkollektiv\EasyCredit\Api;
 
+use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
+
 interface CheckoutInterface
 {
     /**
      * @api
      * @param  string $cartId
-     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
+     * @return CheckoutDataInterface
      */
     public function getCheckoutData($cartId);
 
@@ -20,7 +22,7 @@ interface CheckoutInterface
      * @api
      * @param  string $cartId
      * @param  boolean $express
-     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
+     * @return CheckoutDataInterface
      */
     public function start($cartId, $express = false);
 }

@@ -9,16 +9,15 @@ namespace Netzkollektiv\EasyCredit\Service;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Webapi\Rest\Request;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
-
 use Netzkollektiv\EasyCredit\Api\TransactionsInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
+
+use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
 
 class Transactions implements TransactionsInterface
 {
-
     private EasyCreditHelper $easyCreditHelper;
 
     private ResponseInterface $response;
@@ -32,15 +31,21 @@ class Transactions implements TransactionsInterface
     ) {
         $this->request = $request;
         $this->response = $response;
-        $this->easyCreditHelper = $easyCreditHelper; 
+        $this->easyCreditHelper = $easyCreditHelper;
     }
 
-    private function sendJsonResponseFromException(ApiException $response) : void
+    /**
+     * @return never
+     */
+    private function sendJsonResponseFromException(ApiException $response): void
     {
         $this->sendJsonResponse((string) $response->getResponseBody(), $response->getCode());
     }
 
-    private function sendJsonResponse(string $body, int $statusCode = 200) : void
+    /**
+     * @return never
+     */
+    private function sendJsonResponse(string $body, int $statusCode = 200): void
     {
         $this->response->setHeader('Content-Type', 'application/json', true)
             ->setBody($body)
@@ -59,16 +64,19 @@ class Transactions implements TransactionsInterface
 
             $response = $this->easyCreditHelper
                 ->getTransactionApi()
-                ->apiMerchantV3TransactionGet(null, null,  null, 100, null, null, null, null, ['tId' => $transactionIds]);
+                ->apiMerchantV3TransactionGet(null, null, null, 100, null, null, null, null, [
+                    'tId' => $transactionIds,
+                ]);
             $this->sendJsonResponse($response);
-        } catch (ApiException $e) {
-            $this->sendJsonResponseFromException($e);
-        } catch (\Throwable $e) {
+        } catch (ApiException $apiException) {
+            $this->sendJsonResponseFromException($apiException);
+        } catch (\Throwable $throwable) {
             $this->sendJsonResponse(
                 json_encode(
                     [
-                    'error' => $e->getMessage()
-                    ], 500
+                        'error' => $throwable->getMessage(),
+                    ],
+                    500
                 )
             );
         }
@@ -84,14 +92,15 @@ class Transactions implements TransactionsInterface
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdGet($transactionId);
             $this->sendJsonResponse($response);
-        } catch (ApiException $e) {
-            $this->sendJsonResponseFromException($e);
-        } catch (\Throwable $e) {
+        } catch (ApiException $apiException) {
+            $this->sendJsonResponseFromException($apiException);
+        } catch (\Throwable $throwable) {
             $this->sendJsonResponse(
                 json_encode(
                     [
-                    'error' => $e->getMessage()
-                    ], 500
+                        'error' => $throwable->getMessage(),
+                    ],
+                    500
                 )
             );
         }
@@ -103,22 +112,26 @@ class Transactions implements TransactionsInterface
     public function captureTransaction($transactionId): void
     {
         try {
-            $bodyParams = $this->request->getBodyParams();;
+            $bodyParams = $this->request->getBodyParams();
+            ;
 
             $this->easyCreditHelper
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdCapturePost(
                     $transactionId,
-                    new CaptureRequest(['trackingNumber' => $bodyParams['trackingNumber'] ?? null])
+                    new CaptureRequest([
+                        'trackingNumber' => $bodyParams['trackingNumber'] ?? null,
+                    ])
                 );
-        } catch (ApiException $e) {
-            $this->sendJsonResponseFromException($e);
-        } catch (\Throwable $e) {
+        } catch (ApiException $apiException) {
+            $this->sendJsonResponseFromException($apiException);
+        } catch (\Throwable $throwable) {
             $this->sendJsonResponse(
                 json_encode(
                     [
-                    'error' => $e->getMessage()
-                    ], 500
+                        'error' => $throwable->getMessage(),
+                    ],
+                    500
                 )
             );
         }
@@ -130,22 +143,26 @@ class Transactions implements TransactionsInterface
     public function refundTransaction($transactionId): void
     {
         try {
-            $bodyParams = $this->request->getBodyParams();;
+            $bodyParams = $this->request->getBodyParams();
+            ;
 
             $this->easyCreditHelper
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdRefundPost(
                     $transactionId,
-                    new RefundRequest(['value' => $bodyParams['value']])
+                    new RefundRequest([
+                        'value' => $bodyParams['value'],
+                    ])
                 );
-        } catch (ApiException $e) {
-            $this->sendJsonResponseFromException($e);
-        } catch (\Throwable $e) {
+        } catch (ApiException $apiException) {
+            $this->sendJsonResponseFromException($apiException);
+        } catch (\Throwable $throwable) {
             $this->sendJsonResponse(
                 json_encode(
                     [
-                    'error' => $e->getMessage()
-                    ], 500
+                        'error' => $throwable->getMessage(),
+                    ],
+                    500
                 )
             );
         }

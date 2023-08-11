@@ -7,21 +7,22 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Magento\Framework\App\Action\Context;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Checkout\Model\Session as CheckoutSession;
-use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
-use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\Model\Payment;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
 class ReturnAction extends AbstractController
 {
+    private QuoteBuilder $easyCreditQuoteBuilder;
+
     private CartRepositoryInterface $quoteRepository;
 
     private EasyCreditHelper $easyCreditHelper;
@@ -30,29 +31,27 @@ class ReturnAction extends AbstractController
 
     private StorageFactory $storageFactory;
 
-    public function __construct(
-        Context $context,
-        Session $checkoutSession,
-        Url $customerUrl,
-        CartRepositoryInterface $quoteRepository,
-        EasyCreditHelper $easyCreditHelper,
-        Logger $logger,
-        StorageFactory $storageFactory,
-    ) {
+    public function __construct(Context $context, Session $checkoutSession, Url $customerUrl, CartRepositoryInterface $quoteRepository, EasyCreditHelper $easyCreditHelper, Logger $logger, StorageFactory $storageFactory, QuoteBuilder $easyCreditQuoteBuilder)
+    {
+        $this->quoteRepository = $quoteRepository;
+        $this->easyCreditHelper = $easyCreditHelper;
+        $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
+        $this->logger = $logger;
+        $this->storageFactory = $storageFactory;
         parent::__construct($context, $checkoutSession, $customerUrl);
     }
 
-    private function getStorage() {
+    private function getStorage()
+    {
         return $this->storageFactory->create(
             [
-            'payment' => $this->checkoutSession->getQuote()->getPayment()
+                'payment' => $this->checkoutSession->getQuote()->getPayment(),
             ]
         );
     }
 
     /**
      * Dispatch request
-     *
      * @return void
      */
     public function execute()
@@ -63,7 +62,7 @@ class ReturnAction extends AbstractController
             $checkout = $this->easyCreditHelper->getCheckout();
             $transaction = $checkout->loadTransaction();
 
-            if (!$checkout->isApproved()) {
+            if (! $checkout->isApproved()) {
                 throw new TransactionNotApprovedException(__('transaction not approved'));
             }
 
@@ -77,7 +76,7 @@ class ReturnAction extends AbstractController
             $payment = $quote->getPayment();
             $paymentAdditionalInformation = $payment->getAdditionalInformation();
 
-            $payment->save(); // @phpstan-ignore-line 
+            $payment->save(); // @phpstan-ignore-line
 
             $quote->setTotalsCollectedFlag(false);
             $quote->collectTotals();
@@ -103,7 +102,8 @@ class ReturnAction extends AbstractController
         return 'return';
     }
 
-    protected function importExpressCheckoutData(TransactionInformation $transaction) {
+    protected function importExpressCheckoutData(TransactionInformation $transaction)
+    {
         $customer = $transaction->getTransaction()->getCustomer();
         $contact = $customer->getContact();
         $address = $transaction->getTransaction()->getOrderDetails()->getShippingAddress();

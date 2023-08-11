@@ -7,18 +7,41 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset;
 
-use Magento\Config\Block\System\Config\Form\Fieldset;
-use Magento\Config\Model\Config;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\View\Helper\Js;
+use Magento\Config\Block\System\Config\Form\Fieldset;
+use Magento\Config\Model\Config;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\View\Helper\Js;
+
 /**
  * Fieldset renderer for easyCredit-Ratenkauf
  */
 class Payment extends Fieldset
 {
     protected Config $_backendConfig;
+
+    /**
+     * @var string
+     */
+    private const SCRIPT = "require(['jquery', 'prototype'], function(jQuery){
+            window.easyCreditToggleSolution = function (id, url) {
+                var doScroll = false;
+                Fieldset.toggleCollapse(id, url);
+                if ($(this).hasClassName(\"open\")) {
+                    $$(\".with-button button.button\").each(function(anotherButton) {
+                        if (anotherButton != this && $(anotherButton).hasClassName(\"open\")) {
+                            $(anotherButton).click();
+                            doScroll = true;
+                        }
+                    }.bind(this));
+                }
+                if (doScroll) {
+                    var pos = Element.cumulativeOffset($(this));
+                    window.scrollTo(pos[0], pos[1] - 45);
+                }
+            }
+        });";
 
     public function __construct(
         Context $context,
@@ -54,14 +77,14 @@ class Payment extends Fieldset
         $groupConfig = $element->getGroup();
         $activityPaths = $groupConfig['activity_path'] ?? [];
 
-        if (!is_array($activityPaths)) {
+        if (! is_array($activityPaths)) {
             $activityPaths = [$activityPaths];
         }
 
         $isPaymentEnabled = false;
         foreach ($activityPaths as $activityPath) {
             $isPaymentEnabled = $isPaymentEnabled
-                || (bool)(string)$this->_backendConfig->getConfigDataValue($activityPath);
+                || (bool) (string) $this->_backendConfig->getConfigDataValue($activityPath);
         }
 
         return $isPaymentEnabled;
@@ -95,13 +118,13 @@ class Payment extends Fieldset
                 'Close'
             ) . '</span></button>';
 
-        if (!empty($groupConfig['more_url'])) {
+        if (! empty($groupConfig['more_url'])) {
             $html .= '<a class="link-more" href="' . $groupConfig['more_url'] . '" target="_blank">' . __(
                 'Learn More'
             ) . '</a>';
         }
 
-        if (!empty($groupConfig['demo_url'])) {
+        if (! empty($groupConfig['demo_url'])) {
             $html .= '<a class="link-demo" href="' . $groupConfig['demo_url'] . '" target="_blank">' . __(
                 'View Demo'
             ) . '</a>';
@@ -150,25 +173,6 @@ class Payment extends Fieldset
      */
     protected function _getExtraJs($element)
     {
-        $script = "require(['jquery', 'prototype'], function(jQuery){
-            window.easyCreditToggleSolution = function (id, url) {
-                var doScroll = false;
-                Fieldset.toggleCollapse(id, url);
-                if ($(this).hasClassName(\"open\")) {
-                    $$(\".with-button button.button\").each(function(anotherButton) {
-                        if (anotherButton != this && $(anotherButton).hasClassName(\"open\")) {
-                            $(anotherButton).click();
-                            doScroll = true;
-                        }
-                    }.bind(this));
-                }
-                if (doScroll) {
-                    var pos = Element.cumulativeOffset($(this));
-                    window.scrollTo(pos[0], pos[1] - 45);
-                }
-            }
-        });";
-
-        return $this->_jsHelper->getScript($script);
+        return $this->_jsHelper->getScript(self::SCRIPT);
     }
 }

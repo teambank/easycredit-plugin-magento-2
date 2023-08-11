@@ -9,8 +9,6 @@ namespace Netzkollektiv\EasyCredit\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Message\ManagerInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
@@ -18,9 +16,7 @@ use Netzkollektiv\EasyCredit\Model\Payment;
 
 class ExpirePayment implements ObserverInterface
 {
-
     private EasyCreditHelper $easyCreditHelper;
-
 
     private QuoteBuilder $easyCreditQuoteBuilder;
 
@@ -56,7 +52,7 @@ class ExpirePayment implements ObserverInterface
             ->setQuote($quote)
             ->build();
 
-        if (!$checkout->isValid($ecQuote)) {
+        if (! $checkout->isValid($ecQuote)) {
             $checkout->clear();
         }
     }

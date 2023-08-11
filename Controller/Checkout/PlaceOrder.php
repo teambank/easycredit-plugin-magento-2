@@ -7,19 +7,18 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
+use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Model\Session;
-use Magento\Quote\Api\CartManagementInterface;
-use Netzkollektiv\EasyCredit\Logger\Logger;
-use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Api\CartManagementInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Magento\Checkout\Model\Type\Onepage;
+use Netzkollektiv\EasyCredit\Logger\Logger;
 
 class PlaceOrder extends AbstractController
 {
-
     private Session $customerSession;
 
     /**
@@ -62,7 +61,7 @@ class PlaceOrder extends AbstractController
     public function execute(): void
     {
         $ecCheckout = $this->easyCreditHelper->getCheckout();
-        if (!$ecCheckout->isInitialized()) {
+        if (! $ecCheckout->isInitialized()) {
             $this->messageManager->addErrorMessage(
                 __('Unable to finish easyCredit Checkout. Please restart payment process.')
             );
@@ -72,7 +71,7 @@ class PlaceOrder extends AbstractController
 
         $ecQuote = $this->easyCreditQuoteBuilder->build();
 
-        if (!$ecCheckout->isValid($ecQuote)) {
+        if (! $ecCheckout->isValid($ecQuote)) {
             $this->messageManager->addErrorMessage(
                 __("Unable to finish easyCredit Checkout. Validation failed.")
             );
@@ -84,7 +83,7 @@ class PlaceOrder extends AbstractController
 
         $quote = $this->checkoutSession->getQuote();
 
-        if (!$this->customerSession->isLoggedIn()) {
+        if (! $this->customerSession->isLoggedIn()) {
             if ($this->checkoutData->isAllowedGuestCheckout($quote)) {
                 $quote->setCheckoutMethod(Onepage::METHOD_GUEST);
             } else {
@@ -95,7 +94,7 @@ class PlaceOrder extends AbstractController
         }
 
         try {
-            $orderId = $this->cartManagement->placeOrder($quote->getId());
+            $this->cartManagement->placeOrder($quote->getId());
         } catch (LocalizedException $localizedException) {
             $this->logger->error($localizedException->getMessage());
             $this->messageManager->addErrorMessage(__($localizedException->getMessage()));

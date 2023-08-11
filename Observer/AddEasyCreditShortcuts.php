@@ -7,24 +7,25 @@
 
 namespace Netzkollektiv\EasyCredit\Observer;
 
+use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Netzkollektiv\EasyCredit\Block\Ui\ExpressButton;
 
-class AddEasyCreditShortcuts implements ObserverInterface {
-
+class AddEasyCreditShortcuts implements ObserverInterface
+{
     /**
      * Add easyCredit shortcut buttons
      *
      * @param EventObserver $observer
-     * @return void
      */
-    public function execute(Observer $observer)
+    public function execute(Observer $observer): void
     {
-        /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
+        /** @var ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
 
         $shortcut = $shortcutButtons->getLayout()->createBlock(
-            'Netzkollektiv\EasyCredit\Block\Ui\ExpressButton'
+            ExpressButton::class
         )->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
             ->setShowOrPosition($observer->getEvent()->getOrPosition())
             ->setIsShoppingCart((bool) $observer->getEvent()->getIsShoppingCart());

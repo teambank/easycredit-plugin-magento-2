@@ -7,11 +7,11 @@
 
 namespace Netzkollektiv\EasyCredit\Ui\Component\Listing\Column;
 
-use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 use Netzkollektiv\EasyCredit\Model\Payment;
@@ -45,13 +45,13 @@ class Status extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if (!isset($dataSource['data']['items'])) {
+        if (! isset($dataSource['data']['items'])) {
             return $dataSource;
         }
 
         $ids = [];
         foreach ($dataSource['data']['items'] as $item) {
-            if (!isset($item['payment_method'])) {
+            if (! isset($item['payment_method'])) {
                 continue;
             }
 
@@ -65,9 +65,11 @@ class Status extends Column
         $collection = $this->paymentCollectionFactory->create()
             ->addFieldToSelect('parent_id')
             ->addFieldToSelect('additional_information')
-            ->addFieldToFilter('parent_id', ['in' => $ids])->load();
+            ->addFieldToFilter('parent_id', [
+                'in' => $ids,
+            ])->load();
 
-        foreach ($dataSource['data']['items'] as & $item) {
+        foreach ($dataSource['data']['items'] as &$item) {
             $paymentItem = $collection->getItemByColumnValue('parent_id', $item[$item['id_field_name']]);
             if ($paymentItem instanceof DataObject) {
                 $transactionId = $this->escaper->escapeHtml(

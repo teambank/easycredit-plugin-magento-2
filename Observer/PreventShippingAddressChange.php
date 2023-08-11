@@ -7,12 +7,12 @@
 
 namespace Netzkollektiv\EasyCredit\Observer;
 
-use Magento\Sales\Model\Order\Address;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Netzkollektiv\EasyCredit\Model\Payment;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Sales\Model\Order\Address;
+use Netzkollektiv\EasyCredit\Model\Payment;
 
 class PreventShippingAddressChange implements ObserverInterface
 {
@@ -26,7 +26,7 @@ class PreventShippingAddressChange implements ObserverInterface
             return;
         }
 
-        if (!$address->getOrder()->getPayment() instanceof OrderPaymentInterface) {
+        if (! $address->getOrder()->getPayment() instanceof OrderPaymentInterface) {
             return;
         }
 

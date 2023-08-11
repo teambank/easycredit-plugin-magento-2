@@ -13,7 +13,6 @@ use Magento\Sales\Model\Order\Creditmemo;
 
 class CreditmemoSaveAfter implements ObserverInterface
 {
-
     public function execute(Observer $observer): void
     {
         $event = $observer->getEvent();

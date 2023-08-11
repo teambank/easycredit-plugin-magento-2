@@ -8,6 +8,7 @@
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
@@ -48,14 +49,14 @@ class ItemBuilder
         $skus = [];
         foreach (\array_filter(
             [
-            'sku' => $item->getSku(),
-            'ean' => $item->getEan()
+                'sku' => $item->getSku(),
+                'ean' => $item->getEan(),
             ]
         ) as $type => $sku) {
             $skus[] = new Api\Model\ArticleNumberItem(
                 [
-                'numberType' => $type,
-                'number' => $sku
+                    'numberType' => $type,
+                    'number' => $sku,
                 ]
             );
         }
@@ -67,14 +68,14 @@ class ItemBuilder
     {
         return new Api\Model\ShoppingCartInformationItem(
             [
-            'productName' => $item->getName(),
-            'productUrl' => $item->getProduct()->getProductUrl(),
-            'productImageUrl' => $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $item->getProduct()->getSmallImage(),
-            'quantity' => $item->getQty(),
-            'price' => $item->getPrice(),
-            'manufacturer' => $item->getProduct()->getData('manufacturer'),
-            'productCategory' => $this->getDeepestCategoryName($item->getProduct()->getCategoryIds()),
-            'articleNumber' => $this->buildSkus($item)
+                'productName' => $item->getName(),
+                'productUrl' => $item->getProduct()->getProductUrl(),
+                'productImageUrl' => $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $item->getProduct()->getSmallImage(),
+                'quantity' => $item->getQty(),
+                'price' => $item->getPrice(),
+                'manufacturer' => $item->getProduct()->getData('manufacturer'),
+                'productCategory' => $this->getDeepestCategoryName($item->getProduct()->getCategoryIds()),
+                'articleNumber' => $this->buildSkus($item),
             ]
         );
     }

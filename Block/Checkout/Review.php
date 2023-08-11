@@ -9,25 +9,22 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Checkout;
 
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\Quote\Address;
-use Magento\Customer\Model\Address\Config;
-use Magento\Framework\View\Element\Template\Context;
 use Magento\Customer\Block\Address\Renderer\RendererInterface;
+use Magento\Customer\Model\Address\Config;
 use Magento\Framework\Convert\ConvertArray;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Rate;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
-use Magento\Customer\Model\Address\Config as AddressConfig;
-
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 
 /**
  * Class Review
- * 
+ *
  * @package Netzkollektiv\EasyCredit\Block\Checkout
  * @method setPlaceOrderUrl(string $url)
  * @method getPlaceOrderUrl()
@@ -60,11 +57,13 @@ class Review extends Template
      */
     private string $controllerPath = 'easycredit/checkout';
 
-    private \Magento\Tax\Helper\Data $taxHelper;
+    private TaxHelper $taxHelper;
 
     private PriceCurrencyInterface $priceCurrency;
 
-
+    /**
+     * @param mixed $taxHelper
+     */
     public function __construct(
         Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -165,9 +164,11 @@ class Review extends Template
      */
     public function renderShippingRateOption($rate, $format = '%s - %s%s', $inclTaxFormat = ' (%s %s)'): string
     {
-        if (!$rate) {
+        $price = null;
+        if (! $rate) {
             return '';
         }
+
         $renderedInclTax = '';
         if ($rate->getErrorMessage()) {
             $price = $rate->getErrorMessage();
@@ -178,9 +179,16 @@ class Review extends Template
             );
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
-            if ($incl != $price && $this->taxHelper->displayShippingBothPrices()) {
-                $renderedInclTax = sprintf($inclTaxFormat, $this->escapeHtml(__('Incl. Tax')), $incl);
+            if ($incl === $price) {
+                return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
             }
+
+            if (! $this->taxHelper->displayShippingBothPrices()) {
+                return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
+            }
+
+            $renderedInclTax = sprintf($inclTaxFormat, $this->escapeHtml(__('Incl. Tax')), $incl);
+            return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
         }
 
         return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
@@ -215,9 +223,6 @@ class Review extends Template
         return $billingAddress ? $billingAddress->getEmail() : '';
     }
 
-    /**
-     * Set controller path
-     */
     public function setControllerPath(string $prefix): void
     {
         $this->controllerPath = $prefix;
@@ -284,13 +289,17 @@ class Review extends Template
 
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
-                $this->getUrl(sprintf('%s/saveShippingMethod', $this->controllerPath), ['_secure' => true])
+                $this->getUrl(sprintf('%s/saveShippingMethod', $this->controllerPath), [
+                    '_secure' => true,
+                ])
             )->setCanEditShippingAddress(false)
-            ->setCanEditShippingMethod(false);
+                ->setCanEditShippingMethod(false);
         }
 
         $this->setPlaceOrderUrl(
-            $this->getUrl(sprintf('%s/placeOrder', $this->controllerPath), ['_secure' => true])
+            $this->getUrl(sprintf('%s/placeOrder', $this->controllerPath), [
+                '_secure' => true,
+            ])
         );
 
         return parent::_beforeToHtml();
@@ -299,7 +308,11 @@ class Review extends Template
     public function getPaymentPlan()
     {
         $summary = \json_decode((string) $this->quote->getPayment()->getAdditionalInformation('summary'), null, 512, JSON_THROW_ON_ERROR);
-        if ($summary === false || $summary === null) {
+        if ($summary === false) {
+            return null;
+        }
+
+        if ($summary === null) {
             return null;
         }
 

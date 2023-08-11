@@ -7,15 +7,14 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Ui;
 
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Checkout\Model\Session as CheckoutSession;
 
-class PpPlugin extends Template
+class Widget extends Template
 {
-
     private ScopeConfigInterface $scopeConfig;
 
     private CheckoutSession $checkoutSession;
@@ -25,6 +24,7 @@ class PpPlugin extends Template
         CheckoutSession $checkoutSession,
         array $data = []
     ) {
+        $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $context->getScopeConfig();
         parent::__construct($context, $data);
     }

@@ -7,22 +7,38 @@
 
 namespace Netzkollektiv\EasyCredit\Setup;
 
+use Composer\Package\CompletePackageInterface;
 use Magento\Framework\Composer\ComposerFactory;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Composer\Package\CompletePackageInterface;
 
 class UpgradeSchema implements UpgradeSchemaInterface
 {
-    /**
-     * @var ComposerFactory
-     */
-    private $composerFactory;
+    private ComposerFactory $composerFactory;
 
     /**
-     * @param ComposerFactory $composerFactory
-     *
+     * @var string
+     */
+    private const QUOTE_ADDRESS_TABLE = 'quote_address';
+
+    /**
+     * @var string
+     */
+    private const ORDER_TABLE = 'sales_order';
+
+    /**
+     * @var string
+     */
+    private const INVOICE_TABLE = 'sales_invoice';
+
+    /**
+     * @var string
+     */
+    private const CREDITMEMO_TABLE = 'sales_creditmemo';
+
+    /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(ComposerFactory $composerFactory)
@@ -30,7 +46,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->composerFactory = $composerFactory;
     }
 
-    public function getApiLibraryPackage() : ?CompletePackageInterface
+    public function getApiLibraryPackage(): ?CompletePackageInterface
     {
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
         /** @var CompletePackageInterface $package */
@@ -38,198 +54,195 @@ class UpgradeSchema implements UpgradeSchemaInterface
             if ($package instanceof CompletePackageInterface && $package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
                 return $package;
             }
-	    }
-	    return null;
+        }
+
+        return null;
     }
 
     /**
      * Upgrades DB schema
-     *
-     * @param  SchemaSetupInterface   $setup
-     * @param  ModuleContextInterface $context
-     * @return void
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $package = $this->getApiLibraryPackage();
-        if (!$package) {
+        if (! $package instanceof CompletePackageInterface) {
             throw new \Exception('Please run "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
         }
 
-        if (!$context->getVersion()) {
+        if (! $context->getVersion()) {
             $setup->startSetup();
-            $quoteAddressTable = 'quote_address';
-            $orderTable = 'sales_order';
-            $invoiceTable = 'sales_invoice';
-            $creditmemoTable = 'sales_creditmemo';
 
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($quoteAddressTable),
+                    $setup->getTable(self::QUOTE_ADDRESS_TABLE),
                     'easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'easyCredit Amount'
+                        'comment' => 'easyCredit Amount',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($quoteAddressTable),
+                    $setup->getTable(self::QUOTE_ADDRESS_TABLE),
                     'base_easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount'
+                        'comment' => 'Base easyCredit Amount',
                     ]
                 );
             //Order tables
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'easyCredit Amount'
+                        'comment' => 'easyCredit Amount',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'base_easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount'
+                        'comment' => 'Base easyCredit Amount',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'easycredit_amount_refunded',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount Refunded'
+                        'comment' => 'Base easyCredit Amount Refunded',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'base_easycredit_amount_refunded',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount Refunded'
+                        'comment' => 'Base easyCredit Amount Refunded',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'easycredit_amount_invoiced',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'easyCredit Amount Invoiced'
+                        'comment' => 'easyCredit Amount Invoiced',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($orderTable),
+                    $setup->getTable(self::ORDER_TABLE),
                     'base_easycredit_amount_invoiced',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount Invoiced'
+                        'comment' => 'Base easyCredit Amount Invoiced',
                     ]
                 );
             //Invoice tables
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($invoiceTable),
+                    $setup->getTable(self::INVOICE_TABLE),
                     'easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Fee Amount'
+                        'comment' => 'Fee Amount',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($invoiceTable),
+                    $setup->getTable(self::INVOICE_TABLE),
                     'base_easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base Fee Amount'
+                        'comment' => 'Base Fee Amount',
                     ]
                 );
             //Credit memo tables
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($creditmemoTable),
+                    $setup->getTable(self::CREDITMEMO_TABLE),
                     'easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'easyCredit Amount'
+                        'comment' => 'easyCredit Amount',
                     ]
                 );
             $setup->getConnection()
                 ->addColumn(
-                    $setup->getTable($creditmemoTable),
+                    $setup->getTable(self::CREDITMEMO_TABLE),
                     'base_easycredit_amount',
                     [
-                        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+                        'type' => Table::TYPE_DECIMAL,
                         'precision' => 10,
                         'scale' => 2,
                         'default' => 0.00,
                         'nullable' => true,
-                        'comment' =>'Base easyCredit Amount'
+                        'comment' => 'Base easyCredit Amount',
                     ]
                 );
             $setup->endSetup();
         }
 
         // version check for manual installations
-        if (version_compare($context->getVersion(), '2.0.0') >= 0
-            && version_compare($package->getVersion(), '1.3.4', '<')
-        ) {
-            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
+        if (version_compare($context->getVersion(), '2.0.0') < 0) {
+            return;
         }
+
+        if (! version_compare($package->getVersion(), '1.3.4', '<')) {
+            return;
+        }
+
+        throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
     }
 }

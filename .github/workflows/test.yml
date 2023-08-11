@@ -13,10 +13,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          - magento-version: '2.4.1'
+            php-version: 7.4
+            composer-version: 'v1'
+          - magento-version: '2.4.2'
+            php-version: 7.4
+            composer-version: 'v1'
+          - magento-version: '2.4.3-p3'
+            php-version: 7.4
+            composer-version: 'v1'
+          - magento-version: '2.4.4'
+            php-version: 8.1
+            composer-version: 'v2'
           - magento-version: '2.4.5'
             php-version: 8.1
-          - magento-version: '2.4.6'
+            composer-version: 'v2'
+          - magento-version: '2.4.6-p2'
             php-version: 8.2
+            composer-version: 'v2'
 
     name: Magento ${{ matrix.magento-version }}
 
@@ -27,6 +41,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
+
       elasticsearch:
         image: elasticsearch:7.17.10
         env:
@@ -44,8 +59,8 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: mbstring, gd, bcmath, ctype, curl, dom, hash, iconv, intl, openssl, simplexml, soap, xsl, zip
-          tools: composer:v2.1
+          extensions: mbstring, gd, bcmath, ctype, curl, dom, hash, iconv, intl, openssl, simplexml, soap, xsl, zip, xdebug
+          tools: composer:${{ matrix.composer-version }}
       - name: Checkout
         uses: actions/checkout@master
       - name: Debug
@@ -61,6 +76,14 @@ jobs:
           git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 /opt/magento
           cd /opt/magento
           composer install
+
+          # quick patch functional testing framework in subshell
+          (
+            [ -f /opt/magento/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php ] && \
+              cd /opt/magento/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/ && \
+              sed s/xdebug_disable/if\ \(function_exists\(\'debug_disable\'\)\)\ xdebug_disable/g _bootstrap.php > _bootstrap.php1; mv _bootstrap.php1 _bootstrap.php 
+          )
+
           php bin/magento setup:install --base-url=http://localhost/ \
           --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root --admin-firstname=Admin \
           --admin-lastname=Istrator --admin-email=admin@magneto.com --admin-user=admin \
@@ -77,11 +100,14 @@ jobs:
       - name: Static Analyze
         run: |
           cd /opt/magento
-          composer require bitexpert/phpstan-magento -W
+
+          composer require phpstan/phpstan bitexpert/phpstan-magento --update-with-all-dependencies
 
           cd vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2
           php /opt/magento/vendor/bin/phpstan analyze .
-#      - name: Coding Style
-#        run: |
-#          cd $PLUGIN_DIR
-#          php vendor/bin/ecs check --config=ecs.php
+      - name: Coding Style
+        if:  ${{ matrix.magento-version == '2.4.6-p1' }}
+        run: |
+          cd /opt/magento
+          composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
+          php vendor/bin/ecs check -c vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2/ecs.php vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2/

@@ -8,8 +8,8 @@
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\Order\View\Info;
 
 use Magento\Backend\Block\Template;
-use Magento\Framework\Registry;
 use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
 use Magento\Sales\Model\Order;
 use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
 

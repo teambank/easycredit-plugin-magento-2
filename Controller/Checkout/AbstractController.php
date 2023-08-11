@@ -7,16 +7,15 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-use Magento\Framework\App\Action\Action;
+use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
-use Magento\Checkout\Controller\Express\RedirectLoginInterface;
 use Magento\Framework\Exception\LocalizedException;
 
 abstract class AbstractController extends Action implements RedirectLoginInterface
 {
-
     protected Session $checkoutSession;
 
     private Url $_customerUrl;
@@ -38,7 +37,7 @@ abstract class AbstractController extends Action implements RedirectLoginInterfa
     {
         $quote = $this->checkoutSession->getQuote();
 
-        if (!$quote->hasItems() || $quote->getHasError()) {
+        if (! $quote->hasItems() || $quote->getHasError()) {
             throw new LocalizedException(__('Unable to initialize easyCredit Payment.'));
         }
     }

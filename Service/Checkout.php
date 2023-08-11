@@ -8,9 +8,9 @@
 namespace Netzkollektiv\EasyCredit\Service;
 
 use Magento\Checkout\Model\Session as CheckoutSession;
-use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Webapi\Exception as WebapiException;
+use Magento\Quote\Api\CartRepositoryInterface;
 
 use Netzkollektiv\EasyCredit\Api\CheckoutInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
@@ -23,6 +23,8 @@ use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
 {
+    public StorageFactory $storageFactory;
+
     private CartRepositoryInterface $quoteRepository;
 
     private CheckoutSession $checkoutSession;
@@ -35,21 +37,15 @@ class Checkout implements CheckoutInterface
 
     private Logger $logger;
 
-    public function __construct(
-        CartRepositoryInterface $quoteRepository,
-        CheckoutSession $checkoutSession,
-        EasyCreditHelper $easyCreditHelper,
-        CheckoutDataInterface $checkoutData,
-        QuoteBuilder $easyCreditQuoteBuilder,
-        Logger $logger,
-        StorageFactory $storageFactory
-    ) {
+    public function __construct(CartRepositoryInterface $quoteRepository, CheckoutSession $checkoutSession, EasyCreditHelper $easyCreditHelper, CheckoutDataInterface $checkoutData, QuoteBuilder $easyCreditQuoteBuilder, Logger $logger, StorageFactory $storageFactory)
+    {
         $this->quoteRepository = $quoteRepository;
         $this->checkoutSession = $checkoutSession;
         $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
         $this->easyCreditHelper = $easyCreditHelper;
         $this->checkoutData = $checkoutData;
         $this->logger = $logger;
+        $this->storageFactory = $storageFactory;
     }
 
     /**
@@ -73,19 +69,20 @@ class Checkout implements CheckoutInterface
     /**
      * @throws LocalizedException
      */
-    private function _validateQuote() : void
+    private function _validateQuote(): void
     {
         $quote = $this->checkoutSession->getQuote();
 
-        if (!$quote->hasItems() || $quote->getHasError()) {
+        if (! $quote->hasItems() || $quote->getHasError()) {
             throw new LocalizedException(__('Unable to initialize easyCredit Payment.'));
         }
     }
 
-    private function getStorage () {
+    private function getStorage()
+    {
         return $this->storageFactory->create(
             [
-            'payment' => $this->checkoutSession->getQuote()->getPayment()
+                'payment' => $this->checkoutSession->getQuote()->getPayment(),
             ]
         );
     }
@@ -120,15 +117,15 @@ class Checkout implements CheckoutInterface
                 if ($url = $this->easyCreditHelper->getCheckout()->getRedirectUrl()) {
                     $this->checkoutData->setRedirectUrl($url);
                 }
-            } catch (ApiException $e) {
-                $response = json_decode((string) $e->getResponseBody(), null, 512, JSON_THROW_ON_ERROR);
-                if ($response === null || !isset($response->violations)) {
-                    throw new \Exception('violations could not be parsed', $e->getCode(), $e);
+            } catch (ApiException $apiException) {
+                $response = json_decode((string) $apiException->getResponseBody(), null, 512, JSON_THROW_ON_ERROR);
+                if ($response === null || ! isset($response->violations)) {
+                    throw new \Exception('violations could not be parsed', $apiException->getCode(), $apiException);
                 }
 
                 $messages = [];
                 foreach ($response->violations as $violation) {
-                    $messages[] = implode(': ',[$violation->field, $violation->messageDE ?? $violation->message]);
+                    $messages[] = implode(': ', [$violation->field, $violation->messageDE ?? $violation->message]);
                 }
 
                 throw new WebapiException(
@@ -137,13 +134,13 @@ class Checkout implements CheckoutInterface
                     WebapiException::HTTP_FORBIDDEN
                 );
             }
-        } catch (WebapiException $e) {
-            throw $e;
-        } catch (\Throwable $e) {
-            $this->logger->error($e);
+        } catch (WebapiException $webapiException) {
+            throw $webapiException;
+        } catch (\Throwable $throwable) {
+            $this->logger->error($throwable);
             throw new WebapiException(
-                __('Es ist ein Fehler aufgetreten. Leider steht Ihnen easyCredit-Ratenkauf derzeit nicht zur Verfügung.'), 
-                0, 
+                __('Es ist ein Fehler aufgetreten. Leider steht Ihnen easyCredit-Ratenkauf derzeit nicht zur Verfügung.'),
+                0,
                 WebapiException::HTTP_FORBIDDEN
             );
         }
@@ -151,13 +148,15 @@ class Checkout implements CheckoutInterface
         return $this->checkoutData;
     }
 
-    protected function prepareExpressCheckout () {
+    protected function prepareExpressCheckout()
+    {
         $quote = $this->checkoutSession->getQuote();
         $shippingAddress = $quote->getShippingAddress();
 
         if ($shippingAddress->getCountryId() === null) {
             $shippingAddress->setCountryId('DE');
         }
+
         $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
         $shippingMethod = current($shippingAddress->getAllShippingRates());
 
@@ -165,6 +164,7 @@ class Checkout implements CheckoutInterface
             $shippingAddress->setShippingMethod($shippingMethod->getCode());
             $shippingAddress->collectShippingRates();
         }
+
         $this->quoteRepository->save($quote);
     }
 }

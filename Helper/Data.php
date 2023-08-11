@@ -7,13 +7,6 @@
 
 namespace Netzkollektiv\EasyCredit\Helper;
 
-use Teambank\RatenkaufByEasyCreditApiV3\Service\TransactionApiFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Service\WebshopApiFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Service\InstallmentplanApiFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\CheckoutFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\AddressValidator;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
-use Teambank\RatenkaufByEasyCreditApiV3\Client;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -22,6 +15,13 @@ use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+use Teambank\RatenkaufByEasyCreditApiV3\Client;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\CheckoutFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\AddressValidator;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
+use Teambank\RatenkaufByEasyCreditApiV3\Service\InstallmentplanApiFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Service\TransactionApiFactory;
+use Teambank\RatenkaufByEasyCreditApiV3\Service\WebshopApiFactory;
 
 class Data extends AbstractHelper
 {
@@ -116,32 +116,32 @@ class Data extends AbstractHelper
 
     public function getCheckout($quote = null)
     {
-            $args = [
-                'client' => $this->getClient(),
-                'config' => $this->getConfig()
-            ];
+        $args = [
+            'client' => $this->getClient(),
+            'config' => $this->getConfig(),
+        ];
 
-            $webshopApi = $this->webshopApiFactory->create($args);
-            $transactionApi = $this->transactionApiFactory->create($args);
-            $installmentplanApi = $this->installmentplanApiFactory->create($args);
+        $webshopApi = $this->webshopApiFactory->create($args);
+        $transactionApi = $this->transactionApiFactory->create($args);
+        $installmentplanApi = $this->installmentplanApiFactory->create($args);
 
-            $storage = $this->storageFactory->create(
-                [
-                'payment' => ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment()
-                ]
-            );
+        $storage = $this->storageFactory->create(
+            [
+                'payment' => ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment(),
+            ]
+        );
 
-            return $this->checkoutFactory->create(
-                [
+        return $this->checkoutFactory->create(
+            [
                 'webshopApi' => $webshopApi,
                 'transactionApi' => $transactionApi,
                 'installmentplanApi' => $installmentplanApi,
                 'storage' => $storage,
                 'addressValidator' => $this->addressValidator,
                 'prefixConverter' => $this->prefixConverter,
-                'logger' => $this->logger
-                ]
-            );
+                'logger' => $this->logger,
+            ]
+        );
     }
 
     public function getTransactionApi(): Api\Service\TransactionApi
@@ -152,8 +152,8 @@ class Data extends AbstractHelper
 
         return $this->transactionApiFactory->create(
             [
-            'client' => $client,
-            'config' => $config
+                'client' => $client,
+                'config' => $config,
             ]
         );
     }

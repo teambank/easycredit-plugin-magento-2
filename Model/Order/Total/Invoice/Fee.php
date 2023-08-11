@@ -7,8 +7,9 @@
 
 namespace Netzkollektiv\EasyCredit\Model\Order\Total\Invoice;
 
-use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Total\AbstractTotal;
+
 class Fee extends AbstractTotal
 {
     public function collect(Invoice $invoice)

@@ -7,17 +7,17 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Checkout;
-use Magento\Framework\App\ViewInterface;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
-use Netzkollektiv\EasyCredit\Helper\Data;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\ViewInterface;
 use Magento\Framework\View\Element\BlockInterface;
+use Netzkollektiv\EasyCredit\Helper\Data;
+use Psr\Log\LoggerInterface;
+use Teambank\RatenkaufByEasyCreditApiV3\Integration\Checkout;
+
 class Review extends AbstractController
 {
-
     /**
      * @var ViewInterface
      */
@@ -47,7 +47,7 @@ class Review extends AbstractController
     {
         try {
             $this->_validateQuote();
-            if (!$this->easyCreditCheckout->isInitialized()) {
+            if (! $this->easyCreditCheckout->isInitialized()) {
                 $this->messageManager->addErrorMessage(
                     __('Unable to initialize easyCredit Checkout review. Not initialized.')
                 );

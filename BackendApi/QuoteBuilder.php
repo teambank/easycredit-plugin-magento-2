@@ -7,27 +7,22 @@
 
 namespace Netzkollektiv\EasyCredit\BackendApi;
 
-use Magento\Store\Model\ScopeInterface;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\ShoppingCartInformationItem;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\RedirectLinks;
-use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Module\ResourceInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Quote\Model\Quote;
-
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\AddressBuilder;
-use Netzkollektiv\EasyCredit\BackendApi\Quote\ItemBuilder;
-use Netzkollektiv\EasyCredit\BackendApi\Quote\SystemBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\CustomerBuilder;
 
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\BackendApi\Quote\ItemBuilder;
+use Netzkollektiv\EasyCredit\BackendApi\Quote\SystemBuilder;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\RedirectLinks;
+
+use Teambank\RatenkaufByEasyCreditApiV3\Model\ShoppingCartInformationItem;
 
 class QuoteBuilder
 {
@@ -86,7 +81,7 @@ class QuoteBuilder
 
     public function getQuote(): ?Quote
     {
-        if (!$this->quote instanceof Quote) {
+        if (! $this->quote instanceof Quote) {
             $this->quote = $this->checkoutSession->getQuote();
         }
 
@@ -105,6 +100,7 @@ class QuoteBuilder
         if ($this->getIsClickAndCollect()) {
             $shippingMethod = '[Selbstabholung] ' . $shippingMethod;
         }
+
         if ($shippingMethod !== '') {
             return $shippingMethod;
         }
@@ -114,12 +110,16 @@ class QuoteBuilder
 
     private function getIsClickAndCollect(): bool
     {
-        if (!$this->getQuote()->getShippingAddress()) {
+        if (! $this->getQuote()->getShippingAddress()) {
             return false;
         }
 
         $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
-        if ($shippingMethod === '' || $shippingMethod === null) {
+        if ($shippingMethod === '') {
+            return false;
+        }
+
+        if ($shippingMethod === null) {
             return false;
         }
 
@@ -150,14 +150,14 @@ class QuoteBuilder
     {
         return $this->storageFactory->create(
             [
-            'payment' => $this->getQuote()->getPayment()
+                'payment' => $this->getQuote()->getPayment(),
             ]
         )->get('duration');
     }
 
     private function getCustomerOrderCount()
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (! $this->customerSession->isLoggedIn()) {
             return 0;
         }
 
@@ -169,17 +169,18 @@ class QuoteBuilder
 
     private function getCustomerCreatedAt()
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (! $this->customerSession->isLoggedIn()) {
             return null;
         }
 
         return \DateTime::createFromFormat('Y-m-d H:i:s', $this->getQuote()->getCustomer()->getCreatedAt());
     }
 
-    private function isExpress() {
+    private function isExpress()
+    {
         return $this->storageFactory->create(
             [
-            'payment' => $this->getQuote()->getPayment()
+                'payment' => $this->getQuote()->getPayment(),
             ]
         )->get('express');
     }
@@ -188,24 +189,25 @@ class QuoteBuilder
     {
         $storage = $this->storageFactory->create(
             [
-            'payment' => $this->getQuote()->getPayment()
+                'payment' => $this->getQuote()->getPayment(),
             ]
         );
 
-        if (!$storage->get('sec_token')) {
+        if (! $storage->get('sec_token')) {
             $storage->set('sec_token', bin2hex(random_bytes(20)));
         }
 
         return new Api\Model\RedirectLinks(
             [
-            'urlSuccess' => $this->url->getUrl('easycredit/checkout/return'),
-            'urlCancellation' => $this->url->getUrl('easycredit/checkout/cancel'),
-            'urlDenial' => $this->url->getUrl('easycredit/checkout/reject'),
-            'urlAuthorizationCallback' =>  $this->url->getUrl(
-                'easycredit/checkout/authorize', [
-                'secToken' => $storage->get('sec_token')
-                ]
-            )
+                'urlSuccess' => $this->url->getUrl('easycredit/checkout/return'),
+                'urlCancellation' => $this->url->getUrl('easycredit/checkout/cancel'),
+                'urlDenial' => $this->url->getUrl('easycredit/checkout/reject'),
+                'urlAuthorizationCallback' => $this->url->getUrl(
+                    'easycredit/checkout/authorize',
+                    [
+                        'secToken' => $storage->get('sec_token'),
+                    ]
+                ),
             ]
         );
     }
@@ -214,34 +216,34 @@ class QuoteBuilder
     {
         return new Api\Model\Transaction(
             [
-            'financingTerm' => $this->getDuration(),
-            'orderDetails' => new Api\Model\OrderDetails(
-                [
-                'orderValue' => $this->getGrandTotal(),
-                'orderId' => $this->getId(),
-                'numberOfProductsInShoppingCart' => is_countable($this->getQuote()->getAllVisibleItems()) ? count($this->getQuote()->getAllVisibleItems()) : 1,
-                'invoiceAddress' => $this->isExpress() ? null : $this->addressBuilder
-                    ->setAddress(new Api\Model\InvoiceAddress())
-                    ->build($this->getQuote()->getBillingAddress()),
-                'shippingAddress' => $this->isExpress() ? null : $this->addressBuilder
-                    ->setAddress(new Api\Model\ShippingAddress())
-                    ->build($this->getQuote()->getShippingAddress()),
-                'shoppingCartInformation' => $this->getItems()
-                ]
-            ),
-            'shopsystem' => $this->systemBuilder->build(),
-            'customer' => $this->customerBuilder->build(
-                $this->getQuote()
-            ),
-            'customerRelationship' => new Api\Model\CustomerRelationship(
-                [
-                'customerSince' => $this->getCustomerCreatedAt(),
-                'orderDoneWithLogin' => $this->customerSession->isLoggedIn(),
-                'numberOfOrders' => $this->getCustomerOrderCount(),
-                'logisticsServiceProvider' => $this->getShippingMethod()
-                ]
-            ),
-            'redirectLinks' => $this->getRedirectLinks()
+                'financingTerm' => $this->getDuration(),
+                'orderDetails' => new Api\Model\OrderDetails(
+                    [
+                        'orderValue' => $this->getGrandTotal(),
+                        'orderId' => $this->getId(),
+                        'numberOfProductsInShoppingCart' => is_countable($this->getQuote()->getAllVisibleItems()) ? count($this->getQuote()->getAllVisibleItems()) : 1,
+                        'invoiceAddress' => $this->isExpress() ? null : $this->addressBuilder
+                            ->setAddress(new Api\Model\InvoiceAddress())
+                            ->build($this->getQuote()->getBillingAddress()),
+                        'shippingAddress' => $this->isExpress() ? null : $this->addressBuilder
+                            ->setAddress(new Api\Model\ShippingAddress())
+                            ->build($this->getQuote()->getShippingAddress()),
+                        'shoppingCartInformation' => $this->getItems(),
+                    ]
+                ),
+                'shopsystem' => $this->systemBuilder->build(),
+                'customer' => $this->customerBuilder->build(
+                    $this->getQuote()
+                ),
+                'customerRelationship' => new Api\Model\CustomerRelationship(
+                    [
+                        'customerSince' => $this->getCustomerCreatedAt(),
+                        'orderDoneWithLogin' => $this->customerSession->isLoggedIn(),
+                        'numberOfOrders' => $this->getCustomerOrderCount(),
+                        'logisticsServiceProvider' => $this->getShippingMethod(),
+                    ]
+                ),
+                'redirectLinks' => $this->getRedirectLinks(),
             ]
         );
     }

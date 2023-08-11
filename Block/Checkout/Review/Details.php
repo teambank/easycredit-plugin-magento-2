@@ -15,7 +15,10 @@ use Magento\Sales\Model\Order\Address;
  */
 class Details extends Totals
 {
-    private ?\Magento\Quote\Model\Quote\Address $_address = null;
+    /**
+     * @var null
+     */
+    private const ADDRESS = null;
 
     /**
      * Return review shipping address
@@ -24,8 +27,7 @@ class Details extends Totals
      */
     public function getAddress(): ?\Magento\Quote\Model\Quote\Address
     {
-
-        return $this->_address;
+        return self::ADDRESS;
     }
 
     /**

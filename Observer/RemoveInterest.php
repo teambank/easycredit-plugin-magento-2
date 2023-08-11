@@ -8,16 +8,15 @@
 namespace Netzkollektiv\EasyCredit\Observer;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Sales\Model\Order;
-use Magento\Quote\Model\Quote;
-use Netzkollektiv\EasyCredit\Model\Payment;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
+use Netzkollektiv\EasyCredit\Model\Payment;
 
 class RemoveInterest implements ObserverInterface
 {
-
     private ScopeConfigInterface $scopeConfig;
 
     public function __construct(ScopeConfigInterface $scopeConfig)

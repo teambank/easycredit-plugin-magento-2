@@ -18,7 +18,6 @@ use Teambank\RatenkaufByEasyCreditApiV3\Integration\ApiCredentialsNotActiveExcep
 
 class VerifyCredentials implements VerifyCredentialsInterface
 {
-
     private EasyCreditHelper $easyCreditHelper;
 
     private Logger $logger;
@@ -38,23 +37,23 @@ class VerifyCredentials implements VerifyCredentialsInterface
                 ->getCheckout()
                 ->verifyCredentials($apiKey, $apiToken, $apiSignature);
             return true;
-        } catch (ApiCredentialsInvalidException $e) {
+        } catch (ApiCredentialsInvalidException $apiCredentialsInvalidException) {
             throw new WebapiException(
-                __('Credentials incorrect. Please review the inserted values and try again.'), 
-                0, 
+                __('Credentials incorrect. Please review the inserted values and try again.'),
+                0,
                 WebapiException::HTTP_FORBIDDEN
             );
-        } catch (ApiCredentialsNotActiveException $e) {
+        } catch (ApiCredentialsNotActiveException $apiCredentialsNotActiveException) {
             throw new WebapiException(
-                __('The provided API credentials are valid, but not yet activated'), 
-                0, 
+                __('The provided API credentials are valid, but not yet activated'),
+                0,
                 WebapiException::HTTP_FORBIDDEN
             );
-        } catch (\Throwable $e) {
-            $this->logger->error($e);
+        } catch (\Throwable $throwable) {
+            $this->logger->error($throwable);
             throw new WebapiException(
-                __('Error verifying credentials. Please try again later.'), 
-                0, 
+                __('Error verifying credentials. Please try again later.'),
+                0,
                 WebapiException::HTTP_FORBIDDEN
             );
         }

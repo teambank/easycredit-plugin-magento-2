@@ -7,12 +7,11 @@
 
 namespace Netzkollektiv\EasyCredit\Model\Sales\Quote\Address\Total;
 
-use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
-use Magento\Quote\Model\Quote;
-use Magento\Quote\Api\Data\ShippingAssignmentInterface;
-use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Framework\Phrase;
-use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address\Total;
+use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 
 class Fee extends AbstractTotal
 {
@@ -36,8 +35,11 @@ class Fee extends AbstractTotal
         $this->_setBaseAmount(0);
 
         $amount = $quote->getPayment()->getAdditionalInformation('interest_amount');
+        if ($amount == null) {
+            return $this;
+        }
 
-        if ($amount == null || $amount <= 0) {
+        if ($amount <= 0) {
             return $this;
         }
 
@@ -73,19 +75,17 @@ class Fee extends AbstractTotal
         Quote $quote,
         Total $total
     ) {
-        $result = null;
-
         $amount = $total->getEasycreditAmount();
 
         if ($amount != 0) {
             return [
                 'code' => 'easycredit',
                 'title' => __('Interest'),
-                'value' => $amount
+                'value' => $amount,
             ];
         }
 
-        return $result;
+        return null;
     }
 
     /**

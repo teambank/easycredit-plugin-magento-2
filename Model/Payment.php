@@ -7,35 +7,36 @@
 
 namespace Netzkollektiv\EasyCredit\Model;
 
-use Magento\Payment\Model\Method\AbstractMethod;
-use Netzkollektiv\EasyCredit\Helper\Data;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Api\AttributeValueFactory;
-use Magento\Payment\Model\Method\Logger;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Model\InfoInterface;
-use Magento\Quote\Api\Data\CartInterface;
-use Magento\Sales\Model\Order;
-use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Model\Method\AbstractMethod;
+use Magento\Payment\Model\Method\Logger;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Netzkollektiv\EasyCredit\Block\Info;
+
+use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
+use Netzkollektiv\EasyCredit\Helper\Data;
+use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
-
-use Netzkollektiv\EasyCredit\Block\Info;
-use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
 
 class Payment extends AbstractMethod
 {
+    /**
+     * @var string
+     */
     public const CODE = 'easycredit';
 
     /**
@@ -141,10 +142,15 @@ class Payment extends AbstractMethod
 
     public function isAvailable(CartInterface $quote = null)
     {
-        if (!$quote instanceof CartInterface
-            || !$this->getConfigData('credentials/api_key')
-            || !$this->getConfigData('credentials/api_token')
-        ) {
+        if (! $quote instanceof CartInterface) {
+            return false;
+        }
+
+        if (! $this->getConfigData('credentials/api_key')) {
+            return false;
+        }
+
+        if (! $this->getConfigData('credentials/api_token')) {
             return false;
         }
 
@@ -177,7 +183,7 @@ class Payment extends AbstractMethod
      */
     public function refund(InfoInterface $payment, $amount)
     {
-        if (!$this->canRefund()) {
+        if (! $this->canRefund()) {
             throw new LocalizedException(__('The refund action is not available.'));
         }
 
@@ -190,7 +196,9 @@ class Payment extends AbstractMethod
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdRefundPost(
                     $txId,
-                    new RefundRequest(['value' => $amount])
+                    new RefundRequest([
+                        'value' => $amount,
+                    ])
                 );
         } catch (\Exception $exception) {
             throw new LocalizedException(__($exception->getMessage()));
@@ -207,7 +215,7 @@ class Payment extends AbstractMethod
     public function assignData(DataObject $data)
     {
         $additionalData = $data->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
-        if (!is_object($additionalData)) {
+        if (! is_object($additionalData)) {
             $additionalData = new DataObject($additionalData ?: []);
         }
 
@@ -229,7 +237,7 @@ class Payment extends AbstractMethod
      */
     public function capture(InfoInterface $payment, $amount)
     {
-        if (!$this->canCapture()) {
+        if (! $this->canCapture()) {
             throw new LocalizedException(__('Capture action is not available.'));
         }
 
@@ -244,7 +252,6 @@ class Payment extends AbstractMethod
                     $txId,
                     new CaptureRequest([])
                 );
-
         } catch (\Exception $exception) {
             throw new LocalizedException(__($exception->getMessage()));
         }
@@ -254,17 +261,17 @@ class Payment extends AbstractMethod
 
     protected function _getTransaction($txId)
     {
-        try { 
+        try {
             $transaction = $this->easyCreditHelper
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdGet($txId);
-        } catch (ApiException $e) {
+        } catch (ApiException $apiException) {
             throw new TransactionNotFoundException(
                 'Payment transaction not found. 
                 It can take up to 24 hours until the transaction is available in the merchant portal. 
                 If you still want to create the invoice immediately, please use "Capture Offline".'
             );
-        } catch (\Exception $e) {
+        } catch (\Exception $exception) {
             throw new TransactionNotFoundException(
                 'An error occured when searching the transaction.'
             );
@@ -286,12 +293,12 @@ class Payment extends AbstractMethod
      */
     public function order(InfoInterface $payment, $amount)
     {
-        if (!$this->canOrder()) {
+        if (! $this->canOrder()) {
             throw new LocalizedException(__('The authorize action is not available.'));
         }
 
         try {
-            if (!$this->easyCreditHelper->getCheckout()->authorize($payment->getOrder()->getIncrementId())
+            if (! $this->easyCreditHelper->getCheckout()->authorize($payment->getOrder()->getIncrementId())
             ) {
                 throw new \Exception('Transaction could not be authorized');
             }

@@ -7,24 +7,20 @@
 
 namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
-
-use Magento\Framework\App\Action\Context;
 use Magento\Checkout\Model\Session;
 use Magento\Customer\Model\Url;
-use Netzkollektiv\EasyCredit\Model\Payment;
-use Magento\Sales\Api\Data\TransactionInterface;
-use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Payment\Transaction;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\OrderRepository;
+use Magento\Store\Model\ScopeInterface;
 
-use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
-use Magento\Sales\Model\Order\Email\Sender\OrderSender;
-use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Logger\Logger;
+use Netzkollektiv\EasyCredit\Model\Payment;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
 class Authorize extends AbstractController
 {
@@ -58,13 +54,12 @@ class Authorize extends AbstractController
         $this->orderRepository = $orderRepository;
 
         $this->logger = $logger;
-        
+
         parent::__construct($context, $checkoutSession, $customerUrl);
     }
 
     /**
      * Dispatch request
-     *
      * @return void
      */
     public function execute()
@@ -73,7 +68,7 @@ class Authorize extends AbstractController
         $txId = $this->getRequest()->getParam('transactionId');
         $incrementId = $this->getRequest()->getParam('orderId');
 
-        if (!$txId) {
+        if (! $txId) {
             throw new \Exception('no transaction ID provided');
         }
 
@@ -83,7 +78,7 @@ class Authorize extends AbstractController
         }
 
         $payment = $order->getPayment();
-        if (!isset($payment->getAdditionalInformation()['sec_token']) 
+        if (! isset($payment->getAdditionalInformation()['sec_token'])
             && $secToken !== $payment->getAdditionalInformation()['sec_token']
         ) {
             throw new \Exception('secToken not valid');
@@ -97,7 +92,7 @@ class Authorize extends AbstractController
         }
 
         $payment->setParentTransactionId($txId)
-            ->setTransactionId($txId.'-authorize')
+            ->setTransactionId($txId . '-authorize')
             ->setIsTransactionClosed(false)
             ->authorize(
                 true,

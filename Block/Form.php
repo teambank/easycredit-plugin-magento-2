@@ -9,13 +9,10 @@ namespace Netzkollektiv\EasyCredit\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Store\Model\ScopeInterface;
-use Netzkollektiv\EasyCredit\Helper\Data as DataHelper;
 
 class Form extends \Magento\Payment\Block\Form
 {
-
     private ScopeConfigInterface $scopeConfig;
 
     public function __construct(

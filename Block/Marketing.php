@@ -8,17 +8,17 @@
 namespace Netzkollektiv\EasyCredit\Block;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
 
-class Marketing extends \Magento\Framework\View\Element\Template
+class Marketing extends Template
 {
-    /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
+        Context $context,
         array $data = []
     ) {
         $this->scopeConfig = $context->getScopeConfig();
@@ -33,8 +33,8 @@ class Marketing extends \Magento\Framework\View\Element\Template
         );
     }
 
-    public function getBaseUrlMedia()
+    public function getBaseUrlMedia(): string
     {
-       return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . 'netzkollektiv/easycredit/';
+        return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'netzkollektiv/easycredit/';
     }
 }

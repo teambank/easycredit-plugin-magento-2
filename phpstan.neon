@@ -4,12 +4,13 @@ parameters:
   paths:
     - %currentWorkingDirectory%
   level: 1
-  reportUnmatchedIgnoredErrors: false
-  #checkGenericClassInNonGenericObjectType: false
   scanDirectories:
     - %rootDir%/../../../vendor
   excludePaths:
     - ecs.php
     - rector.php
+  ignoreErrors:
+    - '#Use service contracts.+?QuoteIdMask#'
+  reportUnmatchedIgnoredErrors: false
   extdn:
     setTemplateDisallowedForBlockClasses: false

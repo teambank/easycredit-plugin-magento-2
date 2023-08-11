@@ -25,7 +25,11 @@ class InterceptGuestSaveOrder
             }
         }
 
-        if (!$paymentMethod instanceof PaymentInterface || $paymentMethod->getMethod() !== Payment::CODE) {
+        if (! $paymentMethod instanceof PaymentInterface) {
+            return $proceed(...$args);
+        }
+
+        if ($paymentMethod->getMethod() !== Payment::CODE) {
             return $proceed(...$args);
         }
 

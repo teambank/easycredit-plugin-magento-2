@@ -8,6 +8,7 @@
 namespace Netzkollektiv\EasyCredit\Block\Checkout\Totals;
 
 use Magento\Checkout\Block\Total\DefaultTotal;
+
 class Fee extends DefaultTotal
 {
 }

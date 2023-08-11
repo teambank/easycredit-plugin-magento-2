@@ -9,7 +9,6 @@ namespace Netzkollektiv\EasyCredit\Controller\Checkout;
 
 class Reject extends AbstractController
 {
-
     /**
      * Dispatch request
      */

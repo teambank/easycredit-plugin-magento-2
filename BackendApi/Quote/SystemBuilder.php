@@ -10,6 +10,7 @@ namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ResourceInterface;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\Shopsystem;
+
 class SystemBuilder
 {
     private ProductMetadataInterface $productMetadata;
@@ -43,8 +44,8 @@ class SystemBuilder
     {
         return new Shopsystem(
             [
-            'shopSystemManufacturer' => implode(' ', [$this->getSystemVendor(),$this->getSystemVersion()]),
-            'shopSystemModuleVersion' => $this->getModuleVersion()
+                'shopSystemManufacturer' => implode(' ', [$this->getSystemVendor(), $this->getSystemVersion()]),
+                'shopSystemModuleVersion' => $this->getModuleVersion(),
             ]
         );
     }

@@ -3,17 +3,14 @@
 declare(strict_types=1);
 
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ECSConfig $ecsConfig): void {
     $ecsConfig->paths([
-        __DIR__ . '/app',
-        __DIR__ . '/dev',
-        __DIR__ . '/generated',
-        __DIR__ . '/phpserver',
-        __DIR__ . '/pub',
-        __DIR__ . '/setup',
+        __DIR__,
     ]);
     $ecsConfig->rules([
         NoUnusedImportsFixer::class,
@@ -26,5 +23,9 @@ return static function (ECSConfig $ecsConfig): void {
         SetList::NAMESPACES,
         SetList::COMMENTS,
         SetList::PSR_12,
+    ]);
+    $ecsConfig->skip([
+        NoSuperfluousPhpdocTagsFixer::class,
+        PhpdocNoEmptyReturnFixer::class,
     ]);
 };

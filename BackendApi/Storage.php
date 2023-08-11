@@ -28,20 +28,20 @@ class Storage implements Api\Integration\StorageInterface
 
     public function set($key, $value)
     {
-        $this->logger->debug('set('.$key.', '.$value.')');
+        $this->logger->debug('set(' . $key . ', ' . $value . ')');
         $this->payment->setAdditionalInformation($key, $value);
         return $this;
     }
 
     public function get($key)
     {
-        $this->logger->debug('get('.$key.') => '.$this->payment->getAdditionalInformation($key));
+        $this->logger->debug('get(' . $key . ') => ' . $this->payment->getAdditionalInformation($key));
         return $this->payment->getAdditionalInformation($key);
     }
 
     public function clear(): void
     {
         $this->logger->debug('clear');
-        $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line 
+        $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line
     }
 }

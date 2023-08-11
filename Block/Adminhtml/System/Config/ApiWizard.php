@@ -9,15 +9,23 @@ namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+
 class ApiWizard extends Field
 {
     /**
      * Path to block template
+     * @var string
      */
     public const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
 
+    /**
+     * @var string
+     */
     public const REST_INTERNAL_VERIFY_CREDENTIALS = 'rest/V1/easycredit/verify/credentials';
 
+    /**
+     * @var string
+     */
     public const REST_INTERNAL_VERIFY_CREDENTIALS_METHOD = 'get';
 
     /**
@@ -27,7 +35,7 @@ class ApiWizard extends Field
      */
     protected function _prepareLayout()
     {
-        if (!$this->getTemplate()) {
+        if (! $this->getTemplate()) {
             $this->setTemplate(self::WIZARD_TEMPLATE);
         }
 
@@ -62,7 +70,7 @@ class ApiWizard extends Field
                 'html_id' => $element->getHtmlId(),
                 'api_key_selector' => $originalData['api_key_selector'],
                 'api_token_selector' => $originalData['api_token_selector'],
-                'api_signature_selector' => $originalData['api_signature_selector']
+                'api_signature_selector' => $originalData['api_signature_selector'],
             ]
         );
         return $this->_toHtml();

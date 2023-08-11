@@ -44,18 +44,18 @@ class Config extends Template
     {
         return json_encode(
             [
-            'endpoints' => [
-                'list' => $this->getBaseUrl() . 'rest/V1/easycredit/transactions?ids={transactionId}',
-                'get' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}',
-                'refund' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/refund',
-                'capture' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/capture'
-            ],
-            'request_config' => [
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $this->getToken()
-                ]
-            ]
+                'endpoints' => [
+                    'list' => $this->getBaseUrl() . 'rest/V1/easycredit/transactions?ids={transactionId}',
+                    'get' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}',
+                    'refund' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/refund',
+                    'capture' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/capture',
+                ],
+                'request_config' => [
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $this->getToken(),
+                    ],
+                ],
             ]
         );
     }

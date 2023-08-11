@@ -7,15 +7,20 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Sales\Order\Totals;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Framework\DataObject;
 use Magento\Framework\DataObjectFactory;
+use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Sales\Block\Adminhtml\Order\Totals;
-use Magento\Framework\DataObject;
+
 class Fee extends Template
 {
-
     protected DataObjectFactory $dataObjectFactory;
+
+    /**
+     * @var string
+     */
+    private const AFTER = 'subtotal';
 
     public function __construct(
         Context $context,
@@ -51,30 +56,29 @@ class Fee extends Template
          * @var Totals $parent
          */
         $parent = $this->getParentBlock();
-        if (!$parent instanceof Totals) {
-            return $this;
-        }
 
         $source = $parent->getSource();
 
         $amount = $source->getEasycreditAmount();
         $baseAmount = $source->getBaseEasycreditAmount();
+        if ($amount === null) {
+            return $this;
+        }
 
-        if ($amount === null || (float) $amount == 0) {
+        if ((float) $amount == 0) {
             return $this;
         }
 
         $total = new DataObject(
             [
-            'code'  => 'easycredit_amount',
-            'value' => $amount,
-            'base_value' => $baseAmount,
-            'label' => __('Interest')
+                'code' => 'easycredit_amount',
+                'value' => $amount,
+                'base_value' => $baseAmount,
+                'label' => __('Interest'),
             ]
         );
-        $after = 'subtotal';
 
-        $parent->addTotal($total, $after);
+        $parent->addTotal($total, self::AFTER);
         return $this;
     }
 }

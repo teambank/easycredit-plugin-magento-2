@@ -7,8 +7,9 @@ class Image extends \Magento\Config\Model\Config\Backend\Image
     /**
      * The tail part of directory path for uploading
      *
+     * @var string
      */
-    const UPLOAD_DIR = 'netzkollektiv/easycredit';
+    public const UPLOAD_DIR = 'netzkollektiv/easycredit';
 
     /**
      * Return path to directory for upload file
