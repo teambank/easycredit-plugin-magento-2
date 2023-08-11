@@ -19,7 +19,8 @@ interface CheckoutInterface
     /**
      * @api
      * @param  string $cartId
+     * @param  boolean $express
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId);
+    public function start($cartId, $express = false);
 }

@@ -176,6 +176,14 @@ class QuoteBuilder
         return \DateTime::createFromFormat('Y-m-d H:i:s', $this->getQuote()->getCustomer()->getCreatedAt());
     }
 
+    private function isExpress() {
+        return $this->storageFactory->create(
+            [
+            'payment' => $this->getQuote()->getPayment()
+            ]
+        )->get('express');
+    }
+
     private function getRedirectLinks(): RedirectLinks
     {
         $storage = $this->storageFactory->create(
@@ -212,10 +220,10 @@ class QuoteBuilder
                 'orderValue' => $this->getGrandTotal(),
                 'orderId' => $this->getId(),
                 'numberOfProductsInShoppingCart' => is_countable($this->getQuote()->getAllVisibleItems()) ? count($this->getQuote()->getAllVisibleItems()) : 1,
-                'invoiceAddress' => $this->addressBuilder
+                'invoiceAddress' => $this->isExpress() ? null : $this->addressBuilder
                     ->setAddress(new Api\Model\InvoiceAddress())
                     ->build($this->getQuote()->getBillingAddress()),
-                'shippingAddress' => $this->addressBuilder
+                'shippingAddress' => $this->isExpress() ? null : $this->addressBuilder
                     ->setAddress(new Api\Model\ShippingAddress())
                     ->build($this->getQuote()->getShippingAddress()),
                 'shoppingCartInformation' => $this->getItems()

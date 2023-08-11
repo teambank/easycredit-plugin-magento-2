@@ -1,32 +1,36 @@
 <?php
 /**
- * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block
+ * @var \Netzkollektiv\EasyCredit\Block\Ui\Widget $block
  */
 if (!$block->getApiKey()) {
     return;
 }
 ?>
-<?php /**
-       * * @var \Netzkollektiv\EasyCredit\Block\PpPlugin $block 
-       */ ?>
 <script>
-    require([
-        "jquery",
-        "mage/translate",
-        "domReady!",
-    ], function ($, modal) {
-        $(function() {
-            $('.product-info-main .price-box').each(function(){
-                var me = this;
-                var amount = function() {
-                    return $(me).find('*[data-price-type="finalPrice"]').data('price-amount');
-                }();
+require([
+    "jquery",
+    "domReady!",
+], function ($) {
+    $(function() { 
+        $('.product-info-main .price-box').each(function(){
+            var me = this;
+            var amount = function() {
+                return $(me).find('*[data-price-type="finalPrice"]').data('price-amount');
+            }();
 
-                $(this).append(['<easycredit-widget', 
-                    'webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"',
-                    'amount="'+amount+'"',
-                '/>'].join(' '));
+            var widget = $(['<easycredit-widget', 
+                'webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"',
+                'amount="'+amount+'"',
+            '/>'].join(' '));
+            $(this).append(widget);
+
+            var priceType = 'finalPrice';
+            var priceBoxSelector = '.price-box';
+            var priceBox = $(priceBoxSelector);
+            priceBox.on('priceUpdated', function(event, data) {
+                widget.get(0).setAttribute('amount', data[priceType].amount);
             });
         });
     });
+});
 </script>

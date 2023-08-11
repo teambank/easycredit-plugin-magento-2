@@ -15,6 +15,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Netzkollektiv\EasyCredit\Api\CheckoutInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
+use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 
@@ -40,7 +41,8 @@ class Checkout implements CheckoutInterface
         EasyCreditHelper $easyCreditHelper,
         CheckoutDataInterface $checkoutData,
         QuoteBuilder $easyCreditQuoteBuilder,
-        Logger $logger
+        Logger $logger,
+        StorageFactory $storageFactory
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->checkoutSession = $checkoutSession;
@@ -80,15 +82,30 @@ class Checkout implements CheckoutInterface
         }
     }
 
+    private function getStorage () {
+        return $this->storageFactory->create(
+            [
+            'payment' => $this->checkoutSession->getQuote()->getPayment()
+            ]
+        );
+    }
+
     /**
      * @api
      * @param  string $cartId
+     * @param  boolean $express
      */
-    public function start($cartId): CheckoutDataInterface
+    public function start($cartId, $express = false): CheckoutDataInterface
     {
         try {
             try {
                 $this->_validateQuote();
+
+                if ($express) {
+                    $this->getStorage()->clear();
+                    $this->getStorage()->set('express', true);
+                    $this->prepareExpressCheckout();
+                }
 
                 $ecQuote = $this->easyCreditQuoteBuilder->build();
                 $this->easyCreditHelper->getCheckout()->start(
@@ -96,7 +113,6 @@ class Checkout implements CheckoutInterface
                 );
 
                 $quote = $this->checkoutSession->getQuote();
-
                 $quote->getPayment()->save(); // @phpstan-ignore-line
                 $quote->collectTotals();
                 $this->quoteRepository->save($quote);
@@ -133,5 +149,22 @@ class Checkout implements CheckoutInterface
         }
 
         return $this->checkoutData;
+    }
+
+    protected function prepareExpressCheckout () {
+        $quote = $this->checkoutSession->getQuote();
+        $shippingAddress = $quote->getShippingAddress();
+
+        if ($shippingAddress->getCountryId() === null) {
+            $shippingAddress->setCountryId('DE');
+        }
+        $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
+        $shippingMethod = current($shippingAddress->getAllShippingRates());
+
+        if ($shippingMethod) {
+            $shippingAddress->setShippingMethod($shippingMethod->getCode());
+            $shippingAddress->collectShippingRates();
+        }
+        $this->quoteRepository->save($quote);
     }
 }

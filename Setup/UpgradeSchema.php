@@ -229,7 +229,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         if (version_compare($context->getVersion(), '2.0.0') >= 0
             && version_compare($package->getVersion(), '1.3.4', '<')
         ) {
-            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require ratenkaufbyeasycredit/php-sdk"');
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
         }
     }
 }

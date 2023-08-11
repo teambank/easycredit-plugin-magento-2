@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="before.body.end">
-            <block class="Netzkollektiv\EasyCredit\Block\PpPlugin"
+            <block class="Netzkollektiv\EasyCredit\Block\Ui\Widget"
                    name="easycredit.pp-plugin"
                    template="Netzkollektiv_EasyCredit::easycredit/pp-plugin.phtml"
                    ifconfig="payment/easycredit/widget_enabled">
