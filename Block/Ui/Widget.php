@@ -37,6 +37,11 @@ class Widget extends Template
         );
     }
 
+    public function getStoreCode()
+    {
+        return $this->_storeManager->getStore()->getCode();
+    }
+
     public function getConfigValue($key)
     {
         return $this->scopeConfig->getValue(

@@ -9,7 +9,8 @@
     amount="<?= /* @noEscape */ $block->getGrandTotal(); ?>"
     full-width="true" 
     data-mage-init='{
-        "Netzkollektiv_EasyCredit/js/view/express": { 
+        "Netzkollektiv_EasyCredit/js/view/express": {
+            "storeCode": "<?= /* @noEscape */ $block->getStoreCode(); ?>",
             "quoteId": "<?= /* @noEscape */ $block->getQuoteId(); ?>",
             "isInCatalogProduct": "<?= /* @noEscape */ $block->getIsInCatalogProduct(); ?>",
             "isShoppingCart": "<?= /* @noEscape */ $block->getIsShoppingCart(); ?>"

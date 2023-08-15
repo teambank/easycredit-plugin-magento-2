@@ -18,7 +18,8 @@ define(
                 defaults: {
                     priceBoxSelector: '.price-box',
                     priceType: 'finalPrice',
-                    element: null
+                    element: null,
+                    storeCode: 'default'
                 },
                 initialize: function (config, element) {
                     this._super();
@@ -72,7 +73,7 @@ define(
                     });
                 },
                 startCheckout: function (quoteId) {
-                    var apiEndpoint = '/rest/default/V1/easycredit/checkout/express';
+                    var apiEndpoint = '/rest/' + this.storeCode + '/V1/easycredit/checkout/express';
 
                     if (!quoteId) {
                         quoteId = this.quoteId;
