@@ -1,6 +1,15 @@
 Changelog
 =========
 
+v2.1.0
+------
+
+* Express-Checkout: der Ratenkauf kann direkt von der Produktdetailseite oder aus dem Warenkorb heraus gestartet werden
+* umfangreiche Marketing-Komponenten wurden eingefügt und sind über das Backend einstellbar
+* Fehlermeldungen werden nun, wenn verfügbar, in deutscher Sprache ausgegeben
+* bei Ratenkauf-Initialisierung wird die Produkt-URL und die URL des Hauptbildes übertragen
+* Fehlermeldungen mit Sonderzeichen im Checkout-Widget werden nun korrekt behandelt 
+
 v2.0.5
 ------
 
