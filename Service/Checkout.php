@@ -55,6 +55,7 @@ class Checkout implements CheckoutInterface
     public function getCheckoutData($cartId): CheckoutDataInterface
     {
         try {
+            $this->getStorage()->set('express', false);
             $ecQuote = $this->easyCreditQuoteBuilder->build();
             $this->easyCreditHelper->getCheckout()->isAvailable(
                 $ecQuote
@@ -125,11 +126,11 @@ class Checkout implements CheckoutInterface
 
                 $messages = [];
                 foreach ($response->violations as $violation) {
-                    $messages[] = implode(': ', [$violation->field, $violation->messageDE ?? $violation->message]);
+                    $messages[] = $violation->messageDE ?? implode(' ', [$violation->field, $violation->message]);
                 }
 
                 throw new WebapiException(
-                    __(implode(', ', $messages)),
+                    __(implode(' ', $messages)),
                     0,
                     WebapiException::HTTP_FORBIDDEN
                 );
