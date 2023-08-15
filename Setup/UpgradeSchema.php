@@ -8,6 +8,7 @@
 namespace Netzkollektiv\EasyCredit\Setup;
 
 use Composer\Package\CompletePackageInterface;
+use Composer\Semver\Comparator;
 use Magento\Framework\Composer\ComposerFactory;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -66,7 +67,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $package = $this->getApiLibraryPackage();
         if (! $package instanceof CompletePackageInterface) {
-            throw new \Exception('Please run "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
+            throw new \Exception('Please run "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php:' . $package->getVersion());
+        }
+
+        $composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'), null, 512, JSON_THROW_ON_ERROR);
+
+        if (Comparator::lessThan($package->getVersion(), $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'})) {
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v' . $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'} . ', run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php:' . $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'} . '"');
         }
 
         if (! $context->getVersion()) {
@@ -233,16 +240,5 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 );
             $setup->endSetup();
         }
-
-        // version check for manual installations
-        if (version_compare($context->getVersion(), '2.0.0') < 0) {
-            return;
-        }
-
-        if (! version_compare($package->getVersion(), '1.3.4', '<')) {
-            return;
-        }
-
-        throw new \Exception('Please upgrade ' . $package->getName() . ' to v1.3.4, run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php"');
     }
 }
