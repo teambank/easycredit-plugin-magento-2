@@ -12,8 +12,35 @@
                 <allowspecific>1</allowspecific>
                 <specificcountry>DE</specificcountry>
                 <payment_action>authorize_capture</payment_action>
-                <widget_enabled>1</widget_enabled>
-                <widget_cart_enabled>1</widget_cart_enabled>
+                <marketing>
+                    <widget>
+                        <widget_enabled>1</widget_enabled>
+                        <widget_cart_enabled>1</widget_cart_enabled>
+                    </widget>
+                    <express>
+                        <express_enabled>1</express_enabled>
+                        <express_cart_enabled>1</express_cart_enabled>
+                    </express>
+                    <express>
+                        <express_enabled>1</express_enabled>
+                        <express_cart_enabled>1</express_cart_enabled>
+                    </express>
+                    <modal>
+                        <modal_enabled>1</modal_enabled>
+                        <modal_delay></modal_delay>
+                        <modal_snooze_for></modal_snooze_for>
+                    </modal>
+                    <card>
+                        <card_enabled>1</card_enabled>
+                        <card_search_enabled>1</card_search_enabled>
+                    </card>
+                    <flashbox>
+                        <flashbox_enabled>1</flashbox_enabled>
+                    </flashbox>
+                    <bar>
+                        <bar_enabled>1</bar_enabled>
+                    </bar>
+                </marketing>
                 <remove_interest>1</remove_interest>
             </easycredit>
         </payment>

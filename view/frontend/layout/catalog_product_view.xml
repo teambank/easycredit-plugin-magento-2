@@ -6,7 +6,7 @@
             <block class="Netzkollektiv\EasyCredit\Block\Ui\Widget"
                    name="easycredit.pp-plugin"
                    template="Netzkollektiv_EasyCredit::easycredit/pp-plugin.phtml"
-                   ifconfig="payment/easycredit/widget_enabled">
+                   ifconfig="payment/easycredit/marketing/widget/widget_enabled">
             </block>
         </referenceContainer>
     </body>

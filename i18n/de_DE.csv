@@ -124,6 +124,31 @@
     </div>
 </div>
 "
+"Express Button","Express Button"
+"
+<div class="easycredit-marketing">
+	<div class="easycredit-marketing__grid express">
+		<div class="easycredit-marketing__content">
+			<p>The Express button can be displayed on the product detail page and in the shopping cart. It allows customers to buy the product or shopping cart without detours through the ordering process.</p>
+		</div>
+		<div class="easycredit-marketing__image bg">
+			<div class="img"></div>
+		</div>
+	</div>
+</div>
+",
+"
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid express">
+        <div class="easycredit-marketing__content">
+            <p>Der Express-Button kann auf der Produktdetailseite und im Warenkorb angezeigt werden. Er ermöglicht Kunden das Produkt oder den Warenkorb ohne Umwege über den Bestellprozess zu kaufen.</p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+"
 "Widget","Widget",
 "
 <div class="easycredit-marketing">

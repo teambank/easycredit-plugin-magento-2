@@ -106,6 +106,35 @@
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
 
+
+                    <group id="express" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Express Button</label>
+                        <comment>
+                        <![CDATA[
+                            <div class="easycredit-marketing">
+                                <div class="easycredit-marketing__grid express">
+                                    <div class="easycredit-marketing__content">
+                                        <p>The Express button can be displayed on the product detail page and in the shopping cart. It allows customers to buy the product or shopping cart without detours through the ordering process.</p>
+                                    </div>
+                                    <div class="easycredit-marketing__image bg">
+                                        <div class="img"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ]]>
+                        </comment>
+                        <field id="express_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Show express button on detail page</label>
+                            <comment><![CDATA[If activated, easyCredit Ratenkauf Express Button will be shown next to product prices.]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="express_cart_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Show express button in shopping cart</label>
+                            <comment><![CDATA[If activated, the easyCredit Ratenkauf Express-Button will be shown at the cart page.]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                    </group>
+
                     <group id="widget" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Widget</label>
                         <comment>

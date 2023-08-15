@@ -1,5 +1,11 @@
+<?php if (
+    ($block->getConfigValue('marketing/express/express_enabled') && $block->getIsInCatalogProduct()) ||
+    ($block->getConfigValue('marketing/express/express_cart_enabled') &&
+        ($block->getIsShoppingCart() || (!$block->getIsShoppingCart() && !$block->getIsInCatalogProduct()))
+    )
+) : ?>
 <easycredit-express-button
-    webshop-id="<?= /* @noEscape */ $block->getApiKey(); ?>"
+    webshop-id="<?= /* @noEscape */ $block->getConfigValue('credentials/api_key'); ?>"
     amount="<?= /* @noEscape */ $block->getGrandTotal(); ?>"
     full-width="true" 
     data-mage-init='{
@@ -10,3 +16,4 @@
         }
     }'
 ></easycredit-express-button>
+<?php endif; ?>

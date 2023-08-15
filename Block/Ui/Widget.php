@@ -37,6 +37,14 @@ class Widget extends Template
         );
     }
 
+    public function getConfigValue($key)
+    {
+        return $this->scopeConfig->getValue(
+            'payment/easycredit/' . $key,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
     public function getGrandTotal(): ?float
     {
         $totals = $this->checkoutSession->getQuote()->getTotals();
