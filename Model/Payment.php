@@ -24,13 +24,12 @@ use Magento\Payment\Model\Method\Logger;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Netzkollektiv\EasyCredit\Block\Info;
-
 use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
 use Netzkollektiv\EasyCredit\Helper\Data;
 use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
-
 use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
+use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
 class Payment extends AbstractMethod
 {
@@ -280,21 +279,10 @@ class Payment extends AbstractMethod
         return $transaction;
     }
 
-    /**
-     * Authorize payment abstract method
-     *
-     * @param                                         DataObject|InfoInterface $payment
-     * @param                                         float                    $amount
-     * @return                                        $this
-     * @throws LocalizedException
-     * @api
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated                                    100.2.0
-     */
     public function order(InfoInterface $payment, $amount)
     {
         if (! $this->canOrder()) {
-            throw new LocalizedException(__('The authorize action is not available.'));
+            throw new LocalizedException(__('The order action is not available.'));
         }
 
         try {
@@ -303,13 +291,38 @@ class Payment extends AbstractMethod
                 throw new \Exception('Transaction could not be authorized');
             }
 
-            $payment->setTransactionId(
-                $payment->getAdditionalInformation('transaction_id')
-            )->setIsTransactionClosed(false)
+            $txId = $payment->getAdditionalInformation('transaction_id');
+
+            $payment->setTransactionId($txId)
+                ->setIsTransactionClosed(false)
                 ->setIsTransactionPending(true);
         } catch (\Exception $exception) {
             throw new LocalizedException(__($exception->getMessage()));
         }
+
+        return $this;
+    }
+
+    public function authorize(InfoInterface $payment, $amount)
+    {
+        if (! $this->canAuthorize()) {
+            throw new LocalizedException(__('The authorize action is not available.'));
+        }
+
+        $txId = $payment->getAdditionalInformation('transaction_id');
+        $token = $payment->getAdditionalInformation('token');
+
+        $tx = $this->easyCreditHelper->getCheckout()->loadTransaction($token);
+
+        if ($tx->getStatus() !== TransactionInformation::STATUS_AUTHORIZED) {
+            throw new \Exception('payment status of transaction not updated as transaction status is not AUTHORIZED');
+        }
+
+        $payment
+            ->setParentTransactionId($txId)
+            ->setTransactionId($txId . '-authorize')
+            ->setIsTransactionClosed(false)
+            ->setIsTransactionPending(false);
 
         return $this;
     }

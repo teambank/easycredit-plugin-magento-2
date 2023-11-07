@@ -15,12 +15,10 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\OrderRepository;
-use Magento\Store\Model\ScopeInterface;
 
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-use Netzkollektiv\EasyCredit\Model\Payment;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
+use Netzkollektiv\EasyCredit\Service\Authorization as AuthorizationService;
 
 class Authorize extends AbstractController
 {
@@ -34,6 +32,8 @@ class Authorize extends AbstractController
 
     private OrderSender $orderSender;
 
+    private AuthorizationService $authorizationService;
+
     private Logger $logger;
 
     public function __construct(
@@ -45,6 +45,7 @@ class Authorize extends AbstractController
         EasyCreditHelper $easyCreditHelper,
         OrderRepository $orderRepository,
         OrderSender $orderSender,
+        AuthorizationService $authorizationService,
         Logger $logger
     ) {
         $this->orderFactory = $orderFactory;
@@ -52,6 +53,7 @@ class Authorize extends AbstractController
         $this->easyCreditHelper = $easyCreditHelper;
         $this->orderSender = $orderSender;
         $this->orderRepository = $orderRepository;
+        $this->authorizationService = $authorizationService;
 
         $this->logger = $logger;
 
@@ -73,6 +75,9 @@ class Authorize extends AbstractController
         }
 
         $order = $this->orderFactory->create()->loadByIncrementId($incrementId);
+        if (! $order->getId()) {
+            throw new \Exception('order not found');
+        }
         if ($order->getState() != Order::STATE_PAYMENT_REVIEW) {
             throw new \Exception('order status not valid for authorization');
         }
@@ -84,50 +89,11 @@ class Authorize extends AbstractController
             throw new \Exception('secToken not valid');
         }
 
-        $token = $payment->getAdditionalInformation()['token'] ?? null;
-        $tx = $this->easyCreditHelper->getCheckout()->loadTransaction($token);
-
-        if ($tx->getStatus() !== TransactionInformation::STATUS_AUTHORIZED) {
-            throw new \Exception('payment status of transaction not updated as transaction status is not AUTHORIZED');
-        }
-
-        $payment->setParentTransactionId($txId)
-            ->setTransactionId($txId . '-authorize')
-            ->setIsTransactionClosed(false)
-            ->authorize(
-                true,
-                $payment->getBaseAmountOrdered()
-            );
-
-        $this->setNewOrderState($order);
-
-        $this->orderRepository->save($order);
-
         try {
-            $this->orderSender->send($order);
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
+            $this->authorizationService->authorize($order);
+        } catch (\Throwable $e) {
+            $this->logger->error($e->getMessage());
+            throw new \Exception('payment status could not be set, please check the logs');
         }
-    }
-
-    private function setNewOrderState($order): void
-    {
-        if (! $order instanceof Order) {
-            return;
-        }
-
-        $paymentMethod = $order->getPayment()->getMethod();
-        if ($paymentMethod !== Payment::CODE) {
-            return;
-        }
-
-        $newOrderState = $this->scopeConfig->getValue('payment/easycredit/order_status', ScopeInterface::SCOPE_STORE);
-
-        if (empty($newOrderState)) {
-            $newOrderState = Order::STATE_PROCESSING;
-        }
-
-        $order->setState($newOrderState)
-            ->setStatus($newOrderState);
     }
 }
