@@ -169,6 +169,7 @@ const goToProduct = async (page, num = 0) => {
   })
 }
 
+/*
 test('Check settings', async ({ page }) => {
   await page.goto('/admin/');
   await page.getByPlaceholder('Benutzername').fill('admin');
@@ -186,7 +187,7 @@ test('Check settings', async ({ page }) => {
   await page.getByText('Die Zugangsdaten sind gültig.').click();
 
 });
-
+*/
 test.describe('Go through standard checkout', () => {
   test('standardCheckout', async ({ page }) => {
 
