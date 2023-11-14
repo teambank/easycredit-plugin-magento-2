@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v2.1.1
+------
+
+* sofortige 2-Phasen Bestätigung
+* Anpassung der Zahlungslogik & Einstellung des initialen Bestellstatus
+
 v2.1.0
 ------
 
