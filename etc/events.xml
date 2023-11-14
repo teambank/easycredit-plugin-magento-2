@@ -12,4 +12,7 @@
     <event name="checkout_cart_add_product_complete">
         <observer name="easycredit_checkout_cart_add_product_complete" instance="Netzkollektiv\EasyCredit\Observer\ProductAddToCartComplete"/>
     </event>
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="easycredit_instant_authorization" instance="Netzkollektiv\EasyCredit\Observer\InstantAuthorization"/>
+    </event>
 </config>
