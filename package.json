@@ -5,15 +5,19 @@
     "doc": "docs"
   },
   "scripts": {
-    "docs:build:html" : "sudo docker run --rm -v ${PWD}/docs:/docs -v /opt/sphinx_rtd_theme/sphinx_rtd_theme:/docs/source/_themes/sphinx_rtd_theme sphinxdoc/sphinx make html",
-    "docs:build:pdf" : "sudo docker run --rm -v ${PWD}/docs:/docs -v /opt/sphinx_rtd_theme/sphinx_rtd_theme:/docs/source/_themes/sphinx_rtd_theme sphinxdoc/sphinx-latexpdf make latexpdf",
-    "docs:deploy" : "export $(cat .env | xargs) && rsync -rvz --delete ${PWD}/docs/build/html/ ${DOCS_DEPLOY_DST}",
+    "docs:build:html": "sudo docker run --rm -v ${PWD}/docs:/docs -v /opt/sphinx_rtd_theme/sphinx_rtd_theme:/docs/source/_themes/sphinx_rtd_theme sphinxdoc/sphinx make html",
+    "docs:build:pdf": "sudo docker run --rm -v ${PWD}/docs:/docs -v /opt/sphinx_rtd_theme/sphinx_rtd_theme:/docs/source/_themes/sphinx_rtd_theme sphinxdoc/sphinx-latexpdf make latexpdf",
+    "docs:deploy": "export $(cat .env | xargs) && rsync -rvz --delete ${PWD}/docs/build/html/ ${DOCS_DEPLOY_DST}",
     "docs": "yarn docs:build:html; yarn docs:deploy",
     "phpcs": "vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml --error-severity=10 --ignore-annotations app/code/Netzkollektiv/EasyCredit/",
-    "phpcbf" : "vendor/bin/phpcbf --extensions=php,phtml app/code/Netzkollektiv/EasyCredit/ --ignore=docs/* -v",
+    "phpcbf": "vendor/bin/phpcbf --extensions=php,phtml app/code/Netzkollektiv/EasyCredit/ --ignore=docs/* -v",
     "phpstan": "vendor/bin/phpstan analyse app/code/Netzkollektiv/EasyCredit/ -c  app/code/Netzkollektiv/EasyCredit/phpstan.neon",
     "rector": "vendor/bin/rector -c app/code/Netzkollektiv/EasyCredit/rector.php process"
   },
   "author": "NETZKOLLEKTIV",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.38.1",
+    "@types/node": "^20.8.2"
+  }
 }
