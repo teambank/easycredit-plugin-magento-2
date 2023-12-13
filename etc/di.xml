@@ -38,4 +38,7 @@
     <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
       <plugin name="easyCreditInterceptGuestSaveOrder" type="Netzkollektiv\EasyCredit\Plugin\InterceptGuestSaveOrder" sortOrder="10" />
     </type>
+    <type name="Magento\Checkout\Model\ShippingInformationManagement">
+      <plugin name="easyCreditClearOnShippingSaveAddress" type="Netzkollektiv\EasyCredit\Plugin\ClearOnShippingSaveAddress" sortOrder="10" />
+    </type>
 </config>
