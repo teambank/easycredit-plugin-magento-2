@@ -4,7 +4,7 @@ Changelog
 v2.1.2
 ------
 
-* behebt einen Fehler, durch den die Zinsen bei zweimaligem Durchlaufen des Zahungsterminals auf den Bestellbetrag aufgeschlagen wurden 
+* behebt einen Fehler, durch den die Zinsen bei zweimaligem Durchlaufen des Zahlungsterminals auf den Bestellbetrag aufgeschlagen wurden
 
 v2.1.1
 ------

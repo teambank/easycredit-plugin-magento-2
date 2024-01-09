@@ -4,7 +4,7 @@ Verwendung für Händler
 
 Eine neue Bestellung eines Kunde ist nach ihrem Eingang im Magento gegenüber easyCredit-Ratenkauf genehmigt ("Authorized" [#f1]_). Das heisst, die Zahlung und Bestellung wurde von easyCredit-Ratenkauf gegenüber dem Kunden bestätigt. Eine Auszahlung durch easyCredit-Ratenkauf an den Händler erfolgt erst, wenn der Händler die Lieferung der bestellten Artikel gemeldet hat. Dies erfolgt in Magento 2 entweder durch eine Bestätigung über die Transaktionsverwaltung oder durch Erstellung der Rechnung und Einziehen der Zahlung ("Capture" [#f1]_).
 
-Alternativ ist die weitere Verwaltung des Transaktionsstatus über das `Händler-Interface <https://app.easycredit.de>`_ möglich.
+Alternativ ist die weitere Verwaltung des Transaktionsstatus über das `Händler-Interface <https://partner.easycredit-ratenkauf.de/portal/>`_ möglich.
 
 Transaktionsmanager
 -------------------

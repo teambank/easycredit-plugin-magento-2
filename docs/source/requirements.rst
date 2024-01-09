@@ -30,7 +30,7 @@ Die Zugangsdaten bestehen aus einer Webshop-Id und einem API-Kennwort. Sie erhal
 
 Die Produktivkennung ist erst nach Überprüfung und Freischaltung nutzbar. Die Test-Kennung können Sie verwenden, um die Integration vorzunehmen und vollumfänglich zu testen. 
 
-.. note:: Das Passwort können Sie im Händler-Interface unter https://app.easycredit.de selbst festlegen.
+.. note:: Das Passwort können Sie im Händler-Interface unter https://partner.easycredit-ratenkauf.de/portal/ selbst festlegen.
 
 Sie haben noch keine Zugangsdaten?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

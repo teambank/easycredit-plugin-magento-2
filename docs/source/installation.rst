@@ -34,7 +34,7 @@ Wenn Sie die Zugangsdaten bereits zur Hand haben führen Sie noch die folgenden 
 manuelle Installation via SSH
 ------------------------------
 
-* Laden Sie die Extension von https://www.easycredit-ratenkauf.de/system/magento/ herunter
+* Laden Sie die Extension von der `Github Release Page <https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2>`_ herunter
 * Entpacken Sie die Extension in ein temporäres Verzeichnis
 * Kopieren Sie die Extension nach `app/code/Netzkollektiv/EasyCredit` in Ihrer Magento Installation
 
@@ -47,7 +47,7 @@ manuelle Installation via SSH
 
 .. code-block:: bash
 
-    $ composer require ratenkaufbyeasycredit/php-sdk
+    $ composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php
 
 Fahren Sie ansonsten fort wie bei der :ref:`Composer Installation`.
 
