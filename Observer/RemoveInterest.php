@@ -13,15 +13,20 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
 use Magento\Store\Model\ScopeInterface;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class RemoveInterest implements ObserverInterface
 {
     private ScopeConfigInterface $scopeConfig;
 
-    public function __construct(ScopeConfigInterface $scopeConfig)
-    {
+    private PaymentHelper $paymentHelper;
+
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        PaymentHelper $paymentHelper
+    ) {
         $this->scopeConfig = $scopeConfig;
+        $this->paymentHelper = $paymentHelper;
     }
 
     public function execute(Observer $observer): void
@@ -37,9 +42,8 @@ class RemoveInterest implements ObserverInterface
          * @var Quote $quote
          */
         $quote = $event->getData('quote');
-        $paymentMethod = $quote->getPayment()->getMethod();
 
-        if ($paymentMethod !== Payment::CODE) {
+        if (!$this->paymentHelper->isSelected($quote->getPayment())) {
             return;
         }
 

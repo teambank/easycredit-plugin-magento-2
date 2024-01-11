@@ -11,18 +11,22 @@ use Magento\Backend\Block\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order;
-use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class Transaction extends Template
 {
     private Registry $registry;
 
+    private PaymentHelper $paymentHelper;
+
     public function __construct(
         Context $context,
         Registry $registry,
+        PaymentHelper $paymentHelper,
         array $data = []
     ) {
         $this->registry = $registry;
+        $this->paymentHelper = $paymentHelper;
         parent::__construct($context, $data);
     }
 
@@ -53,6 +57,9 @@ class Transaction extends Template
      */
     protected function _toHtml()
     {
-        return ($this->getPayment()->getMethod() === EasyCreditPayment::CODE) ? parent::_toHtml() : '';
+        if ($this->paymentHelper->isSelected($this->getPayment())) {
+            return parent::_toHtml();
+        }
+        return '';
     }
 }

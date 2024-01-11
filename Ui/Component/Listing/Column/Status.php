@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 /**
  * Class EasyCredit Transaction Status
@@ -24,16 +24,21 @@ class Status extends Column
 
     private CollectionFactory $paymentCollectionFactory;
 
+    private PaymentHelper $paymentHelper;
+
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         Escaper $escaper,
         CollectionFactory $paymentCollectionFactory,
+        PaymentHelper $paymentHelper,
         array $components = [],
         array $data = []
     ) {
         $this->paymentCollectionFactory = $paymentCollectionFactory;
         $this->escaper = $escaper;
+        $this->paymentHelper = $paymentHelper;
+
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -54,7 +59,7 @@ class Status extends Column
                 continue;
             }
 
-            if ($item['payment_method'] != Payment::CODE) {
+            if (!$this->paymentHelper->isMethodSelected($item['payment_method'])) {
                 continue;
             }
 

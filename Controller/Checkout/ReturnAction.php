@@ -16,26 +16,39 @@ use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
+
 use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
 class ReturnAction extends AbstractController
 {
-    private QuoteBuilder $easyCreditQuoteBuilder;
-
     private CartRepositoryInterface $quoteRepository;
 
     private EasyCreditHelper $easyCreditHelper;
+
+    private QuoteBuilder $easyCreditQuoteBuilder;
+
+    private PaymentHelper $paymentHelper;
 
     private Logger $logger;
 
     private StorageFactory $storageFactory;
 
-    public function __construct(Context $context, Session $checkoutSession, Url $customerUrl, CartRepositoryInterface $quoteRepository, EasyCreditHelper $easyCreditHelper, Logger $logger, StorageFactory $storageFactory, QuoteBuilder $easyCreditQuoteBuilder)
-    {
+    public function __construct(
+        Context $context, 
+        Session $checkoutSession, 
+        Url $customerUrl, 
+        CartRepositoryInterface $quoteRepository, 
+        EasyCreditHelper $easyCreditHelper, 
+        QuoteBuilder $easyCreditQuoteBuilder,
+        PaymentHelper $paymentHelper,
+        Logger $logger, 
+        StorageFactory $storageFactory, 
+    ) {
         $this->quoteRepository = $quoteRepository;
         $this->easyCreditHelper = $easyCreditHelper;
         $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
+        $this->paymentHelper = $paymentHelper;
         $this->logger = $logger;
         $this->storageFactory = $storageFactory;
         parent::__construct($context, $checkoutSession, $customerUrl);
@@ -62,7 +75,7 @@ class ReturnAction extends AbstractController
             $checkout = $this->easyCreditHelper->getCheckout();
             $transaction = $checkout->loadTransaction();
 
-            if (! $checkout->isApproved()) {
+            if (!$checkout->isApproved()) {
                 throw new TransactionNotApprovedException(__('transaction not approved'));
             }
 
@@ -81,7 +94,7 @@ class ReturnAction extends AbstractController
             $quote->setTotalsCollectedFlag(false);
             $quote->collectTotals();
 
-            $payment->setMethod(Payment::CODE);
+            $payment->setMethod($this->paymentHelper->getMethodByType($transaction->getTransaction()->getPaymentType()));
             $payment->setAdditionalInformation($paymentAdditionalInformation);
 
             $this->quoteRepository->save($quote);

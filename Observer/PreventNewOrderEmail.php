@@ -11,10 +11,18 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Sales\Model\Order;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class PreventNewOrderEmail implements ObserverInterface
 {
+    private PaymentHelper $paymentHelper;
+
+    public function __construct(
+        PaymentHelper $paymentHelper
+    ) {
+        $this->paymentHelper = $paymentHelper;
+    }
+
     public function execute(Observer $observer): void
     {
         $event = $observer->getEvent();
@@ -28,9 +36,8 @@ class PreventNewOrderEmail implements ObserverInterface
          * @var Quote $quote
          */
         $quote = $event->getData('quote');
-        $paymentMethod = $quote->getPayment()->getMethod();
 
-        if ($paymentMethod !== Payment::CODE) {
+        if (!$this->paymentHelper->isSelected($quote->getPayment())) {
             return;
         }
 

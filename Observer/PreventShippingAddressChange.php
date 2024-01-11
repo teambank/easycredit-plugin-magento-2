@@ -10,12 +10,17 @@ namespace Netzkollektiv\EasyCredit\Observer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Address;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class PreventShippingAddressChange implements ObserverInterface
 {
+    public function __construct(
+        PaymentHelper $paymentHelper
+    ) {
+        $this->paymentHelper = $paymentHelper;
+    }
+
     public function execute(Observer $observer)
     {
         /**
@@ -26,11 +31,7 @@ class PreventShippingAddressChange implements ObserverInterface
             return;
         }
 
-        if (! $address->getOrder()->getPayment() instanceof OrderPaymentInterface) {
-            return;
-        }
-
-        if (Payment::CODE != $address->getOrder()->getPayment()->getMethod()) {
+        if (!$this->paymentHelper->isSelected($address->getOrder()->getPayment())) {
             return;
         }
 

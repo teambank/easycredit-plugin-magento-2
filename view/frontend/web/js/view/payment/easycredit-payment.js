@@ -10,7 +10,13 @@ define(
         'use strict';
         rendererList.push(
             {
-                type: 'easycredit',
+                type: 'easycredit_installment_payment',
+                component: 'Netzkollektiv_EasyCredit/js/view/payment/method-renderer/easycredit-method'
+            }
+        );
+        rendererList.push(
+            {
+                type: 'easycredit_bill_payment',
                 component: 'Netzkollektiv_EasyCredit/js/view/payment/method-renderer/easycredit-method'
             }
         );

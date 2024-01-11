@@ -11,6 +11,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Model\Payment\InstallmentPayment;
+use Netzkollektiv\EasyCredit\Model\Payment\BillPayment;
 use Psr\Log\LoggerInterface;
 
 class EasyCreditConfigProvider implements ConfigProviderInterface
@@ -38,21 +40,23 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $config = [];
-        $config['payment'][Payment::CODE] = '';
-        try {
-            $config['payment'][Payment::CODE] = [
-                'apiKey' => $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('credentials/api_key')),
-                'redirectUrl' => $this->urlBuilder->getUrl('easycredit/checkout/start'),
-                'defaultErrorMessage' => implode(
-                    ' ',
-                    [
-                        'easyCredit-Ratenkauf ist derzeit nicht verfügbar.',
-                        'Bitte versuchen Sie es später erneut.',
-                    ]
-                ),
-            ];
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
+        $config['payment']['easycredit']['apiKey'] = $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('credentials/api_key'));
+        foreach ([InstallmentPayment::CODE, BillPayment::CODE] as $methodCode) {
+            $config['payment'][$methodCode] = '';
+            try {
+                $config['payment'][$methodCode] = [
+                    'redirectUrl' => $this->urlBuilder->getUrl('easycredit/checkout/start'),
+                    'defaultErrorMessage' => implode(
+                        ' ',
+                        [
+                            'easyCredit ist derzeit nicht verfügbar.',
+                            'Bitte versuchen Sie es später erneut.',
+                        ]
+                    ),
+                ];
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+            }
         }
 
         return $config;

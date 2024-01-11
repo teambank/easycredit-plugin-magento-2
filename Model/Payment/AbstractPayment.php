@@ -5,7 +5,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Netzkollektiv\EasyCredit\Model;
+namespace Netzkollektiv\EasyCredit\Model\Payment;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
@@ -31,20 +31,8 @@ use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
 
-class Payment extends AbstractMethod
+class AbstractPayment extends AbstractMethod
 {
-    /**
-     * @var string
-     */
-    public const CODE = 'easycredit';
-
-    /**
-     * Payment method code
-     *
-     * @var string
-     */
-    protected $_code = self::CODE;
-
     /**
      * Cash On Delivery payment block paths
      *
@@ -154,6 +142,16 @@ class Payment extends AbstractMethod
         }
 
         return parent::isAvailable($quote);
+    }
+
+    public function getConfigData($field, $storeId = null)
+    {
+        $value = parent::getConfigData($field, $storeId);
+        if ($value === null) {
+            $path = 'payment/easycredit/' . $field;
+            $value = $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+        }
+        return $value;
     }
 
     /**

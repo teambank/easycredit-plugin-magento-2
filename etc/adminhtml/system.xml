@@ -2,45 +2,84 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
+            <group id="easycredit_bill_payment" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
+            <group id="easycredit_installment_payment" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <label><![CDATA[<easycredit-logo></easycredit-logo>]]></label>
                 <comment><![CDATA[easycredit_intro_comment]]></comment>
                 <fieldset_css>complex easycredit-section</fieldset_css>
                 <attribute type="displayIn">recommended_solutions</attribute>
-                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enabled</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Title</label>
-                </field>
-                <field id="order_status" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>New Order Status</label>
-                    <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
-                </field>
-                <field id="allowspecific" translate="label" type="allowspecific" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Applicable Countries</label>
-                    <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                </field>
-                <field id="specificcountry" translate="label" type="multiselect" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Payment from Specific Countries</label>
-                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                </field>
-                <field id="sort_order" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Sort Order</label>
-                </field>
-                <field id="debug_logging" translate="label comment" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Debug Logging</label>
-                    <comment><![CDATA[If activated, API call debug details will be logged to var/log/easycredit.log (error messages will always be logged)]]></comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="remove_interest" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Remove interest after order</label>
-                    <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.]]></comment>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <group id="credentials" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="easycredit_installment_payment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+                    <label><![CDATA[Installment Payment]]></label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/easycredit_installment_payment/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Title</label>
+                        <config_path>payment/easycredit_installment_payment/title</config_path>
+                    </field>
+                    <field id="order_status" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>New Order Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        <config_path>payment/easycredit_installment_payment/order_status</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/easycredit_installment_payment/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <config_path>payment/easycredit_installment_payment/specificcountry</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <config_path>payment/easycredit_installment_payment/sort_order</config_path>
+                    </field>
+                    <field id="remove_interest" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Remove interest after order</label>
+                        <comment>
+<![CDATA[If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/easycredit_installment_payment/remove_interest</config_path>
+                    </field>
+                </group>
+                <group id="easycredit_bill_payment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+                    <label><![CDATA[Bill Payment]]></label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/easycredit_bill_payment/active</config_path>
+                    </field>
+                    <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Title</label>
+                        <config_path>payment/easycredit_bill_payment/title</config_path>
+                    </field>
+                    <field id="order_status" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>New Order Status</label>
+                        <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                        <config_path>payment/easycredit_bill_payment/order_status</config_path>
+                    </field>
+                    <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Applicable Countries</label>
+                        <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                        <config_path>payment/easycredit_bill_payment/allowspecific</config_path>
+                    </field>
+                    <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Payment from Specific Countries</label>
+                        <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                        <config_path>payment/easycredit_bill_payment/specificcountry</config_path>
+                    </field>
+                    <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Sort Order</label>
+                        <config_path>payment/easycredit_bill_payment/sort_order</config_path>
+                    </field>
+                </group>
+                <group id="credentials" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Credentials</label>
                     <comment>Please insert the Credentials you were provided by easyCredit-Ratenkauf.</comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
@@ -54,7 +93,7 @@
                     <field id="api_signature" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>API Signature (optional)</label>
                     </field>
-                    <field id="api_wizard" translate="button_label attribute" sortOrder="30" showInDefault="1" showInWebsite="1">
+                    <field id="api_wizard" translate="button_label attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
                         <attribute type="button_label">Verify Credentials with easyCredit</attribute>
 
                         <attribute type="api_key_selector">text-groups-easycredit-groups-credentials-fields-api-key-value</attribute>
@@ -64,8 +103,14 @@
                         <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\ApiWizard</frontend_model>
                         <attribute type="shared">1</attribute>
                     </field>
+                    <field id="debug_logging" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Debug Logging</label>
+                        <comment>
+<![CDATA[If activated, API call debug details will be logged to var/log/debug.log (error messages will always be logged)]]></comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                 </group>
-                <group id="marketing" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
+                <group id="marketing" translate="label comment" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Marketing</label>
                     <comment><![CDATA[easycredit_marketing_comment]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>

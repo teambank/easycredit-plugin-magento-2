@@ -131,9 +131,7 @@ define(
                         var message = response.responseJSON.message;
                         if (message) {
                             this.errorMessage(message);
-                            $('easycredit-checkout')
-                                .get(0)
-                                .dispatchEvent(new Event('closeModal'));
+                            document.getElementById(this.getCode()).dispatchEvent(new Event('closeModal'));
                         }
 
                         this.isAvailable(false);
@@ -142,11 +140,16 @@ define(
                 },
                 updateComponent: function () {
                     this.checkoutAttributes({
+                      'id': this.getCheckoutComponentId(), 
                       'webshop-id': this.apiKey(),
+                      'method':       this.getCode().replace(/easycredit_/, '').toUpperCase(),
                       'is-active': this.isSelected,
                       'amount': this.getAmount(),
                       'alert': this.errorMessage()
                     });
+                },
+                getCheckoutComponentId () {
+                    return this.getCode() + '_component';
                 },
                 checkAvailable: function () {
 
@@ -175,26 +178,26 @@ define(
                     return true;
                 },
                 handlePaymentConfirm: function () {
-                    onHydrated('easycredit-checkout', function(){
-                        var ecCheckout = $('easycredit-checkout');
-                        if (ecCheckout.data('submitEventBound')) {
-                          return true;
+                    var id = this.getCheckoutComponentId(); 
+                    onHydrated('#' + id, function(){
+                        var checkoutComponent = document.getElementById(id);
+                        if (checkoutComponent.hasAttribute('data-submitEventBound')) {
+                            return true;
                         }
-                        ecCheckout.data('submitEventBound', true);
-
-                        ecCheckout.submit(function(e){
-
+                        checkoutComponent.setAttribute('data-submitEventBound', true);
+                        checkoutComponent.addEventListener('submit', function(e){
 
                             // check agreements, agreements are displayed at review page again
-                            ecCheckout
+                            var agreements = checkoutComponent
                                 .closest('.payment-method')
-                                .find('.checkout-agreements input[type=checkbox]')
-                                .attr('checked','checked');
-
+                                .querySelector('.checkout-agreements input[type=checkbox]');
+                                
+                            if (agreements) {
+                                agreements.setAttribute('checked', 'checked');
+                            }
+                            
                             if (!additionalValidators.validate()) {
-                                $('easycredit-checkout')
-                                    .get(0)
-                                    .dispatchEvent(new Event('closeModal'));
+                                checkoutComponent.dispatchEvent(new Event('closeModal'));
                                 return;
                             }
                             this.numberOfInstallments = e.detail.numberOfInstallments;

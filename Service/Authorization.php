@@ -11,39 +11,33 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Store\Model\ScopeInterface;
-use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Netzkollektiv\EasyCredit\Model\Payment;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class Authorization
 {
-    private EasyCreditHelper $easyCreditHelper;
-
-    private QuoteBuilder $easyCreditQuoteBuilder;
-
     private OrderRepository $orderRepository;
 
     private OrderSender $orderSender;
 
     private ScopeConfigInterface $scopeConfig;
 
+    private PaymentHelper $paymentHelper;
+
     public function __construct(
-        EasyCreditHelper $easyCreditHelper,
-        QuoteBuilder $easyCreditQuoteBuilder,
         OrderRepository $orderRepository,
         OrderSender $orderSender,
-        ScopeConfigInterface $scopeConfig
+        ScopeConfigInterface $scopeConfig,
+        PaymentHelper $paymentHelper
     ) {
-        $this->easyCreditHelper = $easyCreditHelper;
-        $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
         $this->orderRepository = $orderRepository;
         $this->orderSender = $orderSender;
         $this->scopeConfig = $scopeConfig;
+        $this->paymentHelper = $paymentHelper;
     }
 
     public function authorize($order): void
     {
-        if ($order->getPayment()->getMethod() != Payment::CODE) {
+        if (!$this->paymentHelper->isSelected($order->getPayment())) {
             return;
         }
 
