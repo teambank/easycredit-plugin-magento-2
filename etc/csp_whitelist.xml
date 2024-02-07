@@ -6,5 +6,15 @@
                 <value id="easycredit" type="host">ratenkauf.easycredit.de</value>
             </values>
         </policy>
+        <policy id="script-src">
+            <values>
+                <value id="easycredit" type="host">ratenkauf.easycredit.de</value>
+            </values>
+        </policy>
+        <policy id="img-src">
+            <values>
+                <value id="easycredit" type="host">ratenkauf.easycredit.de</value>
+            </values>
+        </policy>
     </policies>
 </csp_whitelist>
