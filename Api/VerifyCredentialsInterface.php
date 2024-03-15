@@ -11,6 +11,9 @@ interface VerifyCredentialsInterface
 {
     /**
      * @api
+     * @param string|null $apiKey
+     * @param string|null $apiToken
+     * @param string|null $apiSignature
      * @return bool
      */
     public function verifyCredentials(?string $apiKey, ?string $apiToken, ?string $apiSignature);
