@@ -71,7 +71,7 @@ class ItemBuilder
                 'productName' => $item->getName(),
                 'productUrl' => $item->getProduct()->getProductUrl(),
                 'productImageUrl' => $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $item->getProduct()->getSmallImage(),
-                'quantity' => $item->getQty(),
+                'quantity' => (int) $item->getQty(),
                 'price' => $item->getPrice(),
                 'manufacturer' => $item->getProduct()->getData('manufacturer'),
                 'productCategory' => $this->getDeepestCategoryName($item->getProduct()->getCategoryIds()),

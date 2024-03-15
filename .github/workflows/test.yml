@@ -99,7 +99,9 @@ jobs:
 
           mysql -u root -proot -h 127.0.0.1 -e "UPDATE admin_user Set interface_locale = 'de_DE';" magento 
 
-          composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 dev-${GITHUB_REF##*/}
+          REF=${GITHUB_REF##*/}
+          BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
+          composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 $BRANCH
 
           php bin/magento s:up
           php bin/magento deploy:mode:set production -s
@@ -130,7 +132,7 @@ jobs:
           composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
           php vendor/bin/ecs check -c $PLUGIN_DIR/ecs.php $PLUGIN_DIR
       - name: Cache Node Modules
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: node-modules-${{ hashFiles('yarn.lock') }}
@@ -145,7 +147,7 @@ jobs:
           echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
       - name: Cache Playwright Browsers for Playwright's Version
         id: cache-playwright-browsers
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
