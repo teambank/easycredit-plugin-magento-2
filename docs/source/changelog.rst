@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v2.1.3
+-------
+
+* behebt einen Fehler, der die Nutzung der SOAP API verhinderte
+* die Artikelanzahl wird nun immer als Ganzzahl übergeben, um einen Fehler bei der Zahlungsinitialisierung i.V.m. Drittanbieter-Erweiterungen zu vermeiden
+* erweitert die CSP-Whitelist um img-src & script-src zur Darstellung der Web-Komponenten im CSP Strict-Mode
+
 v2.1.2
 ------
 
