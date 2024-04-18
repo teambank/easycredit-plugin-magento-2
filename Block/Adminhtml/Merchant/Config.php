@@ -50,6 +50,7 @@ class Config extends Template
                     'refund' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/refund',
                     'capture' => $this->getBaseUrl() . 'rest/V1/easycredit/transaction/{transactionId}/capture',
                 ],
+                'apiBaseUrl' => 'https://ratenkauf.easycredit.de',
                 'request_config' => [
                     'headers' => [
                         'Content-Type' => 'application/json',

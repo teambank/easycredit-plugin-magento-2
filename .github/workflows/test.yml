@@ -31,6 +31,9 @@ jobs:
           - magento-version: '2.4.6-p2'
             php-version: 8.2
             composer-version: 'v2'
+          - magento-version: '2.4.7'
+            php-version: 8.3
+            composer-version: 'v2'
 
     name: Magento ${{ matrix.magento-version }}
 
@@ -125,8 +128,7 @@ jobs:
           cd $PLUGIN_DIR
           php $MAGENTO_DIR/vendor/bin/phpstan analyze .
       - name: Coding Style
-        if:  false 
-        # ${{ matrix.magento-version == '2.4.6-p1' }}
+        if: false
         run: |
           cd $MAGENTO_DIR
           composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
