@@ -119,7 +119,6 @@ jobs:
           php bin/magento c:cl
 
       - name: Static Analyze
-        if: false
         run: |
           cd $MAGENTO_DIR
 
@@ -128,7 +127,6 @@ jobs:
           cd $PLUGIN_DIR
           php $MAGENTO_DIR/vendor/bin/phpstan analyze .
       - name: Coding Style
-        if: false
         run: |
           cd $MAGENTO_DIR
           composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
