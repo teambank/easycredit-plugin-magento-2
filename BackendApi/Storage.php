@@ -9,7 +9,6 @@ namespace Netzkollektiv\EasyCredit\BackendApi;
 
 use Magento\Quote\Model\Quote\Payment;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 
 class Storage implements Api\Integration\StorageInterface
@@ -41,6 +40,9 @@ class Storage implements Api\Integration\StorageInterface
 
     public function clear(): void
     {
+        if (!$this->payment->getId()) {
+            return;
+        }
         $this->logger->debug('clear');
         $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line
     }
