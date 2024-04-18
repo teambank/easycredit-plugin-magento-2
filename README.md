@@ -30,9 +30,11 @@ Please also follow the guidelines in our [Documentation](https://netzkollektiv.c
 
 # Compatibility
 
+[![Test](https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2/actions/workflows/test.yml/badge.svg)](https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2/actions/workflows/test.yml)
+
 This extension aims to be as compatible as possible with current, future versions of Magento 2. This version is tested with:
 
-* Magento 2.4.x
+* Magento 2.4.x 
 
 Earlier versions of Magento 2 may work, but are not actively tested anymore. For earlier versions of Magento or PHP < 7.4 based systems please try to use v1.3.10.
 
