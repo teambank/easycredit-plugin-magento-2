@@ -11,14 +11,12 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
-
 use Netzkollektiv\EasyCredit\Api\CheckoutInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-
 use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface

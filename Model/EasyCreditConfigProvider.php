@@ -11,7 +11,6 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-
 use Psr\Log\LoggerInterface;
 
 class EasyCreditConfigProvider implements ConfigProviderInterface

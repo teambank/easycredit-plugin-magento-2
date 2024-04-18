@@ -23,8 +23,6 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
- * Class Review
- *
  * @package Netzkollektiv\EasyCredit\Block\Checkout
  * @method setPlaceOrderUrl(string $url)
  * @method getPlaceOrderUrl()

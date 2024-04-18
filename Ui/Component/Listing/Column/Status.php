@@ -13,7 +13,6 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Sales\Model\ResourceModel\Order\Payment\CollectionFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
-
 use Netzkollektiv\EasyCredit\Model\Payment;
 
 /**

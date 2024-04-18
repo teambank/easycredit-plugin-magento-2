@@ -13,7 +13,6 @@ use Magento\Framework\App\ResponseFactory;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\QuoteIdMaskFactory;
-
 use Netzkollektiv\EasyCredit\Logger\Logger;
 
 class ProductAddToCartComplete implements ObserverInterface

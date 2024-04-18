@@ -40,7 +40,7 @@ class Storage implements Api\Integration\StorageInterface
 
     public function clear(): void
     {
-        if (!$this->payment->getId()) {
+        if (! $this->payment->getId()) {
             return;
         }
         $this->logger->debug('clear');

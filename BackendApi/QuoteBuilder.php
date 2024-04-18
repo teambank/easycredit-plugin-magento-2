@@ -16,12 +16,10 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\AddressBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\CustomerBuilder;
-
 use Netzkollektiv\EasyCredit\BackendApi\Quote\ItemBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\SystemBuilder;
 use Teambank\RatenkaufByEasyCreditApiV3 as Api;
 use Teambank\RatenkaufByEasyCreditApiV3\Model\RedirectLinks;
-
 use Teambank\RatenkaufByEasyCreditApiV3\Model\ShoppingCartInformationItem;
 
 class QuoteBuilder
