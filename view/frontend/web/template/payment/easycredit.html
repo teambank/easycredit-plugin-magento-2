@@ -14,7 +14,11 @@
         <!-- ko template: getTemplate() --><!-- /ko -->
         <!--/ko-->
 
-        <div class="easycredit-component" data-bind="html: componentHtml">
+        <div class="easycredit-component">
+            <easycredit-checkout
+              data-bind="attr: checkoutAttributes"
+            >
+            </easycredit-checkout>
         </div>
 
         <div class="checkout-agreements-block">

@@ -29,7 +29,7 @@ define(
                     numberOfInstallments: false,
                     calculatedForGrandTotal: null,
                     redirectAfterPlaceOrder: false,
-                    componentHtml: ''
+                    checkoutAttributes: null
                 },
                 initObservable: function () {
                     this._super()
@@ -38,7 +38,7 @@ define(
                             'isAvailable',
                             'apiKey',
                             'errorMessage',
-                            'componentHtml',
+                            'checkoutAttributes',
                             'numberOfInstallments',
                             'calculatedForGrandTotal'
                         ]
@@ -49,7 +49,7 @@ define(
                     }.bind(this));
 
                     this.checkAvailable();
-                    this.renderComponent();
+                    this.updateComponent();
 
                     var billingAddressComponent = registry.get(
                         function (item) { 
@@ -64,9 +64,10 @@ define(
 
                     this.isSelected.subscribe(this.checkAvailable.bind(this));
                     paymentMethods.subscribe(this.checkAvailable.bind(this));
-                    this.isAvailable.subscribe(this.renderComponent.bind(this))
-                    this.errorMessage.subscribe(this.renderComponent.bind(this))
-                    this.getAmount.subscribe(this.renderComponent.bind(this))
+                    this.isAvailable.subscribe(this.updateComponent.bind(this))
+                    this.errorMessage.subscribe(this.updateComponent.bind(this))
+                    this.getAmount.subscribe(this.updateComponent.bind(this))
+                    this.handlePaymentConfirm();
 
                     return this;
                 },
@@ -139,24 +140,13 @@ define(
                         fullScreenLoader.stopLoader(true);
                     }.bind(this));
                 },
-                renderComponent: function () {
-                    var attrs = {
-                        'webshop-id':   this.apiKey(),
-                        'is-active':    true,
-                        'amount':       this.getAmount(),
-                        'alert':        this.errorMessage(),
-                    };
-
-                    var component = document.createElement("easycredit-checkout");
-                    Object.keys(attrs).forEach(function(key) {
-                        var value = attrs[key];
-                        if (value !== null) {
-                            component.setAttribute(key, attrs[key])
-                        }
+                updateComponent: function () {
+                    this.checkoutAttributes({
+                      'webshop-id': this.apiKey(),
+                      'is-active': this.isSelected,
+                      'amount': this.getAmount(),
+                      'alert': this.errorMessage()
                     });
-
-                    this.componentHtml(component.outerHTML);
-                    this.handlePaymentConfirm();
                 },
                 checkAvailable: function () {
 
