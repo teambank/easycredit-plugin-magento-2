@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v2.1.4
+------
+
+* die Zustimmungserklärung der Checkout-Komponente wird nun im Fehlerfall geschlossen (Einbindung der Checkout-Komponente mit Knockout-Attribute-Binding)
+* behebt einen Fehler in der Komponentenkonfiguration im Backend, der bei aktiviertem HTTP Basic Auth zu unauthentifizierten, fehlgeschlagenen Anfragen führte
+* behebt einen Fehler bei Nutzung der REST API (leeres payment-Objekt kann nicht gespeichert werden) 
+* die E2E-Tests wurden für Magento 2.4.7 @ PHP 8.3 angepasst
+
 v2.1.3
 -------
 
