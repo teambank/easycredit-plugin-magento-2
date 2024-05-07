@@ -191,21 +191,11 @@ class QuoteBuilder
             ]
         );
 
-        if (! $storage->get('sec_token')) {
-            $storage->set('sec_token', bin2hex(random_bytes(20)));
-        }
-
         return new Api\Model\RedirectLinks(
             [
                 'urlSuccess' => $this->url->getUrl('easycredit/checkout/return'),
                 'urlCancellation' => $this->url->getUrl('easycredit/checkout/cancel'),
                 'urlDenial' => $this->url->getUrl('easycredit/checkout/reject'),
-                'urlAuthorizationCallback' => $this->url->getUrl(
-                    'easycredit/checkout/authorize',
-                    [
-                        'secToken' => $storage->get('sec_token'),
-                    ]
-                ),
             ]
         );
     }
