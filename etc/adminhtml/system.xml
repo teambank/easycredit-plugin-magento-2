@@ -5,23 +5,7 @@
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <label><![CDATA[<easycredit-logo></easycredit-logo>]]></label>
-                <comment><![CDATA[
-                    <div class="easycredit-marketing intro">
-                        <div class="easycredit-marketing__content">
-                            <p>
-                                Offer your customers the option of payment by instalments with easyCredit-Ratenkauf.<br />
-                                <strong>Pay in instalments with ease.</strong>
-                            </p>
-                            <ul>
-                                <li><a href="https://partner.easycredit-ratenkauf.de/registrierung/firmendaten" target="_blank">Register as trader</a></li>
-                                <li><a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">Partner portal</a></li>
-                                <li><a href="https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/" target="_blank">Documentation</a></li>
-                                <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with easyCredit-Ratenkauf</a></li>
-                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Support</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                ]]></comment>
+                <comment><![CDATA[easycredit_intro_comment]]></comment>
                 <fieldset_css>complex easycredit-section</fieldset_css>
                 <attribute type="displayIn">recommended_solutions</attribute>
                 <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -48,7 +32,7 @@
                 </field>
                 <field id="debug_logging" translate="label comment" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Debug Logging</label>
-                    <comment><![CDATA[If activated, API call debug details will be logged to var/log/debug.log (error messages will always be logged)]]></comment>
+                    <comment><![CDATA[If activated, API call debug details will be logged to var/log/easycredit.log (error messages will always be logged)]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="remove_interest" translate="label comment" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -83,46 +67,14 @@
                 </group>
                 <group id="marketing" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Marketing</label>
-                    <comment>
-                        <![CDATA[
-                            <div class="easycredit-marketing">
-                                <div class="easycredit-marketing__grid intro">
-                                    <div class="easycredit-marketing__content">
-                                        <p>We provide you with a range of marketing components that you can easily activate in your online shop. In this way, you achieve an optimal presentation of financing via easyCredit-Ratenkauf, for higher sales and satisfied customers.</p>
-                                        <h3>Useful links</h3>
-                                        <ul>
-                                            <li><a href="https://netzkollektiv.com/docs/easycredit-ratenkauf-components/" target="_blank">Documentation</a></li>
-                                            <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with marketing components</a></li>
-                                            <li><a href="https://www.easycredit-ratenkauf.de/marketingmaterial-schulung/" target="_blank">Marketing portal</a></li>
-                                        </ul>
-                                    </div>
-                                    <div class="easycredit-marketing__image">
-                                        <div class="img"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        ]]>
-                    </comment>
+                    <comment><![CDATA[easycredit_marketing_comment]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
 
 
                     <group id="express" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Express Button</label>
-                        <comment>
-                        <![CDATA[
-                            <div class="easycredit-marketing">
-                                <div class="easycredit-marketing__grid express">
-                                    <div class="easycredit-marketing__content">
-                                        <p>The Express button can be displayed on the product detail page and in the shopping cart. It allows customers to buy the product or shopping cart without detours through the ordering process.</p>
-                                    </div>
-                                    <div class="easycredit-marketing__image bg">
-                                        <div class="img"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        ]]>
-                        </comment>
+                        <comment><![CDATA[easycredit_express_button_comment]]></comment>
                         <field id="express_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Show express button on detail page</label>
                             <comment><![CDATA[If activated, easyCredit Ratenkauf Express Button will be shown next to product prices.]]></comment>
@@ -137,49 +89,26 @@
 
                     <group id="widget" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Widget</label>
-                        <comment>
-                        <![CDATA[
-                            <div class="easycredit-marketing">
-                                <div class="easycredit-marketing__grid widget">
-                                    <div class="easycredit-marketing__content">
-                                        <p>The widget component is shown on the product detail page and in the shopping cart. It calculates the lowest possible rate with which a product with a certain price can be financed. Clicking on "more info" opens the rate calculator with further details on financing. If the product price is outside the possible financing amounts, the widget indicates the minimum or maximum possible financing amount.</p>
-                                    </div>
-                                    <div class="easycredit-marketing__image bg">
-                                        <div class="img"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        ]]>
-                        </comment>
-						<field id="widget_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-							<label>Show widget at product detail page</label>
-							<comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
-							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-						</field>
-						<field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-							<label>Show widget in cart</label>
-							<comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
-							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-						</field>
+                        <comment><![CDATA[easycredit_widget_comment]]></comment>
+                        <field id="widget_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Show widget at product detail page</label>
+                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="widget_listing_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Show widget in product listing</label>
+                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the product listing page.]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
+                        <field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Show widget in cart</label>
+                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        </field>
                     </group>
-
-
                     <group id="modal" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Modal</label>
-                        <comment>
-                        <![CDATA[
-                            <div class="easycredit-marketing">
-                                <div class="easycredit-marketing__grid modal">
-                                    <div class="easycredit-marketing__content">
-                                        <p>The modal component can be used to actively draw the customer's attention to the instalment purchase in the shop. A time-controlled display of the modal is possible. If the customer closes the modal, the component remembers this and prevents it from being displayed again.</p>
-                                    </div>
-                                    <div class="easycredit-marketing__image bg">
-                                        <div class="img"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        ]]>
-                        </comment>
+                        <comment><![CDATA[easycredit_modal_comment]]></comment>
                         <field id="modal_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate modal</label>
                             <comment><![CDATA[Show modal automatically when visiting the online shop for the first time]]></comment>
@@ -202,20 +131,7 @@
                     </group>
                     <group id="card" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Card</label>
-                        <comment>
-                            <![CDATA[
-                                <div class="easycredit-marketing">
-                                    <div class="easycredit-marketing__grid card">
-                                        <div class="easycredit-marketing__content">
-                                            <p>The card component can be used to replace a product within the product list with a banner to advertise the hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offering.</p>
-                                        </div>
-                                        <div class="easycredit-marketing__image bg">
-                                            <div class="img"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ]]>
-                        </comment>
+                        <comment><![CDATA[easycredit_card_comment]]></comment>
                         <field id="card_enabled" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate card</label>
                             <comment><![CDATA[Show card within the product list (category)]]></comment>
@@ -238,20 +154,7 @@
                     </group>
                     <group id="flashbox" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Flashbox</label>
-                        <comment>
-                            <![CDATA[
-                                <div class="easycredit-marketing">
-                                    <div class="easycredit-marketing__grid flashbox">
-                                        <div class="easycredit-marketing__content">
-                                            <p>This marketing component allows a banner to be displayed at the bottom of the screen to advertise hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offer.</p>
-                                        </div>
-                                        <div class="easycredit-marketing__image bg">
-                                            <div class="img"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ]]>
-                        </comment>
+                        <comment><![CDATA[easycredit_flashbox_comment]]></comment>
                         <field id="flashbox_enabled" translate="label comment" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate flashbox</label>
                             <comment><![CDATA[Show flashbox at the bottom of the screen]]></comment>
@@ -266,20 +169,7 @@
                     </group>
                     <group id="bar" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Bar</label>
-                        <comment>
-                            <![CDATA[
-                                <div class="easycredit-marketing">
-                                    <div class="easycredit-marketing__grid bar">
-                                        <div class="easycredit-marketing__content">
-                                            <p>The bar component can be displayed at the top of the screen and promotes the hire purchase with short slogans. The slogans are predefined and cannot be customised.</p>
-                                        </div>
-                                        <div class="easycredit-marketing__image bg">
-                                            <div class="img"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ]]>
-                        </comment>
+                        <comment><![CDATA[easycredit_bar_comment]]></comment>
                         <field id="bar_enabled" translate="label comment" type="select" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate bar</label>
                             <comment><![CDATA[Show bar at the top of the screen]]></comment>
@@ -289,28 +179,7 @@
                 </group>
                 <group id="clickandcollect" translate="label comment" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label><![CDATA[Click & Collect]]></label>
-                    <comment><![CDATA[
-                        <div class="easycredit-marketing clickandcollect">
-                            <div class="easycredit-marketing__grid">
-                                <div class="easycredit-marketing__content">
-                                    <p>
-                                        You want to use Click&Collect for easyCredit-Ratenkauf? Nothing could be simpler!
-                                        To be able to use the feature, you need an additional supplementary agreement to your factoring contract.
-                                        To do so, simply contact your key account manager or ask him via our <a href="https://www.easycredit-ratenkauf.de/click-und-collect/" target="_blank">Click&Collect form</a>.
-                                    </p>
-                                    <p>
-                                        It is important for you that when using Click&Collect you must ensure that the purchased product is handed over exclusively to the contractual partner. The responsibility for the correct handover lies with you as the merchant.
-                                    </p>
-                                    <p>
-                                        Please set the shipping method with which you offer Click&Collect in the following:
-                                    </p>
-                                </div>
-                                <div class="easycredit-marketing__image bg">
-                                    <div class="img"></div>
-                                </div>
-                            </div>
-                        </div>
-                    ]]></comment>
+                    <comment><![CDATA[easycredit_clickandcollect_comment]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
                     <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">

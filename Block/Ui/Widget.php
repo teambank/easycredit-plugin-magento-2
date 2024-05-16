@@ -50,8 +50,12 @@ class Widget extends Template
         );
     }
 
-    public function getGrandTotal(): ?float
+    public function getAmount(): ?float
     {
+        if ($this->getData('amount')) {
+            return $this->getData('amount');
+        }
+
         $totals = $this->checkoutSession->getQuote()->getTotals();
         return $totals['grand_total']->getValue();
     }

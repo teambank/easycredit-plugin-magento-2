@@ -41,4 +41,10 @@
     <type name="Magento\Checkout\Model\ShippingInformationManagement">
       <plugin name="easyCreditClearOnShippingSaveAddress" type="Netzkollektiv\EasyCredit\Plugin\ClearOnShippingSaveAddress" sortOrder="10" />
     </type>
+    <type name="Magento\Catalog\Block\Product\ListProduct">
+      <plugin name="addListingWidget" type="Netzkollektiv\EasyCredit\Plugin\AddWidgetCatalogListProduct" sortOrder="10" />
+    </type>
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+        <plugin name="addListingWidget" type="Netzkollektiv\EasyCredit\Plugin\AddWidgetCatalogWidgetProductsList" sortOrder="10" />
+    </type>
 </config>

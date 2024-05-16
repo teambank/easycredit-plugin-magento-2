@@ -2,11 +2,12 @@
 /**
  * @var \Netzkollektiv\EasyCredit\Block\Ui\Widget $block
  */
-if (!$block->getApiKey() || $block->getGrandTotal() === 0) {
+if (!$block->getApiKey() || $block->getAmount() === 0) {
     return;
 }
 ?>
 <easycredit-widget
     webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"
-    amount="<?php echo $block->getGrandTotal(); ?>"
+    amount="<?php echo $block->getAmount(); ?>"
+    <?= $block->getAdditionalAttributes(); ?>
 ></easycredit-widget>

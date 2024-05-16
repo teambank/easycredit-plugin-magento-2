@@ -16,11 +16,8 @@
                     <widget>
                         <widget_enabled>1</widget_enabled>
                         <widget_cart_enabled>1</widget_cart_enabled>
+                        <widget_listing_enabled>1</widget_listing_enabled>
                     </widget>
-                    <express>
-                        <express_enabled>1</express_enabled>
-                        <express_cart_enabled>1</express_cart_enabled>
-                    </express>
                     <express>
                         <express_enabled>1</express_enabled>
                         <express_cart_enabled>1</express_cart_enabled>

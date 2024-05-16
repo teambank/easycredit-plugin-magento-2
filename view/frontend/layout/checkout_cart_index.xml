@@ -22,8 +22,12 @@
         <referenceContainer name="checkout.cart.methods">
             <block class="Netzkollektiv\EasyCredit\Block\Ui\Widget"
                    name="easycredit.pp-plugin"
-                   template="Netzkollektiv_EasyCredit::easycredit/pp-plugin-cart.phtml"
-                   ifconfig="payment/easycredit/marketing/widget/widget_cart_enabled">
+                   template="Netzkollektiv_EasyCredit::easycredit/widget.phtml"
+                   ifconfig="payment/easycredit/marketing/widget/widget_cart_enabled"
+            >
+                <action method="setPosition">
+                    <argument name="position" xsi:type="string">cart</argument>
+                </action>
             </block>
         </referenceContainer>
     </body>
