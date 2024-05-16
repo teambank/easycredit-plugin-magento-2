@@ -123,7 +123,7 @@ jobs:
         run: |
           cd $MAGENTO_DIR
 
-          composer require phpstan/phpstan bitexpert/phpstan-magento --update-with-all-dependencies
+          composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies
 
           cd $PLUGIN_DIR
           php $MAGENTO_DIR/vendor/bin/phpstan analyze .

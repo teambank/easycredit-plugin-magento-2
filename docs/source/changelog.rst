@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v2.1.5
+------
+
+* die asynchrone Authorisierung wurde entfernt, da die Transaktionen synchron autorisiert und geprüft werden
+* das Widget kann nun auch in der Produktübersicht angezeigt werden
+* die Übersetzungen im Admin-Bereich wurden überarbeitet
+
 v2.1.4
 ------
 
