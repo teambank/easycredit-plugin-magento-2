@@ -35,15 +35,15 @@ class ReturnAction extends AbstractController
     private StorageFactory $storageFactory;
 
     public function __construct(
-        Context $context, 
-        Session $checkoutSession, 
-        Url $customerUrl, 
-        CartRepositoryInterface $quoteRepository, 
-        EasyCreditHelper $easyCreditHelper, 
+        Context $context,
+        Session $checkoutSession,
+        Url $customerUrl,
+        CartRepositoryInterface $quoteRepository,
+        EasyCreditHelper $easyCreditHelper,
         QuoteBuilder $easyCreditQuoteBuilder,
         PaymentHelper $paymentHelper,
-        Logger $logger, 
-        StorageFactory $storageFactory, 
+        Logger $logger,
+        StorageFactory $storageFactory
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->easyCreditHelper = $easyCreditHelper;

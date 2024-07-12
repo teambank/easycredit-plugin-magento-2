@@ -2,9 +2,9 @@ import { test, expect } from "@playwright/test";
 import { delay, randomize } from "./utils";
 import { PaymentTypes } from "./types";
 
-export const goToProduct = async (page, num = 0) => {
-  await test.step(`Go to product (num: ${num}}`, async () => {
-    await page.goto("index.php/product.html");
+export const goToProduct = async (page, sku = 'regular-product') => {
+  await test.step(`Go to product (sku: ${sku}}`, async () => {
+    await page.goto(`index.php/${sku}.html`);
   });
 };
 
@@ -13,9 +13,11 @@ export const addCurrentProductToCart = async (page) => {
       .getByRole("button", { name: "In den Warenkorb" })
       .first()
       .click();
-    await expect(
-      page.getByText("Sie haben Product zu Ihrem Warenkorb hinzugefügt.")
-    ).toBeVisible();
+    await page.waitForResponse(/checkout\/cart\/add/);
+
+    await expect(page.locator(".page.messages")).toContainText(
+      /Sie haben .+? zu Ihrem Warenkorb hinzugefügt./
+    );
 }
 
 export const confirmOrder = async ({
@@ -26,6 +28,20 @@ export const confirmOrder = async ({
   paymentType: PaymentTypes;
 }) => {
   await test.step(`Confirm order`, async () => {
+
+		await expect(page.locator("easycredit-checkout-label")).toContainText(
+      paymentType === PaymentTypes.INSTALLMENT ? "Ratenkauf" : "Rechnung"
+    );
+
+    if (paymentType === PaymentTypes.INSTALLMENT) {
+      await expect
+        .soft(page.locator(".opc-block-summary"))
+        .toContainText("Zinsen für Ratenzahlung");
+    } else {
+      await expect
+        .soft(page.locator(".opc-block-summary"))
+        .not.toContainText("Zinsen für Ratenzahlung");
+    }
     /* Confirm Page */
     //await page.getByLabel('Please accept the terms').check();
     await page.getByRole("button", { name: "Jetzt kaufen" }).click();

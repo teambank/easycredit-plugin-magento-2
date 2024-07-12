@@ -1,6 +1,6 @@
 import { chromium, request, type FullConfig } from "@playwright/test";
 
-export async function globalSetup() {
+async function globalSetup(config: FullConfig) {
   console.log("[prepareData] preparing test data in store");
 
   var headers = {
@@ -8,18 +8,17 @@ export async function globalSetup() {
     Accept: "application/json",
   };
 
-  const req = await request.newContext();
+  const req = await request.newContext({
+    baseURL: config.projects[0].use.baseURL
+  });
 
-  var response = await req.post(
-    "/rest/default/V1/integration/admin/token",
-    {
-      headers: headers,
-      data: {
-        username: "admin",
-        password: "admin1234578!",
-      },
-    }
-  );
+  var response = await req.post("/rest/default/V1/integration/admin/token", {
+    headers: headers,
+    data: {
+      username: "admin",
+      password: "admin1234578!",
+    },
+  });
   const authorization = await response.json();
   headers["Authorization"] = "Bearer " + authorization;
   console.log(`[prepareData] logged in with ${authorization}`);
@@ -66,7 +65,7 @@ export async function globalSetup() {
 
   const productsData = [
     { sku: "regular", name: "Regular Product", price: 201 },
-    { sku: "below50", name: "Below 50", price: 49 },
+    { sku: "below50", name: "Below 50", price: 40 },
     { sku: "below200", name: "Below 200", price: 199 },
     { sku: "above5000", name: "Above 5000", price: 6000 },
     { sku: "above10000", name: "Above 10000", price: 10000 },
@@ -85,3 +84,5 @@ export async function globalSetup() {
     console.log(`[prepareData] added product ${productData.sku}`);
   }
 };
+
+export default globalSetup;

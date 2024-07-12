@@ -82,7 +82,12 @@ jobs:
           mysql -u root --password=root -h 127.0.0.1 -e 'CREATE DATABASE IF NOT EXISTS magento;'
           git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 $MAGENTO_DIR
           cd $MAGENTO_DIR
+
           composer install
+          composer config minimum-stability dev
+          composer config repositories.local path $GITHUB_WORKSPACE
+          
+          COMPOSER_MIRROR_PATH_REPOS=1 composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 dev-${GITHUB_REF##*/}#${GITHUB_SHA}
           composer require community-engineering/language-de_DE
 
           # quick patch functional testing framework in subshell
@@ -133,40 +138,29 @@ jobs:
           cd $MAGENTO_DIR
           composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
           php vendor/bin/ecs check -c $PLUGIN_DIR/ecs.php $PLUGIN_DIR
-      - name: Cache Node Modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: node-modules-${{ hashFiles('yarn.lock') }}
       - name: Install Dependencies
         run: |
           npm install --global yarn
           yarn install --frozen-lockfile
-      - name: Store Playwright's Version
-        run: |
-          PLAYWRIGHT_VERSION=$(npm ls @playwright/test | grep @playwright | sed 's/.*@//')
-          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
-      - name: Cache Playwright Browsers for Playwright's Version
-        id: cache-playwright-browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
       - name: Setup Playwright
-        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: yarn playwright install --with-deps
+        run: yarn playwright install --with-deps chromium
       - name: Playwright E2E Tests
         run: |
           cd $GITHUB_WORKSPACE
           VERSION=${{ matrix.magento-version }} yarn playwright test -c tests/
-      - name: Save Shopware Logs for Debugging
+      - name: Save Magento Logs for Debugging
         if: always()
         run: |
-          cp -r $MAGENTO_DIR/var/log test-results/${{ matrix.magento-version }}/
-      - uses: actions/upload-artifact@v3
-        if: failure()
+          LOG_DIR=playwright-report/logs
+          mkdir $LOG_DIR
+          cp -r $MAGENTO_DIR/var/log/* $LOG_DIR/
+          for i in $LOG_DIR/*; do
+            echo "<a href=\"$(basename $i)\">$i</a><br />" >> $LOG_DIR/index.html
+          done;
+      - name: Deploy
+        if: always()
+        uses: cloudflare/wrangler-action@v3
         with:
-          name: playwright-report
-          path: test-results/
-          retention-days: 7
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy playwright-report/ --project-name=easycredit-playwright-reports
