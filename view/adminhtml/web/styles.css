@@ -1,14 +1,3 @@
-.easycredit-section .heading {
-  padding-left: 20rem;
-}
-.easycredit-section .heading easycredit-logo {
-  position:absolute;
-  margin-left: -20rem;
-}
-.easycredit-section .button-container {
-  float: right;
-}
-
-#easycredit-verify-credentials {
-  margin-top:10px;
+:root {
+    color: inherit;
 }

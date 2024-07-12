@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \Netzkollektiv\EasyCredit\Block\Ui\Widget $block
  */
@@ -6,8 +7,4 @@ if (!$block->getApiKey() || $block->getAmount() === 0) {
     return;
 }
 ?>
-<easycredit-widget
-    webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"
-    amount="<?php echo $block->getAmount(); ?>"
-    <?= $block->getAdditionalAttributes(); ?>
-></easycredit-widget>
+<easycredit-widget payment-types="<?= implode(',', $block->getPaymentHelper()->getAvailableMethodTypes()); ?>" webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>" amount="<?php echo $block->getGrandTotal(); ?>" <?= $block->getAdditionalAttributes(); ?>></easycredit-widget>

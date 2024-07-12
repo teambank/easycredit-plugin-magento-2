@@ -7,7 +7,7 @@
 <div class="easycredit-review view">
     <div class="block block-order-details-view">
         <div class="block-content columns">
-            <?php if ($block->getShippingAddress()): ?>
+            <?php if ($block->getShippingAddress()) : ?>
                 <div class="box box-order-shipping-address">
                     <strong class="box-title">
                         <span><?php echo $block->escapeHtml(__('Shipping Address')); ?></span>
@@ -15,9 +15,9 @@
                     <div class="box-content">
                         <address>
                             <?php echo $block->escapeHtml(
-    $block->renderAddress($block->getShippingAddress()),
-    ['br']
-);?>
+                                $block->renderAddress($block->getShippingAddress()),
+                                ['br']
+                            ); ?>
                         </address>
                     </div>
                 </div>
@@ -27,9 +27,9 @@
                 <div class="box-content">
                     <address>
                         <?php echo $block->escapeHtml(
-                                $block->renderAddress($block->getBillingAddress()),
-                                ['br']
-                            );?>
+                            $block->renderAddress($block->getBillingAddress()),
+                            ['br']
+                        ); ?>
                     </address>
                 </div>
             </div>
@@ -40,8 +40,8 @@
             <div class="box box-easycredit-payment-method">
                 <strong class="box-title"><span><?php echo $block->escapeHtml(__('Payment Method')); ?></span></strong>
                 <div class="box-content">
-                    <easycredit-checkout-label><?php echo $block->escapeHtml($block->getPaymentMethodTitle()); ?></easycredit-checkout-label>
-                    <easycredit-checkout payment-plan="<?php echo $block->escapeHtml($block->getPaymentPlan()); ?>"></easycredit-checkout>
+                    <easycredit-checkout-label payment-type="<?= $block->getPaymentHelper()->getTypeByMethod($block->getPaymentMethod()::CODE); ?>"></easycredit-checkout-label>
+                    <easycredit-checkout payment-type="<?= $block->getPaymentHelper()->getTypeByMethod($block->getPaymentMethod()::CODE); ?>" payment-plan=" <?php echo $block->escapeHtml($block->getPaymentPlan()); ?>"></easycredit-checkout>
                 </div>
             </div>
             <div class="box box-order-shipping-method">
@@ -55,7 +55,7 @@
                         ); ?>
                     </p>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
     <div class="easycredit-review-items">
@@ -65,13 +65,11 @@
 
         <?php echo $block->getChildHtml('details'); ?>
 
-        <form method="post" id="order-review-form" action="<?php echo $block->escapeUrl($block->getPlaceOrderUrl()); ?>"
-              class="form order-review-form">
+        <form method="post" id="order-review-form" action="<?php echo $block->escapeUrl($block->getPlaceOrderUrl()); ?>" class="form order-review-form">
             <?php echo $block->getChildHtml('agreements'); ?>
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">
-                    <button type="submit" id="review-button" class="action checkout primary"
-                            value="<?php echo $block->escapeHtml(__('Place Order')); ?>">
+                    <button type="submit" id="review-button" class="action checkout primary" value="<?php echo $block->escapeHtml(__('Place Order')); ?>">
                         <span><?php echo $block->escapeHtml(__('Place Order')); ?></span>
                     </button>
                 </div>

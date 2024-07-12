@@ -22,10 +22,10 @@
                                                                 <item name="easycredit-payments" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Netzkollektiv_EasyCredit/js/view/payment/easycredit-payment</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="easycredit_installment_payment" xsi:type="array">
+                                                                        <item name="easycredit_ratenkauf" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="easycredit_bill_payment" xsi:type="array">
+                                                                        <item name="easycredit_rechnung" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
                                                                     </item>

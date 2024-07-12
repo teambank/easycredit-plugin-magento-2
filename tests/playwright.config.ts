@@ -1,24 +1,48 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices, PlaywrightTestConfig } from "@playwright/test";
+import { seconds } from "./utils";
 
-export default defineConfig({
-  outputDir: '../test-results/'+ process.env.VERSION + '/',
+let config: PlaywrightTestConfig = {
+  outputDir: "../test-results/" + process.env.VERSION + "/",
   use: {
-    baseURL: process.env.BASE_URL ?? 'http://localhost',
-    trace: 'on'
+    baseURL: process.env.BASE_URL ?? "http://localhost",
+    trace: "on",
   },
-  timeout: 10 * 60 * 1000, // 10m
+  globalSetup: require.resolve("./global-setup"),
+  timeout: seconds(40),
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    }
+      name: "backend-auth",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /.*\.setup\.ts/,
+    },
+    {
+      name: "checkout",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: "checkout.spec.ts",
+    },
+    {
+      name: "backend",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: "backend.spec.ts",
+      dependencies: ["backend-auth", "checkout"],
+    },
   ],
-  webServer: {
-    command: 'PHP_CLI_SERVER_WORKERS=8 sudo php -S localhost:80 -t /opt/magento/pub /opt/magento/phpserver/router.php',
-    url: 'http://localhost/',
-    reuseExistingServer: !process.env.CI,
-    stdout: 'ignore',
-    stderr: 'pipe',
-    timeout: 10 * 1000
+};
+
+if (!process.env.BASE_URL) {
+  config = {
+    ...config,
+    ... {
+      webServer: {
+        command: 'PHP_CLI_SERVER_WORKERS=8 sudo php -S localhost:80 -t /opt/wordpress',
+        url: 'http://localhost/',
+        reuseExistingServer: !process.env.CI,
+        stdout: 'ignore',
+        stderr: 'pipe',
+        timeout: 5 * 1000
+      }
+    }
   }
-});
+}
+
+export default defineConfig(config)

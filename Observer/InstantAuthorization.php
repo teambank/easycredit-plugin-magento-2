@@ -18,7 +18,7 @@ class InstantAuthorization implements ObserverInterface
     private AuthorizationService $authorizationService;
 
     private Logger $logger;
-    
+
     private PaymentHelper $paymentHelper;
 
     public function __construct(

@@ -13,10 +13,12 @@ use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Netzkollektiv\EasyCredit\Api\CheckoutInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
+use Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
@@ -31,16 +33,27 @@ class Checkout implements CheckoutInterface
 
     private EasyCreditHelper $easyCreditHelper;
 
+    private PaymentHelper $paymentHelper;
+
     private CheckoutDataInterface $checkoutData;
 
     private Logger $logger;
 
-    public function __construct(CartRepositoryInterface $quoteRepository, CheckoutSession $checkoutSession, EasyCreditHelper $easyCreditHelper, CheckoutDataInterface $checkoutData, QuoteBuilder $easyCreditQuoteBuilder, Logger $logger, StorageFactory $storageFactory)
-    {
+    public function __construct(
+        CartRepositoryInterface $quoteRepository,
+        CheckoutSession $checkoutSession,
+        EasyCreditHelper $easyCreditHelper,
+        PaymentHelper $paymentHelper,
+        CheckoutDataInterface $checkoutData,
+        QuoteBuilder $easyCreditQuoteBuilder,
+        Logger $logger,
+        StorageFactory $storageFactory
+    ) {
         $this->quoteRepository = $quoteRepository;
         $this->checkoutSession = $checkoutSession;
         $this->easyCreditQuoteBuilder = $easyCreditQuoteBuilder;
         $this->easyCreditHelper = $easyCreditHelper;
+        $this->paymentHelper = $paymentHelper;
         $this->checkoutData = $checkoutData;
         $this->logger = $logger;
         $this->storageFactory = $storageFactory;
@@ -72,7 +85,7 @@ class Checkout implements CheckoutInterface
     {
         $quote = $this->checkoutSession->getQuote();
 
-        if (! $quote->hasItems() || $quote->getHasError()) {
+        if (!$quote->hasItems() || $quote->getHasError()) {
             throw new LocalizedException(__('Unable to initialize easyCredit Payment.'));
         }
     }
@@ -88,16 +101,24 @@ class Checkout implements CheckoutInterface
 
     /**
      * @api
-     * @param  string $cartId
-     * @param  boolean $express
+     * @param string $cartId
+     * @param \Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface $checkoutData
+     * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId, $express = false): CheckoutDataInterface
+    public function start($cartId, CheckoutRequestInterface $checkoutData = null): CheckoutDataInterface
     {
         try {
             try {
                 $this->_validateQuote();
 
-                if ($express) {
+                $quote = $this->checkoutSession->getQuote();
+
+                if ($checkoutData && $checkoutData->getExpress()) {
+
+                    $quote->getPayment()->setMethod(
+                        $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
+                    );
+
                     $this->getStorage()->clear();
                     $this->getStorage()->set('express', true);
                     $this->prepareExpressCheckout();
@@ -108,7 +129,6 @@ class Checkout implements CheckoutInterface
                     $ecQuote
                 );
 
-                $quote = $this->checkoutSession->getQuote();
                 $quote->getPayment()->save(); // @phpstan-ignore-line
                 $quote->collectTotals();
                 $this->quoteRepository->save($quote);
@@ -118,7 +138,7 @@ class Checkout implements CheckoutInterface
                 }
             } catch (ApiException $apiException) {
                 $response = json_decode((string) $apiException->getResponseBody(), null, 512, JSON_THROW_ON_ERROR);
-                if ($response === null || ! isset($response->violations)) {
+                if ($response === null || !isset($response->violations)) {
                     throw new \Exception('violations could not be parsed', $apiException->getCode(), $apiException);
                 }
 

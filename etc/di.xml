@@ -9,6 +9,8 @@
                type="Netzkollektiv\EasyCredit\Service\VerifyCredentials" />
     <preference for="Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface" 
                type="Netzkollektiv\EasyCredit\Api\CheckoutData" />
+    <preference for="Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface" 
+               type="Netzkollektiv\EasyCredit\Api\CheckoutRequest" />
 
     <type name="Netzkollektiv\EasyCredit\Logger\Logger">
         <arguments>

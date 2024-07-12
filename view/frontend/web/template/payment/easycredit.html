@@ -6,7 +6,8 @@
                data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
         <label data-bind="attr: {'for': getCode()}" class="label">
             <easycredit-checkout-label
-                data-bind="attr: {'label': getTitle()}"
+                payment-type="""
+                data-bind="attr: {'payment-type': getPaymentType(),'label': getTitle()}"
             ></easycredit-checkout-label>
         </label>
     </div>

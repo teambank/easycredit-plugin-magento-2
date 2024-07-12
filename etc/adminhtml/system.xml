@@ -2,88 +2,196 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="easycredit_bill_payment" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
-            <group id="easycredit_installment_payment" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
+            <group id="easycredit_rechnung" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
+            <group id="easycredit_ratenkauf" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label"></group>
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                <label><![CDATA[<easycredit-logo></easycredit-logo>]]></label>
-                <comment><![CDATA[easycredit_intro_comment]]></comment>
+                <label><![CDATA[<div class="img"></div>]]></label>
+                <comment><![CDATA[
+                    <div class="easycredit-marketing intro">
+                        <div class="easycredit-marketing__content">
+                            <strong>easyCredit-Ratenkauf und -Rechnungskauf</strong>
+                            <p>
+                                Offer your customers the option of payment by instalments with easyCredit-Ratenkauf.<br />
+                                <strong>Pay in instalments with ease.</strong>
+                            </p>
+                            <ul>
+                                <li><a href="https://partner.easycredit-ratenkauf.de/registrierung/firmendaten" target="_blank">Register as trader</a></li>
+                                <!--
+                                <li><a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">Partner portal</a></li>
+                                <li><a href="https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/" target="_blank">Documentation</a></li>
+                                <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with easyCredit-Ratenkauf</a></li>
+                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Support</a></li>
+                                -->
+                            </ul>
+                        </div>
+                    </div>
+                ]]></comment>
                 <fieldset_css>complex easycredit-section</fieldset_css>
                 <attribute type="displayIn">recommended_solutions</attribute>
-                <group id="easycredit_installment_payment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+                <group id="intro" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label><![CDATA[Intro]]></label>
+                    <comment><![CDATA[
+                        <div class="easycredit-marketing__grid">
+                            <div class="sw-card">
+                                <div class="sw-card__content">
+                                    <div class="easycredit-marketing card intro-2024">
+                                        <div class="easycredit-marketing__grid">
+                                            <div class="easycredit-marketing__content">
+                                                <h2>Der einfachste Rechnungs- und Ratenkauf Deutschlands.</h2>
+                                                <p>Wir freuen uns, dass Sie sich für easyCredit entschieden haben, die perfekte Zahlungsmethode für den Handel in Onlineshops.</p>
+                                                <a
+                                                    class="btn btn-secondary"
+                                                    href="https://netzkollektiv.com/docs/easycredit-ratenkauf-shopware6/index.html"
+                                                    target="_blank"
+                                                >
+                                                    Dokumentation
+                                                </a>
+                                                <a
+                                                    class="btn btn-secondary"
+                                                    href="https://easycredit-demo.netzkollektiv.com/"
+                                                    target="_blank"
+                                                >
+                                                    Demoshop
+                                                </a>
+                                            </div>
+
+                                            <div class="easycredit-marketing__image bg fill aspect-2-3">
+                                                <div class="img"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sw-card dimmed">
+                                <div class="sw-card__content">
+                                    <div class="easycredit-marketing card intro-2024">
+                                        <div class="easycredit-marketing__content">
+                                            <h2>Sie haben Fragen? Wir helfen gerne.</h2>
+                                            <p>Wir sind von Montag bis Freitag von 8:00 bis 18:00 Uhr für Sie erreichbar.</p>
+                                            <ul>
+                                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Fragen & Antworten</a></li>
+                                                <li><a href="tel:091153902726" target="_blank">Rufen Sie uns an: 0911 5390-2726</a></li>
+                                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/#b064f73c4cdfc080a73b69ea0125da53" target="_blank">Kontaktformular</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sw-card" id="ecbill">
+                            <div class="sw-card__content">
+                                <div class="easycredit-marketing card intro-2024 bill">
+                                    <div class="easycredit-marketing__grid grid-50-50">
+                                        <div class="easycredit-marketing__image bg fill aspect-36-2"></div>
+
+                                        <div class="easycredit-marketing__content">
+                                            <span class="badge">Neu</span>
+                                            <h2>easyCredit-Rechnung - die ideale Ergänzung zum Ratenkauf</h2>
+                                            <p>Sie können Ihren Kunden mit easyCredit neben dem klassischen Ratenkauf nun auch den Kauf auf Rechnung anbieten. Das Zahlungsziel liegt dabei <strong>30 Tage in der Zukunft</strong>.</p>
+                                            <a
+                                                class="btn btn-secondary"
+                                                href="/wp-admin/admin.php?page=wc-settings&tab=checkout&section=easycredit_rechnung"
+                                            >
+                                                Jetzt aktivieren
+                                            </a>
+                                            <a
+                                                class="btn btn-link"
+                                                href="https://www.easycredit-ratenkauf.de/produkt/"
+                                                target="_blank"
+                                            >
+                                                Mehr erfahren
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ]]></comment>
+                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <attribute type="expanded">1</attribute>
+                    <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Shipping Method</label>
+                        <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>
+                    </field>
+                </group>
+                <group id="easycredit_ratenkauf" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                     <label><![CDATA[Installment Payment]]></label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/easycredit_installment_payment/active</config_path>
+                        <config_path>payment/easycredit_ratenkauf/active</config_path>
                     </field>
                     <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Title</label>
-                        <config_path>payment/easycredit_installment_payment/title</config_path>
+                        <config_path>payment/easycredit_ratenkauf/title</config_path>
                     </field>
                     <field id="order_status" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>New Order Status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
-                        <config_path>payment/easycredit_installment_payment/order_status</config_path>
+                        <config_path>payment/easycredit_ratenkauf/order_status</config_path>
                     </field>
                     <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/easycredit_installment_payment/allowspecific</config_path>
+                        <config_path>payment/easycredit_ratenkauf/allowspecific</config_path>
                     </field>
                     <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <config_path>payment/easycredit_installment_payment/specificcountry</config_path>
+                        <config_path>payment/easycredit_ratenkauf/specificcountry</config_path>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
-                        <config_path>payment/easycredit_installment_payment/sort_order</config_path>
+                        <config_path>payment/easycredit_ratenkauf/sort_order</config_path>
                     </field>
                     <field id="remove_interest" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Remove interest after order</label>
                         <comment>
-<![CDATA[If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.]]></comment>
+                            <![CDATA[If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.]]>
+                        </comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/easycredit_installment_payment/remove_interest</config_path>
+                        <config_path>payment/easycredit_ratenkauf/remove_interest</config_path>
                     </field>
                 </group>
-                <group id="easycredit_bill_payment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+                <group id="easycredit_rechnung" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                     <label><![CDATA[Bill Payment]]></label>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enabled</label>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        <config_path>payment/easycredit_bill_payment/active</config_path>
+                        <config_path>payment/easycredit_rechnung/active</config_path>
                     </field>
                     <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Title</label>
-                        <config_path>payment/easycredit_bill_payment/title</config_path>
+                        <config_path>payment/easycredit_rechnung/title</config_path>
                     </field>
                     <field id="order_status" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>New Order Status</label>
                         <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
-                        <config_path>payment/easycredit_bill_payment/order_status</config_path>
+                        <config_path>payment/easycredit_rechnung/order_status</config_path>
                     </field>
                     <field id="allowspecific" translate="label" type="allowspecific" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Applicable Countries</label>
                         <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
-                        <config_path>payment/easycredit_bill_payment/allowspecific</config_path>
+                        <config_path>payment/easycredit_rechnung/allowspecific</config_path>
                     </field>
                     <field id="specificcountry" translate="label" type="multiselect" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Payment from Specific Countries</label>
                         <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
-                        <config_path>payment/easycredit_bill_payment/specificcountry</config_path>
+                        <config_path>payment/easycredit_rechnung/specificcountry</config_path>
                     </field>
                     <field id="sort_order" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Sort Order</label>
-                        <config_path>payment/easycredit_bill_payment/sort_order</config_path>
+                        <config_path>payment/easycredit_rechnung/sort_order</config_path>
                     </field>
                 </group>
                 <group id="credentials" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Credentials</label>
                     <comment>Please insert the Credentials you were provided by easyCredit-Ratenkauf.</comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <attribute type="expanded">1</attribute>
+                    <attribute type="expanded">0</attribute>
                     <field id="api_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Webshop-ID</label>
                     </field>
@@ -106,7 +214,8 @@
                     <field id="debug_logging" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Debug Logging</label>
                         <comment>
-<![CDATA[If activated, API call debug details will be logged to var/log/debug.log (error messages will always be logged)]]></comment>
+                            <![CDATA[If activated, API call debug details will be logged to var/log/debug.log (error messages will always be logged)]]>
+                        </comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     </field>
                 </group>
@@ -114,7 +223,7 @@
                     <label>Marketing</label>
                     <comment><![CDATA[easycredit_marketing_comment]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <attribute type="expanded">1</attribute>
+                    <attribute type="expanded">0</attribute>
 
 
                     <group id="express" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -226,7 +335,7 @@
                     <label><![CDATA[Click & Collect]]></label>
                     <comment><![CDATA[easycredit_clickandcollect_comment]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                    <attribute type="expanded">1</attribute>
+                    <attribute type="expanded">0</attribute>
                     <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Shipping Method</label>
                         <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>

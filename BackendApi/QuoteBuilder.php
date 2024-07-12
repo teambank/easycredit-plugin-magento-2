@@ -84,7 +84,7 @@ class QuoteBuilder
 
     public function getQuote(): ?Quote
     {
-        if (! $this->quote instanceof Quote) {
+        if (!$this->quote instanceof Quote) {
             $this->quote = $this->checkoutSession->getQuote();
         }
 
@@ -96,10 +96,11 @@ class QuoteBuilder
         return $this->getQuote()->getId();
     }
 
-    public function getPaymentType() {
+    public function getPaymentType()
+    {
         return $this->paymentHelper->getTypeByMethod(
             $this->getQuote()->getPayment()->getMethod()
-        );
+        ) . '_PAYMENT';
     }
 
     private function getShippingMethod()
@@ -119,7 +120,7 @@ class QuoteBuilder
 
     private function getIsClickAndCollect(): bool
     {
-        if (! $this->getQuote()->getShippingAddress()) {
+        if (!$this->getQuote()->getShippingAddress()) {
             return false;
         }
 
@@ -166,7 +167,7 @@ class QuoteBuilder
 
     private function getCustomerOrderCount()
     {
-        if (! $this->customerSession->isLoggedIn()) {
+        if (!$this->customerSession->isLoggedIn()) {
             return 0;
         }
 
@@ -178,7 +179,7 @@ class QuoteBuilder
 
     private function getCustomerCreatedAt()
     {
-        if (! $this->customerSession->isLoggedIn()) {
+        if (!$this->customerSession->isLoggedIn()) {
             return null;
         }
 

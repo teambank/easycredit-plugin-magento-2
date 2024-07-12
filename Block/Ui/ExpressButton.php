@@ -12,6 +12,7 @@ use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Model\QuoteIdMaskFactory;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class ExpressButton extends Widget implements ShortcutInterface
 {
@@ -30,12 +31,14 @@ class ExpressButton extends Widget implements ShortcutInterface
         Context $context,
         CheckoutSession $checkoutSession,
         QuoteIdMaskFactory $quoteIdMaskFactory,
+        PaymentHelper $paymentHelper,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->scopeConfig = $context->getScopeConfig();
-        parent::__construct($context, $checkoutSession, $data);
+
+        parent::__construct($context, $checkoutSession, $paymentHelper, $data);
     }
 
     public function getAlias()

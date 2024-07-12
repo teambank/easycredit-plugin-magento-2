@@ -16,13 +16,23 @@ use Magento\Quote\Api\Data\PaymentInterface;
 
 class Payment extends AbstractHelper
 {
+    private $paymentConfig = null;
+
+    public function __construct(
+        \Magento\Payment\Model\Config $paymentConfig
+    ) {
+        $this->paymentConfig = $paymentConfig;
+    }
+
     private $typeMapping = [
-        'INSTALLMENT_PAYMENT' => EasyCreditPayment\InstallmentPayment::CODE,
-        'BILL_PAYMENT' => EasyCreditPayment\BillPayment::CODE
+        'INSTALLMENT' => EasyCreditPayment\InstallmentPayment::CODE,
+        'BILL' => EasyCreditPayment\BillPayment::CODE
     ];
 
-    public function isSelected (ExtensibleDataInterface $paymentMethod) {
-        if (!$paymentMethod instanceof OrderPaymentInterface
+    public function isSelected(ExtensibleDataInterface $paymentMethod)
+    {
+        if (
+            !$paymentMethod instanceof OrderPaymentInterface
             && !$paymentMethod instanceof PaymentInterface
         ) {
             return false;
@@ -31,28 +41,47 @@ class Payment extends AbstractHelper
         return $this->isMethodSelected($paymentMethod->getMethod());
     }
 
-    public function isMethodSelected(string $method) {
+    public function isMethodSelected(string $method)
+    {
         if (
             EasyCreditPayment\BillPayment::CODE === $method ||
             EasyCreditPayment\InstallmentPayment::CODE === $method
         ) {
             return true;
         }
-        return false;   
+        return false;
     }
 
-    public function getMethodByType(string $type) {
+    public function getMethodByType(string $type)
+    {
+        $type = str_replace('_PAYMENT', '', $type);
         if (!isset($this->typeMapping[$type])) {
-            throw new \Exception('payment type '.$type. ' does not exist');
+            throw new \Exception('payment type ' . $type . ' does not exist');
         }
         return $this->typeMapping[$type];
     }
 
-    public function getTypeByMethod(string $method) {
+    public function getTypeByMethod(string $method)
+    {
         $typeMapping = array_flip($this->typeMapping);
         if (!isset($typeMapping[$method])) {
-            throw new \Exception('method '.$method. ' does not exist');
+            throw new \Exception('method ' . $method . ' does not exist');
         }
         return $typeMapping[$method];
+    }
+
+    public function getAvailableMethods()
+    {
+        return array_filter($this->paymentConfig->getActiveMethods(), function ($method) {
+            return $method instanceof EasyCreditPayment\BillPayment ||
+                $method instanceof EasyCreditPayment\InstallmentPayment;
+        });
+    }
+
+    public function getAvailableMethodTypes()
+    {
+        return array_map(function ($paymentMethod) {
+            return $this->getTypeByMethod($paymentMethod::CODE);
+        }, $this->getAvailableMethods());
     }
 }

@@ -12,6 +12,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Store\Model\ScopeInterface;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class Widget extends Template
 {
@@ -19,13 +20,18 @@ class Widget extends Template
 
     private CheckoutSession $checkoutSession;
 
+    private PaymentHelper $paymentHelper;
+
     public function __construct(
         Context $context,
         CheckoutSession $checkoutSession,
+        PaymentHelper $paymentHelper,
         array $data = []
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $context->getScopeConfig();
+        $this->paymentHelper = $paymentHelper;
+
         parent::__construct($context, $data);
     }
 
@@ -58,5 +64,10 @@ class Widget extends Template
 
         $totals = $this->checkoutSession->getQuote()->getTotals();
         return $totals['grand_total']->getValue();
+    }
+
+    public function getPaymentHelper()
+    {
+        return $this->paymentHelper;
     }
 }

@@ -35,7 +35,8 @@ class ProductAddToCartBefore implements ObserverInterface
 
     public function execute(Observer $observer): void
     {
-        if (! $this->request->getParam('easycredit-express-checkout')) {
+        $params = $this->request->getParam('easycredit');
+        if (!$params || !isset($params['express'])) {
             return;
         }
 

@@ -11,9 +11,8 @@ use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Netzkollektiv\EasyCredit\Model\Payment\InstallmentPayment;
-use Netzkollektiv\EasyCredit\Model\Payment\BillPayment;
 use Psr\Log\LoggerInterface;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class EasyCreditConfigProvider implements ConfigProviderInterface
 {
@@ -25,15 +24,19 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
 
     private LoggerInterface $logger;
 
+    private PaymentHelper $paymentHelper;
+
     public function __construct(
         Escaper $escaper,
         UrlInterface $urlBuilder,
         EasyCreditHelper $easyCreditHelper,
+        PaymentHelper $paymentHelper,
         LoggerInterface $logger
     ) {
         $this->escaper = $escaper;
         $this->urlBuilder = $urlBuilder;
         $this->easyCreditHelper = $easyCreditHelper;
+        $this->paymentHelper = $paymentHelper;
         $this->logger = $logger;
     }
 
@@ -41,10 +44,11 @@ class EasyCreditConfigProvider implements ConfigProviderInterface
     {
         $config = [];
         $config['payment']['easycredit']['apiKey'] = $this->escaper->escapeHtml($this->easyCreditHelper->getConfigValue('credentials/api_key'));
-        foreach ([InstallmentPayment::CODE, BillPayment::CODE] as $methodCode) {
-            $config['payment'][$methodCode] = '';
+        foreach ($this->paymentHelper->getAvailableMethods() as $method) {
+            $config['payment'][$method::CODE] = '';
             try {
-                $config['payment'][$methodCode] = [
+                $config['payment'][$method::CODE] = [
+                    'paymentType' => $this->paymentHelper->getTypeByMethod($method::CODE),
                     'redirectUrl' => $this->urlBuilder->getUrl('easycredit/checkout/start'),
                     'defaultErrorMessage' => implode(
                         ' ',

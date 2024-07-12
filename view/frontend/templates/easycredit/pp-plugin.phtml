@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @var \Netzkollektiv\EasyCredit\Block\Ui\Widget $block
  */
@@ -7,30 +8,32 @@ if (!$block->getApiKey()) {
 }
 ?>
 <script>
-require([
-    "jquery",
-    "domReady!",
-], function ($) {
-    $(function() { 
-        $('.product-info-main .price-box').each(function(){
-            var me = this;
-            var amount = function() {
-                return $(me).find('*[data-price-type="finalPrice"]').data('price-amount');
-            }();
+    require([
+        "jquery",
+        "domReady!",
+    ], function($) {
+        $(function() {
+            $('.product-info-main .price-box').each(function() {
+                var me = this;
+                var amount = function() {
+                    return $(me).find('*[data-price-type="finalPrice"]').data('price-amount');
+                }();
 
-            var widget = $(['<easycredit-widget', 
-                'webshop-id="<?php echo $block->escapeHtml($block->getApiKey()); ?>"',
-                'amount="'+amount+'"',
-            '/>'].join(' '));
-            $(this).append(widget);
+                var widget = $(['<easycredit-widget',
+                    'payment-types="<?= implode(',', $block->getPaymentHelper()->getAvailableMethodTypes()); ?>""',
+                    'webshop-id="<?= $block->escapeHtml($block->getApiKey()); ?>"',
+                    'amount="' + amount + '"',
+                    '/>'
+                ].join(' '));
+                $(this).append(widget);
 
-            var priceType = 'finalPrice';
-            var priceBoxSelector = '.price-box';
-            var priceBox = $(priceBoxSelector);
-            priceBox.on('priceUpdated', function(event, data) {
-                widget.get(0).setAttribute('amount', data[priceType].amount);
+                var priceType = 'finalPrice';
+                var priceBoxSelector = '.price-box';
+                var priceBox = $(priceBoxSelector);
+                priceBox.on('priceUpdated', function(event, data) {
+                    widget.get(0).setAttribute('amount', data[priceType].amount);
+                });
             });
         });
     });
-});
 </script>

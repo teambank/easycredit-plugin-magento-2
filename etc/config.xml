@@ -36,16 +36,16 @@
                 </marketing>
                 <remove_interest>1</remove_interest>
             </easycredit>
-            <easycredit_installment_payment>
+            <easycredit_ratenkauf>
                 <active>1</active>
                 <title>easyCredit-Ratenkauf</title>
                 <model>Netzkollektiv\EasyCredit\Model\Payment\InstallmentPayment</model>
-            </easycredit_installment_payment>
-            <easycredit_bill_payment>
+            </easycredit_ratenkauf>
+            <easycredit_rechnung>
                 <active>1</active>
                 <title>easyCredit Rechnungskauf</title>
                 <model>Netzkollektiv\EasyCredit\Model\Payment\BillPayment</model>
-            </easycredit_bill_payment>
+            </easycredit_rechnung>
         </payment>
     </default>
 </config>
