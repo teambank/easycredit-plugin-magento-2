@@ -112,9 +112,12 @@
                     ]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
-                    <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Shipping Method</label>
-                        <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>
+                    <field id="billpayment_button" translate="button_label attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
+                        <attribute type="button_label">Jetzt aktivieren</attribute>
+                        <attribute type="button_label_inactive">Jetzt freischalten lassen</attribute>
+
+                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentButton</frontend_model>
+                        <attribute type="shared">1</attribute>
                     </field>
                 </group>
                 <group id="easycredit_ratenkauf" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">

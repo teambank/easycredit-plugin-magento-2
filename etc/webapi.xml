@@ -6,13 +6,13 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/easycredit/checkout/data/:cartId" method="GET">
+    <route url="/V1/easycredit/checkout/data/:cartId" method="POST">
         <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="getCheckoutData"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
-    <route url="/V1/easycredit/checkout/data" method="GET">
+    <route url="/V1/easycredit/checkout/data" method="POST">
         <service class="Netzkollektiv\EasyCredit\Api\CheckoutInterface" method="getCheckoutData"/>
         <resources>
             <resource ref="self" />

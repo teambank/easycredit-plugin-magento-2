@@ -63,10 +63,16 @@ class Checkout implements CheckoutInterface
      * @api
      * @param  string $cartId
      */
-    public function getCheckoutData($cartId): CheckoutDataInterface
+    public function getCheckoutData($cartId, CheckoutRequestInterface $checkoutData): CheckoutDataInterface
     {
         try {
             $this->getStorage()->set('express', false);
+
+            $quote = $this->checkoutSession->getQuote();
+            $quote->getPayment()->setMethod(
+                $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
+            );
+
             $ecQuote = $this->easyCreditQuoteBuilder->build();
             $this->easyCreditHelper->getCheckout()->isAvailable(
                 $ecQuote
@@ -105,20 +111,18 @@ class Checkout implements CheckoutInterface
      * @param \Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface $checkoutData
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId, CheckoutRequestInterface $checkoutData = null): CheckoutDataInterface
+    public function start($cartId, CheckoutRequestInterface $checkoutData): CheckoutDataInterface
     {
         try {
             try {
                 $this->_validateQuote();
 
                 $quote = $this->checkoutSession->getQuote();
+                $quote->getPayment()->setMethod(
+                    $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
+                );
 
                 if ($checkoutData && $checkoutData->getExpress()) {
-
-                    $quote->getPayment()->setMethod(
-                        $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
-                    );
-
                     $this->getStorage()->clear();
                     $this->getStorage()->set('express', true);
                     $this->prepareExpressCheckout();

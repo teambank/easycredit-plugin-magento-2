@@ -15,9 +15,10 @@ interface CheckoutInterface
     /**
      * @api
      * @param  string $cartId
+     * @param \Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface $checkoutData
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function getCheckoutData($cartId);
+    public function getCheckoutData($cartId, CheckoutRequestInterface $checkoutData);
 
     /**
      * @api
@@ -25,5 +26,5 @@ interface CheckoutInterface
      * @param \Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface $checkoutData
      * @return \Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface
      */
-    public function start($cartId, CheckoutRequestInterface $checkoutData = null);
+    public function start($cartId, CheckoutRequestInterface $checkoutData);
 }
