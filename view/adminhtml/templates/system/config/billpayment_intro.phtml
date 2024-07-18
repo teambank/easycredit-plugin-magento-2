@@ -1,0 +1,90 @@
+<?php
+/**
+ * @see \Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentIntro
+ * @var \Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentIntro $block
+ */
+?>
+<div class="sw-card" id="ecbill">
+    <div class="sw-card__content">
+        <div class="easycredit-marketing card intro-2024 bill">
+            <div class="easycredit-marketing__grid grid-50-50">
+                <div class="easycredit-marketing__image bg fill aspect-36-2"></div>
+
+                <div class="easycredit-marketing__content">
+                    <span class="badge">Neu</span>
+                    <h2>easyCredit-Rechnung - die ideale Ergänzung zum Ratenkauf</h2>
+                    <p>Sie können Ihren Kunden mit easyCredit neben dem klassischen Ratenkauf nun auch den Kauf auf Rechnung anbieten. Das Zahlungsziel liegt dabei <strong>30 Tage in der Zukunft</strong>.</p>
+                    <a
+                        class="btn btn-secondary"
+                        id="easycredit-activate-invoice-button-active"
+                        href="#row_payment_us_easycredit_easycredit_rechnung"
+                    >
+                        Jetzt aktivieren
+                    </a>
+                    <a
+                        class="btn btn-secondary"
+                        id="easycredit-activate-invoice-button-inactive"
+                        href="https://partner.easycredit-ratenkauf.de/portal"
+                        target="_blank"
+                    >
+                        Jetzt freischalten lassen
+                    </a>
+                    <a
+                        class="btn btn-link"
+                        href="https://www.easycredit-ratenkauf.de/produkt/"
+                        target="_blank"
+                    >
+                        Mehr erfahren
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+         function fetchWebshopInfo () {
+            apiKey = '<?php echo $block->getApiKey(); ?>';
+            // console.log(apiKey);
+
+            if (apiKey.length === 0) {
+                console.log('Api Key missing!');
+                return;
+            }
+
+            const url = 'https://ratenkauf.easycredit.de/api/payment/v3/webshop/' + apiKey;
+
+            return fetch(url).then((response) => {
+                if (!response.ok) { 
+                    return Promise.reject(response); 
+                }
+                return response.json();
+            }).then((data) => {
+                // console.log('Fetched data:', data);
+                return data;
+            }).catch((error) => {
+                console.error('Error fetching webshop info:', error);
+            });
+        }
+
+        $( document ).ready( function() {
+            fetchWebshopInfo().then((data) => {
+                console.log('billPaymentActive:', data.billPaymentActive);
+
+                if ( data.billPaymentActive === true ) {
+                    $('#easycredit-activate-invoice-button-inactive').remove();
+                } else {
+                    $('#easycredit-activate-invoice-button-active').remove();
+                }
+            });
+        });
+    });
+</script>

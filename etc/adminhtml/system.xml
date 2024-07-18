@@ -80,43 +80,11 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="sw-card" id="ecbill">
-                            <div class="sw-card__content">
-                                <div class="easycredit-marketing card intro-2024 bill">
-                                    <div class="easycredit-marketing__grid grid-50-50">
-                                        <div class="easycredit-marketing__image bg fill aspect-36-2"></div>
-
-                                        <div class="easycredit-marketing__content">
-                                            <span class="badge">Neu</span>
-                                            <h2>easyCredit-Rechnung - die ideale Ergänzung zum Ratenkauf</h2>
-                                            <p>Sie können Ihren Kunden mit easyCredit neben dem klassischen Ratenkauf nun auch den Kauf auf Rechnung anbieten. Das Zahlungsziel liegt dabei <strong>30 Tage in der Zukunft</strong>.</p>
-                                            <a
-                                                class="btn btn-secondary"
-                                                href="/wp-admin/admin.php?page=wc-settings&tab=checkout&section=easycredit_rechnung"
-                                            >
-                                                Jetzt aktivieren
-                                            </a>
-                                            <a
-                                                class="btn btn-link"
-                                                href="https://www.easycredit-ratenkauf.de/produkt/"
-                                                target="_blank"
-                                            >
-                                                Mehr erfahren
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     ]]></comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
-                    <field id="billpayment_button" translate="button_label attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
-                        <attribute type="button_label">Jetzt aktivieren</attribute>
-                        <attribute type="button_label_inactive">Jetzt freischalten lassen</attribute>
-
-                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentButton</frontend_model>
+                    <field id="billpayment_intro" translate="attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
+                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentIntro</frontend_model>
                         <attribute type="shared">1</attribute>
                     </field>
                 </group>
