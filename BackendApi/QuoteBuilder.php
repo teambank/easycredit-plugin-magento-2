@@ -217,6 +217,7 @@ class QuoteBuilder
         return new Api\Model\Transaction(
             [
                 'paymentType' => $this->getPaymentType(),
+                'paymentSwitchPossible' => count($this->paymentHelper->getAvailableMethods()) > 1, // Switch between installment & bill payment should be possible if both methods are enabled
                 'financingTerm' => $this->getDuration(),
                 'orderDetails' => new Api\Model\OrderDetails(
                     [
