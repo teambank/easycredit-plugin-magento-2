@@ -89,6 +89,7 @@ jobs:
           
           COMPOSER_MIRROR_PATH_REPOS=1 composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 dev-${GITHUB_REF##*/}#${GITHUB_SHA}
           composer require community-engineering/language-de_DE
+          composer remove magento/composer-dependency-version-audit-plugin
 
           # quick patch functional testing framework in subshell
           (
@@ -111,6 +112,7 @@ jobs:
           BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
           composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 $BRANCH
 
+          php bin/magento module:disable Magento_AdminAnalytics
           php bin/magento s:up
           php bin/magento deploy:mode:set production -s
           php bin/magento s:di:com
@@ -118,11 +120,12 @@ jobs:
 
           php bin/magento indexer:set-mode realtime
           php bin/magento config:set admin/usage/enabled 0
+
           php bin/magento config:set payment/easycredit/credentials/api_key ${{ secrets.EASYCREDITAPIKEY }}
           php bin/magento config:set payment/easycredit/credentials/api_token ${{ secrets.EASYCREDITAPIPASSWORD }}
           php bin/magento config:set payment/easycredit/credentials/api_signature ${{ secrets.EASYCREDITAPISIGNATURE }}
 
-          php bin/magento c:cl
+          php bin/magento c:clean
 
       - name: Static Analyze
         run: |
@@ -157,7 +160,7 @@ jobs:
           for i in $LOG_DIR/*; do
             echo "<a href=\"$(basename $i)\">$i</a><br />" >> $LOG_DIR/index.html
           done;
-      - name: Deploy
+      - name: Deploy Report
         if: always()
         uses: cloudflare/wrangler-action@v3
         with:

@@ -33,6 +33,7 @@ export const confirmOrder = async ({
       paymentType === PaymentTypes.INSTALLMENT ? "Ratenkauf" : "Rechnung"
     );
 
+     /* temporarly disabled, waiting for implementation on api side
     if (paymentType === PaymentTypes.INSTALLMENT) {
       await expect
         .soft(page.locator(".opc-block-summary"))
@@ -42,6 +43,8 @@ export const confirmOrder = async ({
         .soft(page.locator(".opc-block-summary"))
         .not.toContainText("Zinsen für Ratenzahlung");
     }
+    */
+
     /* Confirm Page */
     //await page.getByLabel('Please accept the terms').check();
     await page.getByRole("button", { name: "Jetzt kaufen" }).click();
