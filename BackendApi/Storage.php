@@ -9,7 +9,7 @@ namespace Netzkollektiv\EasyCredit\BackendApi;
 
 use Magento\Quote\Model\Quote\Payment;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+use Teambank\EasyCreditApiV3 as Api;
 
 class Storage implements Api\Integration\StorageInterface
 {

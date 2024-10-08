@@ -1,10 +1,10 @@
 {
-  "name": "teambank/ratenkaufbyeasycredit-plugin-magento-2",
+  "name": "teambank/easycredit-plugin-magento-2",
   "description": "easyCredit-Ratenkauf Payment integration for Magento 2",
   "type": "magento2-module",
   "license": "MIT",
   "require": {
-    "netzkollektiv/ratenkaufbyeasycredit-api-v3-php": "dev-invoice"
+    "netzkollektiv/easycredit-api-v3-php": "^2.0"
   },
   "authors": [
     {

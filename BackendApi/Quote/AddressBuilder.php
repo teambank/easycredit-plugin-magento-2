@@ -8,9 +8,9 @@
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
 use Magento\Quote\Model\Quote\Address;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\InvoiceAddress;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\ModelInterface;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\ShippingAddress;
+use Teambank\EasyCreditApiV3\Model\InvoiceAddress;
+use Teambank\EasyCreditApiV3\Model\ModelInterface;
+use Teambank\EasyCreditApiV3\Model\ShippingAddress;
 
 class AddressBuilder
 {

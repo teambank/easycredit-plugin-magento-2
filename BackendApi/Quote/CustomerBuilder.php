@@ -8,9 +8,9 @@
 namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
 use Magento\Customer\Model\Session as CustomerSession;
-use Teambank\RatenkaufByEasyCreditApiV3 as Api;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\Customer;
+use Teambank\EasyCreditApiV3 as Api;
+use Teambank\EasyCreditApiV3\Integration\Util\PrefixConverter;
+use Teambank\EasyCreditApiV3\Model\Customer;
 
 class CustomerBuilder
 {

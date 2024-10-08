@@ -8,7 +8,7 @@ Composer Installation
 
 .. code-block:: bash
 
-    $ composer require teambank/ratenkaufbyeasycredit-plugin-magento-2
+    $ composer require teambank/easycredit-plugin-magento-2
 
 * Führen Sie die folgenden Kommandos als Webserver-User auf der Kommandozeile aus:
 
@@ -34,7 +34,7 @@ Wenn Sie die Zugangsdaten bereits zur Hand haben führen Sie noch die folgenden 
 manuelle Installation via SSH
 ------------------------------
 
-* Laden Sie die Extension von der `Github Release Page <https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2>`_ herunter
+* Laden Sie die Extension von der `Github Release Page <https://github.com/teambank/easycredit-plugin-magento-2>`_ herunter
 * Entpacken Sie die Extension in ein temporäres Verzeichnis
 * Kopieren Sie die Extension nach `app/code/Netzkollektiv/EasyCredit` in Ihrer Magento Installation
 
@@ -47,7 +47,7 @@ manuelle Installation via SSH
 
 .. code-block:: bash
 
-    $ composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php
+    $ composer require netzkollektiv/easycredit-api-v3-php
 
 Fahren Sie ansonsten fort wie bei der :ref:`Composer Installation`.
 

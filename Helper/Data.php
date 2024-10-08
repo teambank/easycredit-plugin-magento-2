@@ -14,14 +14,14 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Logger\Logger;
-use Teambank\RatenkaufByEasyCreditApiV3 as Api;
-use Teambank\RatenkaufByEasyCreditApiV3\Client;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\CheckoutFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\AddressValidator;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Util\PrefixConverter;
-use Teambank\RatenkaufByEasyCreditApiV3\Service\InstallmentplanApiFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Service\TransactionApiFactory;
-use Teambank\RatenkaufByEasyCreditApiV3\Service\WebshopApiFactory;
+use Teambank\EasyCreditApiV3 as Api;
+use Teambank\EasyCreditApiV3\Client;
+use Teambank\EasyCreditApiV3\Integration\CheckoutFactory;
+use Teambank\EasyCreditApiV3\Integration\Util\AddressValidator;
+use Teambank\EasyCreditApiV3\Integration\Util\PrefixConverter;
+use Teambank\EasyCreditApiV3\Service\InstallmentplanApiFactory;
+use Teambank\EasyCreditApiV3\Service\TransactionApiFactory;
+use Teambank\EasyCreditApiV3\Service\WebshopApiFactory;
 
 class Data extends AbstractHelper
 {

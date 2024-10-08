@@ -18,7 +18,7 @@ use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
-use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
+use Teambank\EasyCreditApiV3\Model\TransactionInformation;
 
 class ReturnAction extends AbstractController
 {

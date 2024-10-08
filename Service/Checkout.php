@@ -19,7 +19,7 @@ use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
-use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
+use Teambank\EasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
 {

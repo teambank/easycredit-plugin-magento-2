@@ -19,9 +19,9 @@ use Netzkollektiv\EasyCredit\BackendApi\Quote\CustomerBuilder;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\ItemBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\SystemBuilder;
-use Teambank\RatenkaufByEasyCreditApiV3 as Api;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\RedirectLinks;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\ShoppingCartInformationItem;
+use Teambank\EasyCreditApiV3 as Api;
+use Teambank\EasyCreditApiV3\Model\RedirectLinks;
+use Teambank\EasyCreditApiV3\Model\ShoppingCartInformationItem;
 
 class QuoteBuilder
 {

@@ -9,7 +9,7 @@ namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Module\ResourceInterface;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\Shopsystem;
+use Teambank\EasyCreditApiV3\Model\Shopsystem;
 
 class SystemBuilder
 {

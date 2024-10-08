@@ -14,7 +14,7 @@ use Magento\Framework\App\ViewInterface;
 use Magento\Framework\View\Element\BlockInterface;
 use Netzkollektiv\EasyCredit\Helper\Data;
 use Psr\Log\LoggerInterface;
-use Teambank\RatenkaufByEasyCreditApiV3\Integration\Checkout;
+use Teambank\EasyCreditApiV3\Integration\Checkout;
 
 class Review extends AbstractController
 {

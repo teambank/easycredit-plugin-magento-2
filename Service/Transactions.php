@@ -11,9 +11,9 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Netzkollektiv\EasyCredit\Api\TransactionsInterface;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
+use Teambank\EasyCreditApiV3\ApiException;
+use Teambank\EasyCreditApiV3\Model\CaptureRequest;
+use Teambank\EasyCreditApiV3\Model\RefundRequest;
 
 class Transactions implements TransactionsInterface
 {

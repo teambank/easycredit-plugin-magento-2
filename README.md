@@ -21,16 +21,16 @@ The easyCredit-Ratenkauf extension for Magento 2 can be installed using Composer
 
 Go to your Magento 2 installation directory and run the following commands:
 
-	composer require teambank/ratenkaufbyeasycredit-plugin-magento-2
+	composer require teambank/easycredit-plugin-magento-2
 	php bin/magento setup:upgrade
 	php bin/magento setup:di:compile
 	php bin/magento cache:clean
 
-Please also follow the guidelines in our [Documentation](https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/)
+Please also follow the guidelines in our [Documentation](https://netzkollektiv.com/docs/easycredit-magento2/)
 
 # Compatibility
 
-[![Test](https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2/actions/workflows/test.yml/badge.svg)](https://github.com/teambank/ratenkaufbyeasycredit-plugin-magento-2/actions/workflows/test.yml)
+[![Test](https://github.com/teambank/easycredit-plugin-magento-2/actions/workflows/test.yml/badge.svg)](https://github.com/teambank/easycredit-plugin-magento-2/actions/workflows/test.yml)
 
 This extension aims to be as compatible as possible with current, future versions of Magento 2. This version is tested with:
 

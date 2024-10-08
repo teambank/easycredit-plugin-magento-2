@@ -10,7 +10,7 @@ namespace Netzkollektiv\EasyCredit\BackendApi\Quote;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Teambank\RatenkaufByEasyCreditApiV3 as Api;
+use Teambank\EasyCreditApiV3 as Api;
 
 class ItemBuilder
 {

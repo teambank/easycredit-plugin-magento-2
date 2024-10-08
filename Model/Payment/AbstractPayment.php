@@ -26,10 +26,10 @@ use Magento\Quote\Api\Data\PaymentInterface;
 use Netzkollektiv\EasyCredit\Block\Info;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
 use Netzkollektiv\EasyCredit\Helper\Data;
-use Teambank\RatenkaufByEasyCreditApiV3\ApiException;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\CaptureRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\RefundRequest;
-use Teambank\RatenkaufByEasyCreditApiV3\Model\TransactionInformation;
+use Teambank\EasyCreditApiV3\ApiException;
+use Teambank\EasyCreditApiV3\Model\CaptureRequest;
+use Teambank\EasyCreditApiV3\Model\RefundRequest;
+use Teambank\EasyCreditApiV3\Model\TransactionInformation;
 
 class AbstractPayment extends AbstractMethod
 {

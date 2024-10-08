@@ -39,7 +39,7 @@ jobs:
 
     env:
       MAGENTO_DIR: /opt/magento/
-      PLUGIN_DIR: vendor/teambank/ratenkaufbyeasycredit-plugin-magento-2/
+      PLUGIN_DIR: vendor/teambank/easycredit-plugin-magento-2/
 
     services:
       mysql:
@@ -87,7 +87,7 @@ jobs:
           composer config minimum-stability dev
           composer config repositories.local path $GITHUB_WORKSPACE
           
-          COMPOSER_MIRROR_PATH_REPOS=1 composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 dev-${GITHUB_REF##*/}#${GITHUB_SHA}
+          COMPOSER_MIRROR_PATH_REPOS=1 composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 dev-${GITHUB_REF##*/}#${GITHUB_SHA}
           composer require community-engineering/language-de_DE
           composer remove magento/composer-dependency-version-audit-plugin
 
@@ -110,7 +110,7 @@ jobs:
 
           REF=${GITHUB_REF##*/}
           BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
-          composer require --ignore-platform-reqs teambank/ratenkaufbyeasycredit-plugin-magento-2 $BRANCH
+          composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 $BRANCH
 
           php bin/magento module:disable Magento_AdminAnalytics
           php bin/magento s:up

@@ -52,7 +52,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
         /** @var CompletePackageInterface $package */
         foreach ($packages as $package) {
-            if ($package instanceof CompletePackageInterface && $package->getName() == 'netzkollektiv/ratenkaufbyeasycredit-api-v3-php') {
+            if ($package instanceof CompletePackageInterface && $package->getName() == 'netzkollektiv/easycredit-api-v3-php') {
                 return $package;
             }
         }
@@ -67,13 +67,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $package = $this->getApiLibraryPackage();
         if (! $package instanceof CompletePackageInterface) {
-            throw new \Exception('Please run "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php:' . $package->getVersion());
+            throw new \Exception('Please run "composer require netzkollektiv/easycredit-api-v3-php:' . $package->getVersion());
         }
 
         $composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'), null, 512, JSON_THROW_ON_ERROR);
 
-        if (Comparator::lessThan($package->getVersion(), $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'})) {
-            throw new \Exception('Please upgrade ' . $package->getName() . ' to v' . $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'} . ', run: "composer require netzkollektiv/ratenkaufbyeasycredit-api-v3-php:' . $composer->require->{'netzkollektiv/ratenkaufbyeasycredit-api-v3-php'} . '"');
+        if (Comparator::lessThan($package->getVersion(), $composer->require->{'netzkollektiv/easycredit-api-v3-php'})) {
+            throw new \Exception('Please upgrade ' . $package->getName() . ' to v' . $composer->require->{'netzkollektiv/easycredit-api-v3-php'} . ', run: "composer require netzkollektiv/easycredit-api-v3-php:' . $composer->require->{'netzkollektiv/easycredit-api-v3-php'} . '"');
         }
 
         if (! $context->getVersion()) {
