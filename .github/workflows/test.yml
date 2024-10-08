@@ -119,7 +119,7 @@ jobs:
           php bin/magento s:static:depl de_DE en_US -j 8
 
           php bin/magento indexer:set-mode realtime
-          php bin/magento config:set admin/usage/enabled 0
+          #php bin/magento config:set admin/usage/enabled 0
 
           php bin/magento config:set payment/easycredit/credentials/api_key ${{ secrets.EASYCREDITAPIKEY }}
           php bin/magento config:set payment/easycredit/credentials/api_token ${{ secrets.EASYCREDITAPIPASSWORD }}

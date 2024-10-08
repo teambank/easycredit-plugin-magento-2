@@ -53,7 +53,6 @@ test.describe("Go through standard @installment", () => {
       .locator("easycredit-checkout-label[payment-type=INSTALLMENT]")
       .click();
     await page.getByRole("button", { name: "Weiter zu easyCredit-Ratenkauf" }).click();
-    await page.locator('span:text("Akzeptieren"):visible').click();
 
     await goThroughPaymentPage({
       page: page,

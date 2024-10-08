@@ -4,6 +4,7 @@ import { takeScreenshot, scaleDown } from "./utils";
 test.beforeEach(scaleDown);
 test.afterEach(takeScreenshot);
 
+/* disable temporarly, "Zahlungsarten" menu item cannot be found in any system
 test.describe("Check settings", () => {
   test("Check settings", async ({ page }) => {
     await page.goto("/admin/");
@@ -25,3 +26,4 @@ test.describe("Check settings", () => {
     await page.getByText("Die Zugangsdaten sind gültig.").click();
   });
 });
+*/

@@ -64,7 +64,7 @@ return Component.extend({
       );
 
       this.checkAvailable();
-      this.renderComponent();
+      this.updateComponent();
 
       var billingAddressComponent = registry.get(function (item) {
         return item.component == "Magento_Checkout/js/view/billing-address";
