@@ -45,6 +45,9 @@
     --grid-column-gap-m: 36px;
     --grid-template-columns: 3fr 2fr;
     --grid-template-columns-50-50: 1fr 1fr;
+
+    scroll-behavior: smooth;
+    scroll-padding: 100px;
 }
 
 .easycredit-section {
@@ -88,6 +91,11 @@
         font-weight: normal;
     }
 
+    /* Margins */
+    .mb-1 {
+        margin-bottom: 1em;
+    }
+
     /* Headings & Typo */
     h2, h3,
     p, ul, label {
@@ -124,6 +132,20 @@
                 background-size: contain;
             }
         }
+
+        &.not-decorated {
+            font-weight: 600 !important;
+            text-decoration: none;
+        }
+    }
+    ul {
+        li:has(a) {
+            margin-bottom: 5px;
+
+            a {
+                font-weight: 600;
+            }
+        }
     }
 
     /* Buttons */
@@ -149,14 +171,14 @@
             background-color: transparent;
             padding-left: 0;
             padding-right: 0;
+            font-weight: 600 !important;
             color: @color-ec-secondary !important;
         }
 
         &:not(.btn-link) {
             &:hover,
             &:active,
-            &:focus,
-            &:visited {
+            &:focus {
                 background-color: darken(@color-ec-secondary, 5%) !important;
                 color: @color-white !important;
                 text-decoration: none !important;
@@ -301,6 +323,8 @@
 
                     aspect-ratio: 600 / 450;
                     background-image: url(../images/easycredit-marketing-express-button.png);
+                    background-size: auto calc(~'100% - 20px');
+                    background-position: center bottom 20px;
 
                     border-radius: 5px;
                 }
@@ -319,6 +343,8 @@
 
                     aspect-ratio: 600 / 450;
                     background-image: url(../images/easycredit-marketing-widget.png);
+                    background-size: auto calc(~'100% - 20px');
+                    background-position: center bottom 20px;
 
                     border-radius: 5px;
                 }
@@ -422,7 +448,7 @@
 
         ul {
             li {
-                margin-bottom: 8px;
+                margin-bottom: 5px;
 
                 a {
                     font-weight: 600 !important;
@@ -436,7 +462,13 @@
         }
     }
     &.bill {
+        display: none;
         margin-top: 0;
+
+        &.easycredit_rechnung-not-allowed,
+        &.easycredit_rechnung-not-active {
+            display: block;
+        }
 
         .easycredit-marketing__image {
             background-image: url('../images/card-easycredit-rechnung-image.png');
@@ -470,13 +502,33 @@
     }
 }
 
-tr#row_payment_us_easycredit_intro_billpayment_intro {
+tr#row_payment_us_easycredit_intro_billpayment_intro,
+tr#row_payment_us_easycredit_intro_intro,
+tr#row_payment_us_easycredit_marketing_marketing_intro,
+tr#row_payment_us_easycredit_marketing_express_marketing_express,
+tr#row_payment_us_easycredit_marketing_widget_marketing_widget,
+tr#row_payment_us_easycredit_marketing_modal_marketing_modal,
+tr#row_payment_us_easycredit_marketing_card_marketing_card,
+tr#row_payment_us_easycredit_marketing_flashbox_marketing_flashbox,
+tr#row_payment_us_easycredit_marketing_bar_marketing_bar,
+tr#row_payment_us_easycredit_clickandcollect_click_and_collect {
     td.label,
     td[class=""] {
         display: none;
     }
     td.value {
         padding: 0;
-        width: 100%;
+        width: 100% !important;
+    }
+
+    &#row_payment_us_easycredit_marketing_express_marketing_express,
+    &#row_payment_us_easycredit_marketing_widget_marketing_widget,
+    &#row_payment_us_easycredit_marketing_modal_marketing_modal,
+    &#row_payment_us_easycredit_marketing_card_marketing_card,
+    &#row_payment_us_easycredit_marketing_flashbox_marketing_flashbox,
+    &#row_payment_us_easycredit_marketing_bar_marketing_bar {
+        td.value {
+            padding-bottom: 30px;
+        }
     }
 }

@@ -43,7 +43,7 @@
             </easycredit_ratenkauf>
             <easycredit_rechnung>
                 <active>1</active>
-                <title>easyCredit Rechnungskauf</title>
+                <title>easyCredit-Rechnung</title>
                 <model>Netzkollektiv\EasyCredit\Model\Payment\BillPayment</model>
             </easycredit_rechnung>
         </payment>

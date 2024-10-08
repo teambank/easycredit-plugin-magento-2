@@ -1,0 +1,26 @@
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid modal">
+        <div class="easycredit-marketing__content">
+            <p><?= __('The modal component can be used to actively draw the customer\'s attention to the installment purchase in the shop. A time-controlled display of the modal is possible. If the customer closes the modal, the component remembers this and prevents it from being displayed again.') ?></p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+        $( document ).ready( function() {
+            el = $('#row_payment_us_easycredit_marketing_modal_marketing_modal td.value');
+            el.attr('colspan',3);
+        });
+    });
+</script>

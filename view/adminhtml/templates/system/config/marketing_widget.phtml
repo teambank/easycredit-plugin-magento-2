@@ -1,0 +1,26 @@
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid widget">
+        <div class="easycredit-marketing__content">
+            <p><?= __("The widget component is shown on the product detail page and in the shopping cart. It calculates the lowest possible rate with which a product with a certain price can be financed. Clicking on 'more info' opens the rate calculator with further details on financing. If the product price is outside the possible financing amounts, the widget indicates the minimum or maximum possible financing amount.") ?></p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+        $( document ).ready( function() {
+            el = $('#row_payment_us_easycredit_marketing_widget_marketing_widget td.value');
+            el.attr('colspan',3);
+        });
+    });
+</script>

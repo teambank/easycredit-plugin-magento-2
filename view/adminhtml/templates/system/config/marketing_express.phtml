@@ -1,0 +1,26 @@
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid express">
+        <div class="easycredit-marketing__content">
+            <p><?= __('The Express button can be displayed on the product detail page and in the shopping cart. It allows customers to buy the product or shopping cart without detours through the ordering process.') ?></p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+        $( document ).ready( function() {
+            el = $('#row_payment_us_easycredit_marketing_express_marketing_express td.value');
+            el.attr('colspan',3);
+        });
+    });
+</script>

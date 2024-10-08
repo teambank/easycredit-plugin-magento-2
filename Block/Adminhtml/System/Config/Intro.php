@@ -13,13 +13,13 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\ScopeInterface;
 
-class BillPaymentIntro extends Field
+class Intro extends Field
 {
     /**
      * Path to block template
      * @var string
      */
-    public const BILLPAYMENT_INTRO_TEMPLATE = 'system/config/billpayment_intro.phtml';
+    public const TEMPLATE = 'system/config/intro.phtml';
 
     private ScopeConfigInterface $scopeConfig;
 
@@ -32,22 +32,6 @@ class BillPaymentIntro extends Field
         parent::__construct($context, $data);
     }
 
-    public function getApiKey()
-    {
-        return $this->scopeConfig->getValue(
-            'payment/easycredit/credentials/api_key',
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    public function getPaymentMethodStatus(String $methodName)
-    {
-        return $this->scopeConfig->getValue(
-            'payment/' . $methodName . '/active',
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
     /**
      * Set template to itself
      *
@@ -56,7 +40,7 @@ class BillPaymentIntro extends Field
     protected function _prepareLayout()
     {
         if (! $this->getTemplate()) {
-            $this->setTemplate(self::BILLPAYMENT_INTRO_TEMPLATE);
+            $this->setTemplate(self::TEMPLATE);
         }
 
         parent::_prepareLayout();
@@ -85,9 +69,6 @@ class BillPaymentIntro extends Field
         $this->addData(
             [
                 'html_id' => $element->getHtmlId(),
-                'api_key' => $this->getApiKey(),
-                'installment_payment_method_status' => $this->getPaymentMethodStatus('easycredit_ratenkauf'),
-                'bill_payment_method_status' => $this->getPaymentMethodStatus('easycredit_rechnung'),
             ]
         );
         return $this->_toHtml();

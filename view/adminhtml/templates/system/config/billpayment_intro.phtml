@@ -12,14 +12,14 @@
 
                 <div class="easycredit-marketing__content">
                     <span class="badge">Neu</span>
-                    <h2>easyCredit-Rechnung - die ideale Ergänzung zum Ratenkauf</h2>
-                    <p>Sie können Ihren Kunden mit easyCredit neben dem klassischen Ratenkauf nun auch den Kauf auf Rechnung anbieten. Das Zahlungsziel liegt dabei <strong>30 Tage in der Zukunft</strong>.</p>
+                    <h2><?= __('easyCredit-Rechnung - the ideal addition to installment purchase') ?></h2>
+                    <p><?= __('With easyCredit, you can now offer your customers the option of invoice purchase in addition to the classic installment purchase. The payment term is <strong>30 days in the future</strong>.') ?></p>
                     <a
                         class="btn btn-secondary"
                         id="easycredit-activate-invoice-button-active"
-                        href="#row_payment_us_easycredit_easycredit_rechnung"
+                        href="#payment_us_easycredit_easycredit_rechnung"
                     >
-                        Jetzt aktivieren
+                        <?= __('Activate now') ?>
                     </a>
                     <a
                         class="btn btn-secondary"
@@ -27,14 +27,14 @@
                         href="https://partner.easycredit-ratenkauf.de/portal"
                         target="_blank"
                     >
-                        Jetzt freischalten lassen
+                        <?= __('Unlock now') ?>
                     </a>
                     <a
                         class="btn btn-link"
                         href="https://www.easycredit-ratenkauf.de/produkt/"
                         target="_blank"
                     >
-                        Mehr erfahren
+                        <?= __('Learn more') ?>
                     </a>
                 </div>
             </div>
@@ -51,7 +51,19 @@
         "domReady!"
     ], function ($, alertModal, storage) {
 
-         function fetchWebshopInfo () {
+        function getPaymentMethodStatus () {
+            var installmentPaymentStatus = '<?php echo $block->getPaymentMethodStatus("easycredit_ratenkauf"); ?>';
+            var billPaymentStatus = '<?php echo $block->getPaymentMethodStatus("easycredit_rechnung"); ?>';
+            console.log('InstallmentPayment Method Status:', installmentPaymentStatus);
+            console.log('BillPayment Method Status:', billPaymentStatus);
+
+            elBillPayment = $('#ecbill .bill');
+
+            installmentPaymentStatus === '0' ? elBillPayment[0].classList.add('easycredit_ratenkauf-not-active') : null;
+            billPaymentStatus === '0' ? elBillPayment[0].classList.add('easycredit_rechnung-not-active') : null;
+        }
+
+        function fetchWebshopInfo () {
             apiKey = '<?php echo $block->getApiKey(); ?>';
             // console.log(apiKey);
 
@@ -76,13 +88,18 @@
         }
 
         $( document ).ready( function() {
+            getPaymentMethodStatus();
+
             fetchWebshopInfo().then((data) => {
-                console.log('billPaymentActive:', data.billPaymentActive);
+                console.log('BillPayment Method allowed:', data.billPaymentActive);
+
+                elBillPayment = $('#ecbill .bill');
 
                 if ( data.billPaymentActive === true ) {
                     $('#easycredit-activate-invoice-button-inactive').remove();
                 } else {
                     $('#easycredit-activate-invoice-button-active').remove();
+                    elBillPayment[0].classList.add('easycredit_rechnung-not-allowed');
                 }
             });
         });

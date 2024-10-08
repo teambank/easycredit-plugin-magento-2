@@ -1,0 +1,26 @@
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid card">
+        <div class="easycredit-marketing__content">
+            <p><?= __('The card component can be used to replace a product within the product list with a banner to advertise the hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offering.') ?></p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+        $( document ).ready( function() {
+            el = $('#row_payment_us_easycredit_marketing_card_marketing_card td.value');
+            el.attr('colspan',3);
+        });
+    });
+</script>

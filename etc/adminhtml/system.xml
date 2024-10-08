@@ -7,82 +7,16 @@
             <group id="easycredit" type="text" sortOrder="27" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
                 <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
                 <label><![CDATA[<div class="img"></div>]]></label>
-                <comment><![CDATA[
-                    <div class="easycredit-marketing intro">
-                        <div class="easycredit-marketing__content">
-                            <strong>easyCredit-Ratenkauf und -Rechnungskauf</strong>
-                            <p>
-                                Offer your customers the option of payment by instalments with easyCredit-Ratenkauf.<br />
-                                <strong>Pay in instalments with ease.</strong>
-                            </p>
-                            <ul>
-                                <li><a href="https://partner.easycredit-ratenkauf.de/registrierung/firmendaten" target="_blank">Register as trader</a></li>
-                                <!--
-                                <li><a href="https://partner.easycredit-ratenkauf.de/portal/" target="_blank">Partner portal</a></li>
-                                <li><a href="https://netzkollektiv.com/docs/ratenkaufbyeasycredit-magento2/" target="_blank">Documentation</a></li>
-                                <li><a href="https://easycredit-demo.netzkollektiv.com/" target="_blank">Demo shop with easyCredit-Ratenkauf</a></li>
-                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Support</a></li>
-                                -->
-                            </ul>
-                        </div>
-                    </div>
-                ]]></comment>
+                <comment><![CDATA[<div class='easycredit-marketing intro'><div class='easycredit-marketing__content'><strong>easyCredit-Rechnung and -Ratenkauf</strong><p>Offer your customers the option of payment by installments with easyCredit-Ratenkauf.<br /><strong>Pay in installments with ease.</strong></p><ul><li><a href='https://partner.easycredit-ratenkauf.de/registrierung/firmendaten' target='_blank'>Register as trader</a></li></ul></div></div>]]></comment>
                 <fieldset_css>complex easycredit-section</fieldset_css>
                 <attribute type="displayIn">recommended_solutions</attribute>
                 <group id="intro" translate="label comment" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label><![CDATA[Intro]]></label>
-                    <comment><![CDATA[
-                        <div class="easycredit-marketing__grid">
-                            <div class="sw-card">
-                                <div class="sw-card__content">
-                                    <div class="easycredit-marketing card intro-2024">
-                                        <div class="easycredit-marketing__grid">
-                                            <div class="easycredit-marketing__content">
-                                                <h2>Der einfachste Rechnungs- und Ratenkauf Deutschlands.</h2>
-                                                <p>Wir freuen uns, dass Sie sich für easyCredit entschieden haben, die perfekte Zahlungsmethode für den Handel in Onlineshops.</p>
-                                                <a
-                                                    class="btn btn-secondary"
-                                                    href="https://netzkollektiv.com/docs/easycredit-ratenkauf-shopware6/index.html"
-                                                    target="_blank"
-                                                >
-                                                    Dokumentation
-                                                </a>
-                                                <a
-                                                    class="btn btn-secondary"
-                                                    href="https://easycredit-demo.netzkollektiv.com/"
-                                                    target="_blank"
-                                                >
-                                                    Demoshop
-                                                </a>
-                                            </div>
-
-                                            <div class="easycredit-marketing__image bg fill aspect-2-3">
-                                                <div class="img"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="sw-card dimmed">
-                                <div class="sw-card__content">
-                                    <div class="easycredit-marketing card intro-2024">
-                                        <div class="easycredit-marketing__content">
-                                            <h2>Sie haben Fragen? Wir helfen gerne.</h2>
-                                            <p>Wir sind von Montag bis Freitag von 8:00 bis 18:00 Uhr für Sie erreichbar.</p>
-                                            <ul>
-                                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/" target="_blank">Fragen & Antworten</a></li>
-                                                <li><a href="tel:091153902726" target="_blank">Rufen Sie uns an: 0911 5390-2726</a></li>
-                                                <li><a href="https://www.easycredit-ratenkauf.de/kontakt/#b064f73c4cdfc080a73b69ea0125da53" target="_blank">Kontaktformular</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ]]></comment>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">1</attribute>
+                    <field id="intro" translate="attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
+                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\Intro</frontend_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
                     <field id="billpayment_intro" translate="attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
                         <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\BillPaymentIntro</frontend_model>
                         <attribute type="shared">1</attribute>
@@ -121,7 +55,7 @@
                     <field id="remove_interest" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Remove interest after order</label>
                         <comment>
-                            <![CDATA[If activated, easyCredit Ratenkauf interest rates will be not be included in order and order documents after order.]]>
+                            <![CDATA[If activated, easyCredit-Ratenkauf interest rates will be not be included in order and order documents after order.]]>
                         </comment>
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <config_path>payment/easycredit_ratenkauf/remove_interest</config_path>
@@ -160,7 +94,7 @@
                 </group>
                 <group id="credentials" translate="label comment" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Credentials</label>
-                    <comment>Please insert the Credentials you were provided by easyCredit-Ratenkauf.</comment>
+                    <comment>Please insert the Credentials you were provided by easyCredit.</comment>
                     <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">0</attribute>
                     <field id="api_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -191,49 +125,53 @@
                     </field>
                 </group>
                 <group id="marketing" translate="label comment" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Marketing</label>
-                    <comment><![CDATA[easycredit_marketing_comment]]></comment>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                    <label><![CDATA[Marketing]]></label>
                     <attribute type="expanded">0</attribute>
-
+                    <field id="marketing_intro" translate="attribute" sortOrder="40" showInDefault="1" showInWebsite="1">
+                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingIntro</frontend_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
 
                     <group id="express" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Express Button</label>
-                        <comment><![CDATA[easycredit_express_button_comment]]></comment>
+                        <label><![CDATA[Express Button]]></label>
+                        <field id="marketing_express" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingExpress</frontend_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
                         <field id="express_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Show express button on detail page</label>
-                            <comment><![CDATA[If activated, easyCredit Ratenkauf Express Button will be shown next to product prices.]]></comment>
+                            <comment><![CDATA[If activated, the easyCredit Express Button will be shown next to product prices.]]></comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
                         <field id="express_cart_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Show express button in shopping cart</label>
-                            <comment><![CDATA[If activated, the easyCredit Ratenkauf Express-Button will be shown at the cart page.]]></comment>
+                            <comment><![CDATA[If activated, the easyCredit Express Button will be shown at the cart page.]]></comment>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         </field>
                     </group>
-
                     <group id="widget" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Widget</label>
-                        <comment><![CDATA[easycredit_widget_comment]]></comment>
-                        <field id="widget_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Show widget at product detail page</label>
-                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown next to product prices.]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <label><![CDATA[Widget]]></label>
+                        <field id="marketing_widget" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingWidget</frontend_model>
+                            <attribute type="shared">1</attribute>
                         </field>
-                        <field id="widget_listing_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Show widget in product listing</label>
-                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the product listing page.]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        </field>
-                        <field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Show widget in cart</label>
-                            <comment><![CDATA[If activated, easyCredit Ratenkauf interest rates will be shown at the cart page.]]></comment>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                        </field>
+						<field id="widget_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+							<label>Show widget at product detail page</label>
+							<comment><![CDATA[If activated, the easyCredit widget will be shown next to product prices.]]></comment>
+							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+						</field>
+						<field id="widget_cart_enabled" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+							<label>Show widget in cart</label>
+							<comment><![CDATA[If activated, the easyCredit widget will be shown at the cart page.]]></comment>
+							<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+						</field>
                     </group>
                     <group id="modal" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Modal</label>
-                        <comment><![CDATA[easycredit_modal_comment]]></comment>
+                        <label><![CDATA[Modal]]></label>
+                        <field id="marketing_modal" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingModal</frontend_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
                         <field id="modal_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate modal</label>
                             <comment><![CDATA[Show modal automatically when visiting the online shop for the first time]]></comment>
@@ -255,8 +193,11 @@
                         </field>
                     </group>
                     <group id="card" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Card</label>
-                        <comment><![CDATA[easycredit_card_comment]]></comment>
+                        <label><![CDATA[Card]]></label>
+                        <field id="marketing_card" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingCard</frontend_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
                         <field id="card_enabled" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate card</label>
                             <comment><![CDATA[Show card within the product list (category)]]></comment>
@@ -278,8 +219,11 @@
                         </field>
                     </group>
                     <group id="flashbox" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Flashbox</label>
-                        <comment><![CDATA[easycredit_flashbox_comment]]></comment>
+                        <label><![CDATA[Flashbox]]></label>
+                        <field id="marketing_flashbox" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingFlashbox</frontend_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
                         <field id="flashbox_enabled" translate="label comment" type="select" sortOrder="31" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate flashbox</label>
                             <comment><![CDATA[Show flashbox at the bottom of the screen]]></comment>
@@ -293,8 +237,11 @@
                         </field>
                     </group>
                     <group id="bar" translate="label comment" sortOrder="190" showInDefault="1" showInWebsite="1" showInStore="0">
-                        <label>Bar</label>
-                        <comment><![CDATA[easycredit_bar_comment]]></comment>
+                        <label><![CDATA[Bar]]></label>
+                        <field id="marketing_bar" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                            <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\MarketingBar</frontend_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
                         <field id="bar_enabled" translate="label comment" type="select" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Activate bar</label>
                             <comment><![CDATA[Show bar at the top of the screen]]></comment>
@@ -304,9 +251,11 @@
                 </group>
                 <group id="clickandcollect" translate="label comment" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label><![CDATA[Click & Collect]]></label>
-                    <comment><![CDATA[easycredit_clickandcollect_comment]]></comment>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                     <attribute type="expanded">0</attribute>
+                    <field id="click_and_collect" translate="attribute" sortOrder="1" showInDefault="1" showInWebsite="1">
+                        <frontend_model>Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config\ClickAndCollect</frontend_model>
+                        <attribute type="shared">1</attribute>
+                    </field>
                     <field id="shipping_method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Shipping Method</label>
                         <source_model>Magento\Shipping\Model\Config\Source\Allmethods</source_model>

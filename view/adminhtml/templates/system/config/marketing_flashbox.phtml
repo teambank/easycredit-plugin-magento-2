@@ -1,0 +1,26 @@
+<div class="easycredit-marketing">
+    <div class="easycredit-marketing__grid flashbox">
+        <div class="easycredit-marketing__content">
+            <p><?= __('This marketing component allows a banner to be displayed at the bottom of the screen to advertise hire purchase. The banner shows a standard image that can be overwritten. This allows you to use an image that matches your product offer.') ?></p>
+        </div>
+        <div class="easycredit-marketing__image bg">
+            <div class="img"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/alert",
+        'mage/storage',
+        "mage/translate",
+        "domReady!"
+    ], function ($, alertModal, storage) {
+
+        $( document ).ready( function() {
+            el = $('#row_payment_us_easycredit_marketing_flashbox_marketing_flashbox td.value');
+            el.attr('colspan',3);
+        });
+    });
+</script>
