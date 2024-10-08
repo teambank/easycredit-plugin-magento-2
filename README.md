@@ -1,4 +1,4 @@
-# easyCredit-Ratenkauf for Magento 2 - Installment Payment Plugin
+# easyCredit-Rechnung & Ratenkauf for Magento 2 - Installment Payment Plugin
 
 easyCredit-Ratenkauf is the easiest and fastest installment payment solution of Germany. Join today to get the simplest way of partial payment for your POS and E-Commerce. easyCredit-Ratenkauf gives you the opportunity to offer installments as an additional payment method in your German WooCommerce store.
 
@@ -15,7 +15,7 @@ or register at [easycredit-ratenkauf.de](https://www.easycredit-ratenkauf.de/reg
 
 # Installation
 
-The easyCredit-Ratenkauf extension for Magento 2 can be installed using Composer or by manually copying files. If files are copied manually, the API library has to be installed separately using Composer.
+The easyCredit extension for Magento 2 can be installed using Composer or by manually copying files. If files are copied manually, the API library has to be installed separately using Composer.
 
 ## Composer Installation 
 

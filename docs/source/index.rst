@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-easyCredit-Ratenkauf für Magento 2.x
+easyCredit-Rechnung & Ratenkauf für Magento 2.x
 =========================================================
 
 .. toctree::

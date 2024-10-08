@@ -5,22 +5,22 @@ Verwendung für Kunden
 Voraussetzungen für die Zahlung
 ---------------------------------
 
-Eine Zahlung über easyCredit-Ratenkauf ist unter den folgenden Bedingungen möglich:
+Eine Zahlung über easyCredit ist unter den folgenden Bedingungen möglich:
 
 * es handelt sich um eine Privatperson
 * die Rechnungs- und Lieferadresse des Kunden sind identisch
 * die Adresse befindet sich in Deutschland
-* der Bestellwert befindet sich innerhalb des von easyCredit-Ratenkauf angebotenen Finanzierungsrahmens (derzeit: 200 bis 10.000 EUR)
+* der Bestellwert befindet sich innerhalb des von easyCredit angebotenen Finanzierungsrahmens (derzeit: 200 bis 10.000 EUR)
 
 Bestellvorgang
 --------------
 
-easyCredit-Ratenkauf wird als Zahlungsmethode im Bezahlvorgang angezeigt. Nach Bestätigung der Zustimmungserklärung und Auswahl der Anrede wird der Nutzer auf das Zahlungsterminal von easyCredit-Ratenkauf weitergeleitet. Die Anrede muss nur ausgewählt werden, wenn diese nicht bereits bei der Adresseingabe abgefragt wurde und somit zur Verfügung steht.
+easyCredit wird als Zahlungsmethode im Bezahlvorgang angezeigt. Nach Bestätigung der Zustimmungserklärung und Auswahl der Anrede wird der Nutzer auf das Zahlungsterminal von easyCredit weitergeleitet. Die Anrede muss nur ausgewählt werden, wenn diese nicht bereits bei der Adresseingabe abgefragt wurde und somit zur Verfügung steht.
 
 .. image:: ./_static/usage-customer-payment-methods.png
            :scale: 50%
 
-.. note:: Vor Bestätigung der Zustimmungserklärung und Weiterleitung auf das Zahlungsterminal werden keine persönlichen Daten des Kunden an easyCredit-Ratenkauf weitergegeben.
+.. note:: Vor Bestätigung der Zustimmungserklärung und Weiterleitung auf das Zahlungsterminal werden keine persönlichen Daten des Kunden an easyCredit weitergegeben.
 
 Überprüfung der Bestellung
 --------------------------

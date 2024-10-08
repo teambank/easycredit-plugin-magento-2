@@ -4,7 +4,7 @@ Installation
 Composer Installation
 ------------------------------
 
-* Installieren Sie das Plugin mit Composer:
+* Installieren Sie die Extension mit Composer:
 
 .. code-block:: bash
 
@@ -43,7 +43,7 @@ manuelle Installation via SSH
     $ mkdir app/code/Netzkollektiv/EasyCredit
     $ unzip -d app/code/Netzkollektiv/EasyCredit m2-easycredit-x.x.x.zip
 
-* Installieren Sie das easyCredit-Ratenkauf PHP SDK über Composer:
+* Installieren Sie das easyCredit PHP SDK über Composer:
 
 .. code-block:: bash
 

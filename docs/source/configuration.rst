@@ -4,7 +4,7 @@
 Konfiguration 
 =============
 
-Die Konfiguration des Modules befindet sich unter :menuselection:`Shops --> Konfiguration --> Verkäufe --> Zahlungsarten --> easyCredit-Ratenkauf`.
+Die Konfiguration des Modules befindet sich unter :menuselection:`Shops --> Konfiguration --> Verkäufe --> Zahlungsarten --> easyCredit`.
 
 API-Zugangsdaten konfigurieren
 --------------------------------------------
@@ -20,7 +20,7 @@ API-Zugangsdaten konfigurieren
 Widget konfigurieren
 --------------------
 
-Um easyCredit-Ratenkauf bei Ihren Kunden zu bewerben, blendet die Extension ein Widget auf der Produktdetailseite ein.
+Um easyCredit bei Ihren Kunden zu bewerben, blendet die Extension ein Widget auf der Produktdetailseite ein.
 Dies kann über die Option "Zeige Modellrechner-Widget neben Produktpreis" gesteuert werden. Ist die Option aktiviert, wird das Widget unterhalb des Preises angezeigt. Ein Beispiel sehen Sie im folgenden Screenshot:
 
 .. image:: ./_static/widget.png
