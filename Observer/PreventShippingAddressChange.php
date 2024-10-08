@@ -15,6 +15,8 @@ use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class PreventShippingAddressChange implements ObserverInterface
 {
+    protected PaymentHelper $paymentHelper;
+
     public function __construct(
         PaymentHelper $paymentHelper
     ) {
