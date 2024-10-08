@@ -31,10 +31,10 @@ class InterceptSaveOrder
             return $subject->savePaymentInformation(...$args);
         }
         return $proceed(...$args);
-
     }
 
-    private function getPaymentArg($args) {
+    private function getPaymentArg($args)
+    {
         foreach ($args as $arg) {
             if ($arg instanceof PaymentInterface) {
                 return $arg;

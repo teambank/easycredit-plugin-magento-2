@@ -37,7 +37,7 @@ class Authorization
 
     public function authorize($order): void
     {
-        if (!$this->paymentHelper->isSelected($order->getPayment())) {
+        if (! $this->paymentHelper->isSelected($order->getPayment())) {
             return;
         }
 

@@ -12,8 +12,11 @@ use Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface;
 class CheckoutRequest implements CheckoutRequestInterface
 {
     private $cartId;
+
     private $express = false;
+
     private $paymentType;
+
     private $numberOfInstallments;
 
     public function getCartId(): ?string

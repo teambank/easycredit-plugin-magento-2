@@ -9,8 +9,8 @@ namespace Netzkollektiv\EasyCredit\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
+use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Service\Authorization as AuthorizationService;
 
 class InstantAuthorization implements ObserverInterface
@@ -37,7 +37,7 @@ class InstantAuthorization implements ObserverInterface
 
         $order = $event->getData('order');
 
-        if (!$this->paymentHelper->isSelected($order->getPayment())) {
+        if (! $this->paymentHelper->isSelected($order->getPayment())) {
             return;
         }
 

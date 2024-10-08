@@ -59,7 +59,7 @@ class Status extends Column
                 continue;
             }
 
-            if (!$this->paymentHelper->isMethodSelected($item['payment_method'])) {
+            if (! $this->paymentHelper->isMethodSelected($item['payment_method'])) {
                 continue;
             }
 

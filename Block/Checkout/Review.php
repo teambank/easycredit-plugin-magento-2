@@ -169,7 +169,7 @@ class Review extends Template
     public function renderShippingRateOption($rate, $format = '%s - %s%s', $inclTaxFormat = ' (%s %s)'): string
     {
         $price = null;
-        if (!$rate) {
+        if (! $rate) {
             return '';
         }
 
@@ -187,7 +187,7 @@ class Review extends Template
                 return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
             }
 
-            if (!$this->taxHelper->displayShippingBothPrices()) {
+            if (! $this->taxHelper->displayShippingBothPrices()) {
                 return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
             }
 

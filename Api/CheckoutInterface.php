@@ -7,7 +7,6 @@
 
 namespace Netzkollektiv\EasyCredit\Api;
 
-use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface;
 
 interface CheckoutInterface

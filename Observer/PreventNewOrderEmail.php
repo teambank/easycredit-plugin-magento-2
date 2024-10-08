@@ -37,7 +37,7 @@ class PreventNewOrderEmail implements ObserverInterface
          */
         $quote = $event->getData('quote');
 
-        if (!$this->paymentHelper->isSelected($quote->getPayment())) {
+        if (! $this->paymentHelper->isSelected($quote->getPayment())) {
             return;
         }
 

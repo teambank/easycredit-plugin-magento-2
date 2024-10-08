@@ -17,8 +17,8 @@ use Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
+use Netzkollektiv\EasyCredit\Logger\Logger;
 use Teambank\EasyCreditApiV3\ApiException;
 
 class Checkout implements CheckoutInterface
@@ -91,7 +91,7 @@ class Checkout implements CheckoutInterface
     {
         $quote = $this->checkoutSession->getQuote();
 
-        if (!$quote->hasItems() || $quote->getHasError()) {
+        if (! $quote->hasItems() || $quote->getHasError()) {
             throw new LocalizedException(__('Unable to initialize easyCredit Payment.'));
         }
     }
@@ -142,7 +142,7 @@ class Checkout implements CheckoutInterface
                 }
             } catch (ApiException $apiException) {
                 $response = json_decode((string) $apiException->getResponseBody(), null, 512, JSON_THROW_ON_ERROR);
-                if ($response === null || !isset($response->violations)) {
+                if ($response === null || ! isset($response->violations)) {
                     throw new \Exception('violations could not be parsed', $apiException->getCode(), $apiException);
                 }
 

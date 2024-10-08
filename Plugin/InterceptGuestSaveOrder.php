@@ -26,16 +26,15 @@ class InterceptGuestSaveOrder
         callable $proceed,
         ...$args
     ) {
-
         $paymentMethod = $this->getPaymentArg($args);
         if ($this->paymentHelper->isSelected($paymentMethod)) {
             return $subject->savePaymentInformation(...$args);
         }
         return $proceed(...$args);
-
     }
 
-    private function getPaymentArg($args) {
+    private function getPaymentArg($args)
+    {
         foreach ($args as $arg) {
             if ($arg instanceof PaymentInterface) {
                 return $arg;

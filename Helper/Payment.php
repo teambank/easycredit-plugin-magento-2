@@ -7,12 +7,12 @@
 
 namespace Netzkollektiv\EasyCredit\Helper;
 
-use Magento\Framework\App\Helper\AbstractHelper;
-use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Quote\Api\Data\PaymentInterface;
 
 use Magento\Sales\Api\Data\OrderPaymentInterface;
-use Magento\Quote\Api\Data\PaymentInterface;
+use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
 
 class Payment extends AbstractHelper
 {
@@ -26,14 +26,14 @@ class Payment extends AbstractHelper
 
     private $typeMapping = [
         'INSTALLMENT' => EasyCreditPayment\InstallmentPayment::CODE,
-        'BILL' => EasyCreditPayment\BillPayment::CODE
+        'BILL' => EasyCreditPayment\BillPayment::CODE,
     ];
 
     public function isSelected(ExtensibleDataInterface $paymentMethod)
     {
         if (
-            !$paymentMethod instanceof OrderPaymentInterface
-            && !$paymentMethod instanceof PaymentInterface
+            ! $paymentMethod instanceof OrderPaymentInterface
+            && ! $paymentMethod instanceof PaymentInterface
         ) {
             return false;
         }
@@ -55,7 +55,7 @@ class Payment extends AbstractHelper
     public function getMethodByType(string $type)
     {
         $type = str_replace('_PAYMENT', '', $type);
-        if (!isset($this->typeMapping[$type])) {
+        if (! isset($this->typeMapping[$type])) {
             throw new \Exception('payment type ' . $type . ' does not exist');
         }
         return $this->typeMapping[$type];
@@ -64,7 +64,7 @@ class Payment extends AbstractHelper
     public function getTypeByMethod(string $method)
     {
         $typeMapping = array_flip($this->typeMapping);
-        if (!isset($typeMapping[$method])) {
+        if (! isset($typeMapping[$method])) {
             throw new \Exception('method ' . $method . ' does not exist');
         }
         return $typeMapping[$method];

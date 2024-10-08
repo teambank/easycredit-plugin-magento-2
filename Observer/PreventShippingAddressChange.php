@@ -33,7 +33,7 @@ class PreventShippingAddressChange implements ObserverInterface
             return;
         }
 
-        if (!$this->paymentHelper->isSelected($address->getOrder()->getPayment())) {
+        if (! $this->paymentHelper->isSelected($address->getOrder()->getPayment())) {
             return;
         }
 

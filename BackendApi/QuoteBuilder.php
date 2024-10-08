@@ -16,9 +16,9 @@ use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\Store\Model\ScopeInterface;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\AddressBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\CustomerBuilder;
-use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\ItemBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\Quote\SystemBuilder;
+use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Teambank\EasyCreditApiV3 as Api;
 use Teambank\EasyCreditApiV3\Model\RedirectLinks;
 use Teambank\EasyCreditApiV3\Model\ShoppingCartInformationItem;
@@ -84,7 +84,7 @@ class QuoteBuilder
 
     public function getQuote(): ?Quote
     {
-        if (!$this->quote instanceof Quote) {
+        if (! $this->quote instanceof Quote) {
             $this->quote = $this->checkoutSession->getQuote();
         }
 
@@ -120,7 +120,7 @@ class QuoteBuilder
 
     private function getIsClickAndCollect(): bool
     {
-        if (!$this->getQuote()->getShippingAddress()) {
+        if (! $this->getQuote()->getShippingAddress()) {
             return false;
         }
 
@@ -167,7 +167,7 @@ class QuoteBuilder
 
     private function getCustomerOrderCount()
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (! $this->customerSession->isLoggedIn()) {
             return 0;
         }
 
@@ -179,7 +179,7 @@ class QuoteBuilder
 
     private function getCustomerCreatedAt()
     {
-        if (!$this->customerSession->isLoggedIn()) {
+        if (! $this->customerSession->isLoggedIn()) {
             return null;
         }
 

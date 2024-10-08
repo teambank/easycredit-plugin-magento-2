@@ -1,7 +1,9 @@
 <?php
+
 namespace Netzkollektiv\EasyCredit\Model\Payment;
 
-class LegacyPayment extends AbstractPayment {
+class LegacyPayment extends AbstractPayment
+{
     /**
      * @var string
      */

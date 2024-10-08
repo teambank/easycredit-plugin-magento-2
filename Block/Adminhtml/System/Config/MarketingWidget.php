@@ -7,11 +7,10 @@
 
 namespace Netzkollektiv\EasyCredit\Block\Adminhtml\System\Config;
 
-use Magento\Config\Block\System\Config\Form\Field;
-use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Backend\Block\Template\Context;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
 class MarketingWidget extends Field
 {

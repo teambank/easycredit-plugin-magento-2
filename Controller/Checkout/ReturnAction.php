@@ -15,8 +15,8 @@ use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotApprovedException;
 use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
-use Netzkollektiv\EasyCredit\Logger\Logger;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
+use Netzkollektiv\EasyCredit\Logger\Logger;
 
 use Teambank\EasyCreditApiV3\Model\TransactionInformation;
 
@@ -75,7 +75,7 @@ class ReturnAction extends AbstractController
             $checkout = $this->easyCreditHelper->getCheckout();
             $transaction = $checkout->loadTransaction();
 
-            if (!$checkout->isApproved()) {
+            if (! $checkout->isApproved()) {
                 throw new TransactionNotApprovedException(__('transaction not approved'));
             }
 
