@@ -162,7 +162,7 @@ class Checkout implements CheckoutInterface
         } catch (\Throwable $throwable) {
             $this->logger->error($throwable);
             throw new WebapiException(
-                __('Es ist ein Fehler aufgetreten. Leider steht Ihnen easyCredit-Ratenkauf derzeit nicht zur Verfügung.'),
+                __('Es ist ein Fehler aufgetreten. Leider steht Ihnen easyCredit derzeit nicht zur Verfügung.'),
                 0,
                 WebapiException::HTTP_FORBIDDEN
             );

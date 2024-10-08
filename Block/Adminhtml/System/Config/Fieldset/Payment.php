@@ -15,7 +15,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\View\Helper\Js;
 
 /**
- * Fieldset renderer for easyCredit-Ratenkauf
+ * Fieldset renderer for easyCredit
  */
 class Payment extends Fieldset
 {

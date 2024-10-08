@@ -1,4 +1,4 @@
-.payment-method.payment-method-easycredit .payment-method-title .label[for="easycredit"] {
+.payment-method.payment-method-easycredit .payment-method-title .label {
     display: inline-flex;
     flex-flow: row wrap;
     justify-content: flex-start;
@@ -11,4 +11,8 @@
 }
 .easycredit-review .block .columns .box {
     flex-basis: 50%;
+}
+.block-minicart easycredit-express-button {
+    display:block;
+    margin-top:10px;
 }

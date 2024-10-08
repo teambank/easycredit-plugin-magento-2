@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
 	<head>
+        <css src="Netzkollektiv_EasyCredit::css/easycredit.css" />
         <css src="Netzkollektiv_EasyCredit::css/easycredit-marketing.css" />
 		<link src="Netzkollektiv_EasyCredit::js/view/marketing/easycredit-marketing.js"/>
 	</head>

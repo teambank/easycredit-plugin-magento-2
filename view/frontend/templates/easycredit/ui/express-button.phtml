@@ -4,12 +4,16 @@
         ($block->getIsShoppingCart() || (!$block->getIsShoppingCart() && !$block->getIsInCatalogProduct()))
     )
 ) : ?>
-    <easycredit-express-button payment-types="<?= implode(',', $block->getPaymentHelper()->getAvailableMethodTypes()); ?>" webshop-id="<?= /* @noEscape */ $block->getConfigValue('credentials/api_key'); ?>" amount="<?= /* @noEscape */ $block->getGrandTotal(); ?>" full-width="true" data-mage-init='{
+    <easycredit-express-button 
+        payment-types="<?= implode(',', $block->getPaymentHelper()->getAvailableMethodTypes()); ?>" 
+        webshop-id="<?= /* @noEscape */ $block->getConfigValue('credentials/api_key'); ?>" 
+        amount="<?= /* @noEscape */ $block->getAmount(); ?>" 
+        full-width="true" 
+        data-mage-init='{
         "Netzkollektiv_EasyCredit/js/view/express": {
             "storeCode": "<?= /* @noEscape */ $block->getStoreCode(); ?>",
             "quoteId": "<?= /* @noEscape */ $block->getQuoteId(); ?>",
             "isInCatalogProduct": "<?= /* @noEscape */ $block->getIsInCatalogProduct(); ?>",
             "isShoppingCart": "<?= /* @noEscape */ $block->getIsShoppingCart(); ?>"
-        }
-    }'></easycredit-express-button>
+        }}'></easycredit-express-button>
 <?php endif; ?>

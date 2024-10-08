@@ -39,7 +39,7 @@ class PreventShippingAddressChange implements ObserverInterface
 
         throw new LocalizedException(
             __(
-                'Die Lieferadresse kann bei mit easyCredit-Ratenkauf bezahlten Bestellungen 
+                'Die Lieferadresse kann bei mit easyCredit bezahlten Bestellungen 
                 nicht im Nachhinein geändert werden. Bitte stornieren Sie die Bestellung und Zahlung 
                 hierfür und legen Sie eine neue Bestellung an.'
             )

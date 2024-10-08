@@ -1,6 +1,6 @@
 {
   "name": "teambank/easycredit-plugin-magento-2",
-  "description": "easyCredit-Ratenkauf Payment integration for Magento 2",
+  "description": "easyCredit Payment integration for Magento 2",
   "type": "magento2-module",
   "license": "MIT",
   "require": {
