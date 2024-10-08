@@ -18,7 +18,13 @@ test.describe("Check settings", () => {
       .getByRole("tab", { name: "Verkäufe" })
       .getByRole("strong")
       .click();
+
+    await page.evaluate(() => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
     await page.getByRole("tab", { name: "Zahlungsarten" }).click();
+    
+    //await page.getByRole("link", {name: "Additional payment solutions"}).click();
 
     await page.locator('[data-test-id="easycredit-config-button"]').click();
 
