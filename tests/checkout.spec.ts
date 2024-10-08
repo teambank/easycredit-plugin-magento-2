@@ -52,7 +52,7 @@ test.describe("Go through standard @installment", () => {
     await page
       .locator("easycredit-checkout-label[payment-type=INSTALLMENT]")
       .click();
-    await page.getByRole("button", { name: "Weiter zum Ratenkauf" }).click();
+    await page.getByRole("button", { name: "Weiter zu easyCredit-Ratenkauf" }).click();
     await page.locator('span:text("Akzeptieren"):visible').click();
 
     await goThroughPaymentPage({
@@ -78,7 +78,7 @@ test.describe("Go through standard @bill", () => {
     /* Confirm Page */
     await page.locator("easycredit-checkout-label[payment-type=BILL]").click();
     await page
-      .getByRole("button", { name: "Weiter zum Rechnungskauf" })
+      .getByRole("button", { name: "Weiter zu easyCredit-Rechnung" })
       .click();
 
     await goThroughPaymentPage({
