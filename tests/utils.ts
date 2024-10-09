@@ -39,3 +39,19 @@ export const minutes = (min: number) => {
 export const seconds = (sec: number) => {
   return sec * 1000;
 };
+
+export async function clickWithRetry(locator, maxRetries = 3) {
+  let attempt = 0;
+  while (attempt < maxRetries) {
+    try {
+      await locator.click();
+      return;
+    } catch (e) {
+      console.error(`Click failed on attempt ${attempt + 1}: ${e.message}`);
+      attempt++;
+      if (attempt === maxRetries) {
+        throw new Error(`Max retries reached, click failed: ${e.message}`);
+      }
+    }
+  }
+}
