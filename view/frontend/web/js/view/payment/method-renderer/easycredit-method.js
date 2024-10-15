@@ -189,7 +189,8 @@ define(
                             ecCheckout
                                 .closest('.payment-method')
                                 .find('.checkout-agreements input[type=checkbox]')
-                                .attr('checked','checked');
+                                .attr('checked','checked')
+                                .get(0).checked = true;
 
                             if (!additionalValidators.validate()) {
                                 $('easycredit-checkout')
