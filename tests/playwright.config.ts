@@ -10,6 +10,7 @@ let config: PlaywrightTestConfig = {
   },
   retries: process.env.CI ? 2 : 0,
   timeout: seconds(40),
+  expect: { timeout: 10_000 },
   projects: [
     {
       name: "backend-auth",

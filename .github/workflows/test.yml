@@ -17,24 +17,35 @@ jobs:
           - magento-version: '2.4.1'
             php-version: 7.4
             composer-version: 'v1'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.2'
             php-version: 7.4
             composer-version: 'v1'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.3-p3'
             php-version: 7.4
             composer-version: 'v1'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.4'
             php-version: 8.1
             composer-version: 'v2'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.5'
             php-version: 8.1
             composer-version: 'v2'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.6-p2'
             php-version: 8.2
             composer-version: 'v2'
+            search-engine: 'elasticsearch7'
           - magento-version: '2.4.7'
             php-version: 8.3
             composer-version: 'v2'
+            search-engine: 'elasticsearch7'
+          - magento-version: '2.4.8'
+            php-version: 8.3
+            composer-version: 'v2'
+            search-engine: 'elasticsearch8'
 
     name: Magento ${{ matrix.magento-version }}
 
@@ -84,7 +95,7 @@ jobs:
           git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 $MAGENTO_DIR
           cd $MAGENTO_DIR
 
-          composer install
+          composer install || composer install
           composer config minimum-stability dev
           composer config repositories.local path $GITHUB_WORKSPACE
           
@@ -103,15 +114,15 @@ jobs:
           --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root --admin-firstname=Admin \
           --admin-lastname=Istrator --admin-email=admin@magneto.com --admin-user=admin \
           --admin-password=admin1234578! --language=de_DE --currency=EUR --timezone=Europe/Berlin \
-          --search-engine=elasticsearch7 --elasticsearch-host=localhost \
+          --search-engine=${{ matrix.search-engine }} --elasticsearch-host=localhost \
           --elasticsearch-port=9200 \
           --backend-frontname=admin
 
           mysql -u root -proot -h 127.0.0.1 -e "UPDATE admin_user Set interface_locale = 'de_DE';" magento 
 
-          REF=${GITHUB_REF##*/}
-          BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
-          composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 $BRANCH
+          #REF=${GITHUB_REF##*/}
+          #BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
+          #composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 $BRANCH
 
           php bin/magento module:disable Magento_AdminAnalytics
           php bin/magento s:up
@@ -121,6 +132,8 @@ jobs:
 
           php bin/magento indexer:set-mode realtime
           #php bin/magento config:set admin/usage/enabled 0
+
+          php bin/magento config:set customer/address/telephone_show opt
 
           php bin/magento config:set payment/easycredit/credentials/api_key ${{ secrets.EASYCREDITAPIKEY }}
           php bin/magento config:set payment/easycredit/credentials/api_token ${{ secrets.EASYCREDITAPIPASSWORD }}
@@ -132,7 +145,14 @@ jobs:
         run: |
           cd $MAGENTO_DIR
 
-          composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies
+          if [[ "${{ matrix.magento-version }}" == "2.4.7" || "${{ matrix.magento-version }}" == "2.4.8" ]]; then
+            echo "Using latest PHPStan (2.x) for Magento version ${{ matrix.magento-version }}"
+            composer update phpstan/phpstan --with-all-dependencies
+            composer require bitexpert/phpstan-magento
+          else
+            echo "Using specific PHPStan versions for Magento version ${{ matrix.magento-version }}"
+            composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies
+          fi
 
           cd $PLUGIN_DIR
           php $MAGENTO_DIR/vendor/bin/phpstan analyze .
@@ -140,14 +160,17 @@ jobs:
         if: ${{ matrix.magento-version == '2.4.7' }}
         run: |
           cd $MAGENTO_DIR
-          composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard
+          composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard --dev
           php vendor/bin/ecs check -c $PLUGIN_DIR/ecs.php $PLUGIN_DIR
       - name: Install Dependencies
         run: |
           npm install --global yarn
           yarn install --frozen-lockfile
       - name: Setup Playwright
-        run: yarn playwright install --with-deps chromium
+        run: |
+          # fixes:  Repository 'https://ppa.launchpadcontent.net/ondrej/php/ubuntu noble InRelease' changed its 'Label' value from '***** The main PPA for supported PHP versions with many PECL extensions *****' to 'PPA for PHP'
+          sudo apt-get update -o Acquire::AllowReleaseInfoChange=true 
+          yarn playwright install --with-deps chromium
       - name: Playwright E2E Tests
         run: |
           cd $GITHUB_WORKSPACE

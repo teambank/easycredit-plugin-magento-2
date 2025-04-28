@@ -33,7 +33,6 @@ export const confirmOrder = async ({
       paymentType === PaymentTypes.INSTALLMENT ? "Ratenkauf" : "Rechnung"
     );
 
-     /* temporarly disabled, waiting for implementation on api side
     if (paymentType === PaymentTypes.INSTALLMENT) {
       await expect
         .soft(page.locator(".opc-block-summary"))
@@ -43,7 +42,6 @@ export const confirmOrder = async ({
         .soft(page.locator(".opc-block-summary"))
         .not.toContainText("Zinsen für Ratenzahlung");
     }
-    */
 
     /* Confirm Page */
     //await page.getByLabel('Please accept the terms').check();
@@ -60,21 +58,33 @@ export const goThroughPaymentPage = async ({
   page,
   paymentType,
   express = false,
+  switchPaymentType = false,
 }: {
   page: any;
   paymentType: PaymentTypes;
   express?: boolean;
+  switchPaymentType?: boolean;
 }) => {
-  await test.step(`easyCredit-Ratenkauf Payment`, async () => {
+  await test.step(`easyCredit Payment (${paymentType})`, async () => {
     await page.getByTestId("uc-deny-all-button").click();
 
     await expect(
-      page.getByText(
-        paymentType === PaymentTypes.INSTALLMENT
-          ? "Monatliche Wunschrate"
-          : "Ihre Bezahloptionen"
-      )
+      page.getByRole("heading", {
+        name:
+          paymentType === PaymentTypes.INSTALLMENT
+            ? "Monatliche Wunschrate"
+            : "Ihre Bezahloptionen",
+      })
     ).toBeVisible();
+
+    if (switchPaymentType) {
+      await page
+        .locator(".paymentoptions")
+        .getByText(
+          paymentType === PaymentTypes.INSTALLMENT ? "Rechnung" : "Ratenkauf"
+        )
+        .click();
+    }
 
     await page.getByRole("button", { name: "Weiter zur Dateneingabe" }).click();
 
@@ -86,13 +96,20 @@ export const goThroughPaymentPage = async ({
     await page.locator("#dateOfBirth").fill("05.04.1972");
 
     if (express) {
-      await page.locator("#email").getByRole('textbox').fill("ralf.ratenkauf@teambank.de");
+      await page
+        .locator("#email")
+        .getByRole("textbox")
+        .fill("ralf.ratenkauf@teambank.de");
     }
 
-    await page.locator("tbk-vorwahldropdown .tel-wrapper").click();
-    await page.locator('tbk-vorwahldropdown').locator("p").filter({ hasText: "+49" }).click();
-    await page.locator('#mobilfunknummer').getByRole('textbox').fill('1703404848');
-    await page.locator('app-ratenkauf-iban-input-dumb').getByRole('textbox').fill("DE12500105170648489890");
+    await page
+      .locator("#mobilfunknummer")
+      .getByRole("textbox")
+      .fill("1703404848");
+    await page
+      .locator("app-ratenkauf-iban-input-dumb")
+      .getByRole("textbox")
+      .fill("DE12500105170648489890");
 
     if (express) {
       await page.locator("#streetAndNumber").fill("Beuthener Str. 25");
@@ -100,14 +117,17 @@ export const goThroughPaymentPage = async ({
       await page.locator("#city").fill("Nürnberg");
     }
 
-    await page.locator("#agreeAll").click();
+    await page.locator("#agreeSepa").click();
 
     await delay(500);
+
     await clickWithRetry(
       page.getByRole("button", { name: "Zahlungswunsch prüfen" })
     );
 
     await delay(500);
-    await page.getByRole("button", { name: "Ratenwunsch übernehmen" }).click();
+    await page
+      .getByRole("button", { name: "Zahlungswunsch übernehmen" })
+      .click();
   });
 };
