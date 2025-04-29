@@ -33,29 +33,26 @@ define([
 ) {
   "use strict";
 
-return Component.extend({
-  defaults: {
-      template: 'Netzkollektiv_EasyCredit/payment/easycredit',
+  return Component.extend({
+    defaults: {
+      template: "Netzkollektiv_EasyCredit/payment/easycredit",
       isAvailable: true,
       apiKey: window.checkoutConfig.payment.easycredit.apiKey,
       errorMessage: null,
       numberOfInstallments: false,
       calculatedForGrandTotal: null,
       redirectAfterPlaceOrder: false,
-      checkoutAttributes: null
-  },
-  initObservable: function () {
-      this._super()
-      .observe(
-          [
-              'isAvailable',
-              'apiKey',
-              'errorMessage',
-              'checkoutAttributes',
-              'numberOfInstallments',
-              'calculatedForGrandTotal'
-          ]
-      );
+      checkoutAttributes: null,
+    },
+    initObservable: function () {
+      this._super().observe([
+        "isAvailable",
+        "apiKey",
+        "errorMessage",
+        "checkoutAttributes",
+        "numberOfInstallments",
+        "calculatedForGrandTotal",
+      ]);
 
       this.isSelected = ko.computed(
         function () {
@@ -77,9 +74,9 @@ return Component.extend({
 
       this.isSelected.subscribe(this.checkAvailable.bind(this));
       paymentMethods.subscribe(this.checkAvailable.bind(this));
-      this.isAvailable.subscribe(this.updateComponent.bind(this))
-      this.errorMessage.subscribe(this.updateComponent.bind(this))
-      this.getAmount.subscribe(this.updateComponent.bind(this))
+      this.isAvailable.subscribe(this.updateComponent.bind(this));
+      this.errorMessage.subscribe(this.updateComponent.bind(this));
+      this.getAmount.subscribe(this.updateComponent.bind(this));
       this.handlePaymentConfirm();
 
       return this;
@@ -140,11 +137,14 @@ return Component.extend({
       var uri = this.getCheckoutStartUri(quote);
 
       storage
-        .post(uri, JSON.stringify({
-          checkoutData: {
-            paymentType: this.getPaymentType()
-          },
-        }))
+        .post(
+          uri,
+          JSON.stringify({
+            checkoutData: {
+              paymentType: this.getPaymentType(),
+            },
+          })
+        )
         .done(
           function (data) {
             if (data.redirect_url) {
@@ -163,36 +163,37 @@ return Component.extend({
                 .dispatchEvent(new Event("closeModal"));
             }
 
-                        this.isAvailable(false);
-                        fullScreenLoader.stopLoader(true);
-                    }.bind(this));
-                },
-                updateComponent: function () {
-                    this.checkoutAttributes({
-                      'id': this.getCheckoutComponentId(), 
-                      'payment-type': this.getPaymentType(),
-                      'webshop-id': this.apiKey(),
-                      'method':       this.getCode().replace(/easycredit_/, '').toUpperCase(),
-                      'is-active': this.isSelected,
-                      'amount': this.getAmount(),
-                      'alert': this.errorMessage()
-                    });
-                },
-                getCheckoutComponentId () {
-                    return this.getCode() + '_component';
-                },
-                checkAvailable: function () {
-
-                    fullScreenLoader.startLoader();
+            this.isAvailable(false);
+            fullScreenLoader.stopLoader(true);
+          }.bind(this)
+        );
+    },
+    updateComponent: function () {
+      this.checkoutAttributes({
+        "payment-type": this.getPaymentType(),
+        "webshop-id": this.apiKey(),
+        method: this.getCode()
+          .replace(/easycredit_/, "")
+          .toUpperCase(),
+        "is-active": this.isSelected,
+        amount: this.getAmount(),
+        alert: this.errorMessage(),
+      });
+    },
+    checkAvailable: function () {
+      fullScreenLoader.startLoader();
 
       var uri = this.getIsAvailableUri(quote);
 
       storage
-        .post(uri, JSON.stringify({
-          checkoutData: {
-            paymentType: this.getPaymentType()
-          },
-        }))
+        .post(
+          uri,
+          JSON.stringify({
+            checkoutData: {
+              paymentType: this.getPaymentType(),
+            },
+          })
+        )
         .done(
           function (data) {
             fullScreenLoader.stopLoader(true);
@@ -219,37 +220,35 @@ return Component.extend({
       return true;
     },
     handlePaymentConfirm: function () {
-      var id = this.getCheckoutComponentId();
-      onHydrated(
-        "#" + id,
-        function () {
-          var checkoutComponent = document.getElementById(id);
-          if (checkoutComponent.hasAttribute("data-submitEventBound")) {
-            return true;
-          }
-          checkoutComponent.setAttribute("data-submitEventBound", true);
-          checkoutComponent.addEventListener(
-            "submit",
-            function (e) {
-              // check agreements, agreements are displayed at review page again
-              var agreements = checkoutComponent
-                .closest(".payment-method")
-                .querySelector(".checkout-agreements input[type=checkbox]");
+      document.addEventListener("easycredit-submit", (e) => {
+        if (
+          !componentUtils.isValidEasyCreditEvent(
+            e,
+            "easycredit-checkout",
+            this.getPaymentType()
+          )
+        ) {
+          return;
+        }
 
-              if (agreements) {
-                agreements.setAttribute("checked", "checked");
-              }
+        let checkoutComponent = e.target;
 
-              if (!additionalValidators.validate()) {
-                checkoutComponent.dispatchEvent(new Event("closeModal"));
-                return;
-              }
-              this.numberOfInstallments = e.detail.numberOfInstallments;
-              this.continueToEasyCredit();
-            }.bind(this)
-          );
-        }.bind(this)
-      );
+        // check agreements, agreements are displayed at review page again
+        var agreements = checkoutComponent
+          .closest(".payment-method")
+          .querySelector(".checkout-agreements input[type=checkbox]");
+
+        if (agreements) {
+          agreements.setAttribute("checked", "checked");
+        }
+
+        if (!additionalValidators.validate()) {
+          checkoutComponent.dispatchEvent(new Event("closeModal"));
+          return;
+        }
+        this.numberOfInstallments = e.detail.numberOfInstallments;
+        this.continueToEasyCredit();
+      });
     },
     continueToEasyCredit: function () {
       if (additionalValidators.validate()) {

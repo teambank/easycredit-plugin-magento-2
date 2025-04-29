@@ -34,31 +34,37 @@ define([
       this.element.setAttribute("amount", data[this.priceType].amount);
     },
     handlePaymentConfirm: function (element) {
-      componentUtils.onHydrated(element, () => {
-        element.addEventListener("submit", (e) => {
-          var form;
+      document.addEventListener("easycredit-submit", (e) => {
+        if (e.target !== element) {
+          return;
+        }
 
-          const params = {
-            ...e.detail,
-            ...{ express: 1 },
-          };
+        if (
+          !componentUtils.isValidEasyCreditEvent(e, "easycredit-express-button")
+        ) {
+          return;
+        }
 
-          let buyForm = $(element)
-            .closest("form#product_addtocart_form")
-            .get(0);
+        var form;
 
-          if (
-            (form = componentUtils.replicateForm(buyForm, [
-              { key: "easycredit[express]", value: true },
-            ]))
-          ) {
-            this.addProductToCart(form, (data) => {
-              this.startCheckout(data.quoteId, params);
-            });
-            return;
-          }
-          return this.startCheckout(null, params);
-        });
+        const params = {
+          ...e.detail,
+          express: 1,
+        };
+
+        let buyForm = $(element).closest("form#product_addtocart_form").get(0);
+
+        if (
+          (form = componentUtils.replicateForm(buyForm, [
+            { key: "easycredit[express]", value: true },
+          ]))
+        ) {
+          this.addProductToCart(form, (data) => {
+            this.startCheckout(data.quoteId, params);
+          });
+          return;
+        }
+        return this.startCheckout(null, params);
       });
     },
     addProductToCart: function (form, callback) {
