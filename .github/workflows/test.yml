@@ -14,10 +14,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - magento-version: '2.4.1'
-            php-version: 7.4
-            composer-version: 'v1'
-            search-engine: 'elasticsearch7'
+          # wontfix for this very old version: "Payment model name is not provided in config"
+          #- magento-version: '2.4.1'
+          #  php-version: 7.4
+          #  composer-version: 'v1'
+          #  search-engine: 'elasticsearch7'
           - magento-version: '2.4.2'
             php-version: 7.4
             composer-version: 'v1'

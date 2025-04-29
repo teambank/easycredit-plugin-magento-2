@@ -1,6 +1,13 @@
 Changelog
 =========
 
+v3.0.1
+------
+
+* die Web-Komponenten nutzen nun Event-Delegation (Event: easycredit-submit) zur Verbesserung der Zuverlässigkeit
+* die jeweilige Zahlungsart wird im Frontend nur noch angezeigt, wenn sie in der API aktiv ist
+* Kompatibilität mit Magento 2.4.8 @ PHP 8.3
+
 v3.0.0
 ------
 
