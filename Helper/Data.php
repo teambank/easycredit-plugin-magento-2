@@ -8,6 +8,8 @@
 namespace Netzkollektiv\EasyCredit\Helper;
 
 use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
@@ -30,6 +32,12 @@ class Data extends AbstractHelper
     private StorageFactory $storageFactory;
 
     private Logger $logger;
+
+    private CacheInterface $cache;
+
+    private const CACHE_KEY = 'easycredit_webshop_info';
+
+    private const CACHE_LIFETIME = 3600; // 1 hour in seconds
 
     /**
      * @var Api\Service\TransactionApiFactory
@@ -67,6 +75,7 @@ class Data extends AbstractHelper
         ScopeConfigInterface $scopeConfig,
         StorageFactory $storageFactory,
         Logger $logger,
+        CacheInterface $cache,
         Api\Service\TransactionApiFactory $transactionApiFactory,
         Api\Service\WebshopApiFactory $webshopApiFactory,
         Api\Service\InstallmentplanApiFactory $installmentplanApiFactory,
@@ -83,6 +92,7 @@ class Data extends AbstractHelper
         $this->storageFactory = $storageFactory;
         $this->logger = $logger;
 
+        $this->cache = $cache;
         $this->transactionApiFactory = $transactionApiFactory;
         $this->webshopApiFactory = $webshopApiFactory;
         $this->installmentplanApiFactory = $installmentplanApiFactory;
@@ -156,5 +166,32 @@ class Data extends AbstractHelper
                 'config' => $config,
             ]
         );
+    }
+
+    public function getWebshopDetails()
+    {
+        $cacheKey = self::CACHE_KEY;
+        $cachedData = $this->cache->load($cacheKey);
+
+        if ($cachedData !== false) {
+            return json_decode($cachedData, true);
+        }
+
+        try {
+            $result = $this->getCheckout()->getWebshopDetails();
+
+            if ($result !== null) {
+                $this->cache->save(
+                    json_encode($result),
+                    $cacheKey,
+                    [Config::CACHE_TAG],
+                    self::CACHE_LIFETIME
+                );
+            }
+
+            return $result;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 }

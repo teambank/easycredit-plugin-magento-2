@@ -25,13 +25,14 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Netzkollektiv\EasyCredit\Block\Info;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
-use Netzkollektiv\EasyCredit\Helper\Data;
+use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\Payment as EasyCreditPaymentHelper;
 use Teambank\EasyCreditApiV3\ApiException;
 use Teambank\EasyCreditApiV3\Model\CaptureRequest;
 use Teambank\EasyCreditApiV3\Model\RefundRequest;
 use Teambank\EasyCreditApiV3\Model\TransactionInformation;
 
-class AbstractPayment extends AbstractMethod
+abstract class AbstractPayment extends AbstractMethod
 {
     /**
      * Cash On Delivery payment block paths
@@ -84,13 +85,22 @@ class AbstractPayment extends AbstractMethod
      */
     protected $_isGateway = true;
 
-    protected Data $easyCreditHelper;
+    protected EasyCreditHelper $easyCreditHelper;
+
+    protected EasyCreditPaymentHelper $easyCreditPaymentHelper;
 
     protected UrlInterface $urlBuilder;
 
     protected ScopeConfigInterface $scopeConfig;
 
     protected TimezoneInterface $timezone;
+
+    /**
+     * Payment method code
+     *
+     * @var string
+     */
+    protected $_code;
 
     public function __construct(
         Context $context,
@@ -101,13 +111,15 @@ class AbstractPayment extends AbstractMethod
         ScopeConfigInterface $scopeConfig,
         Logger $logger,
         UrlInterface $urlBuilder,
-        Data $easyCreditHelper,
+        EasyCreditHelper $easyCreditHelper,
+        EasyCreditPaymentHelper $easyCreditPaymentHelper,
         TimezoneInterface $timezone,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->easyCreditHelper = $easyCreditHelper;
+        $this->easyCreditPaymentHelper = $easyCreditPaymentHelper;
 
         $this->urlBuilder = $urlBuilder;
         $this->scopeConfig = $scopeConfig;
@@ -138,6 +150,13 @@ class AbstractPayment extends AbstractMethod
         }
 
         if (! $this->getConfigData('credentials/api_token')) {
+            return false;
+        }
+
+        $webshopInfo = $this->easyCreditHelper->getWebshopDetails();
+        $key = \strtolower($this->easyCreditPaymentHelper->getTypeByMethod($this->_code)) . 'PaymentActive';
+
+        if (isset($webshopInfo[$key]) && $webshopInfo[$key] === false) {
             return false;
         }
 
@@ -284,8 +303,7 @@ class AbstractPayment extends AbstractMethod
         }
 
         try {
-            if (! $this->easyCreditHelper->getCheckout()->authorize($payment->getOrder()->getIncrementId())
-            ) {
+            if (! $this->easyCreditHelper->getCheckout()->authorize($payment->getOrder()->getIncrementId())) {
                 throw new \Exception('Transaction could not be authorized');
             }
 
