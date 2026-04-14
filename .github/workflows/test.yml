@@ -47,6 +47,10 @@ jobs:
             php-version: 8.3
             composer-version: 'v2'
             search-engine: 'elasticsearch8'
+          - magento-version: '2.4.9-beta1'
+            php-version: 8.5
+            composer-version: 'v2'
+            search-engine: 'elasticsearch8'
 
     name: Magento ${{ matrix.magento-version }}
 
@@ -132,10 +136,7 @@ jobs:
           php bin/magento s:static:depl de_DE en_US -j 8
 
           php bin/magento indexer:set-mode realtime
-          #php bin/magento config:set admin/usage/enabled 0
-
           php bin/magento config:set customer/address/telephone_show opt
-
           php bin/magento config:set payment/easycredit/credentials/api_key ${{ secrets.EASYCREDITAPIKEY }}
           php bin/magento config:set payment/easycredit/credentials/api_token ${{ secrets.EASYCREDITAPIPASSWORD }}
           php bin/magento config:set payment/easycredit/credentials/api_signature ${{ secrets.EASYCREDITAPISIGNATURE }}

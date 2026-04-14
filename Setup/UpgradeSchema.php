@@ -63,11 +63,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
     /**
      * Upgrades DB schema
      */
-    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    public function upgrade(SchemaSetupInterface $setup, ?ModuleContextInterface $context = null)
     {
         $package = $this->getApiLibraryPackage();
         if (! $package instanceof CompletePackageInterface) {
-            throw new \Exception('Please run "composer require netzkollektiv/easycredit-api-v3-php:' . $package->getVersion());
+            throw new \Exception(
+                'Please run "composer require netzkollektiv/easycredit-api-v3-php" to install the API library.'
+            );
         }
 
         $composer = json_decode(file_get_contents(__DIR__ . '/../composer.json'), null, 512, JSON_THROW_ON_ERROR);
@@ -76,7 +78,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             throw new \Exception('Please upgrade ' . $package->getName() . ' to v' . $composer->require->{'netzkollektiv/easycredit-api-v3-php'} . ', run: "composer require netzkollektiv/easycredit-api-v3-php:' . $composer->require->{'netzkollektiv/easycredit-api-v3-php'} . '"');
         }
 
-        if (! $context->getVersion()) {
+        if ($context === null || ! $context->getVersion()) {
             $setup->startSetup();
 
             $setup->getConnection()

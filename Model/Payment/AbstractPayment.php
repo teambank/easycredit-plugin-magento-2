@@ -114,8 +114,8 @@ abstract class AbstractPayment extends AbstractMethod
         EasyCreditHelper $easyCreditHelper,
         EasyCreditPaymentHelper $easyCreditPaymentHelper,
         TimezoneInterface $timezone,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
+        ?AbstractResource $resource = null,
+        ?AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->easyCreditHelper = $easyCreditHelper;
@@ -139,7 +139,7 @@ abstract class AbstractPayment extends AbstractMethod
         );
     }
 
-    public function isAvailable(CartInterface $quote = null)
+    public function isAvailable(?CartInterface $quote = null)
     {
         if (! $quote instanceof CartInterface) {
             return false;
