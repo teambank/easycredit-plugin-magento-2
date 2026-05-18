@@ -9,7 +9,7 @@ test.describe("Check settings", () => {
   test("Check settings", async ({ page }) => {
     await page.goto("/admin/");
     await page.getByPlaceholder("Benutzername").fill("admin");
-    await page.getByPlaceholder("Passwort").fill("admin1234578!");
+    await page.getByPlaceholder("Passwort").fill("admin12345678!");
     await page.getByRole("button", { name: "Anmelden" }).click();
 
     await page.getByRole("link", { name: "Shops" }).click();

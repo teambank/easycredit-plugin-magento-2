@@ -1,0 +1,90 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MAGENTO_VERSION: ${MAGENTO_VERSION:-2.4.9}
+      secrets:
+        - composer_auth
+    volumes:
+      - ..:/workspace:cached
+      - ..:/opt/magento/app/code/Netzkollektiv/EasyCredit:cached
+      - ./auth.json:/opt/magento/auth.json
+      - magento-composer-cache:/var/cache/composer
+    ports:
+      - "8080:80"
+    env_file:
+      - default.env
+    environment:
+      MAGENTO_VERSION: ${MAGENTO_VERSION:-2.4.9}
+      MAGENTO_DIR: /opt/magento
+      COMPOSER_CACHE_DIR: /var/cache/composer
+    depends_on:
+      db:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      valkey:
+        condition: service_started
+
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    env_file:
+      - default.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - magento-mariadb:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  opensearch:
+    image: opensearchproject/opensearch:3
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - DISABLE_SECURITY_PLUGIN=true
+      - DISABLE_INSTALL_DEMO_CONFIG=true
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      # Dev: avoid flood-stage disk watermark blocking index creation (common in Docker Desktop).
+      - cluster.routing.allocation.disk.threshold_enabled=false
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - magento-opensearch:/usr/share/opensearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:9200 >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  valkey:
+    image: valkey/valkey:8
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - magento-valkey:/data
+
+secrets:
+  composer_auth:
+    file: ./auth.json
+
+volumes:
+  magento-mariadb:
+  magento-opensearch:
+  magento-valkey:
+  magento-composer-cache:

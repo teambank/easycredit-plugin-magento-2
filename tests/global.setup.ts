@@ -21,7 +21,7 @@ async function globalSetup(config: FullConfig) {
   });
   const authorization = await response.json();
   headers["Authorization"] = "Bearer " + authorization;
-  console.log(`[prepareData] logged in with ${authorization}`);
+  console.log(`[prepareData] logged in with `, authorization);
 
   response = await req.post("/rest/V1/categories", {
     headers: headers,

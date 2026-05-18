@@ -1,0 +1,51 @@
+{
+  "name": "Magento 2.4.9 (PHP 8.5 / OpenSearch 3 / MariaDB 11.4)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "vscode",
+  "shutdownAction": "stopCompose",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts",
+      "pnpmVersion": "none",
+      "nvmVersion": "none"
+    }
+  },
+
+  "forwardPorts": [8080, 3306, 6379, 9200],
+  "portsAttributes": {
+    "8080": { "label": "Apache (Magento pub)" },
+    "3306": { "label": "MariaDB" },
+    "9200": { "label": "OpenSearch HTTP" }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client"
+      ],
+      "settings": {
+        "php.validate.executablePath": "/usr/local/bin/php"
+      }
+    }
+  },
+
+  "remoteEnv": {
+    "MAGENTO_VERSION": "2.4.9",
+    "COMPOSER_MEMORY_LIMIT": "2G",
+    "MAGENTO_DIR": "/opt/magento",
+    "COMPOSER_CACHE_DIR": "/var/cache/composer",
+    "MAGENTO_DB_HOST": "db",
+    "MAGENTO_DB_NAME": "magento",
+    "MAGENTO_DB_USER": "magento",
+    "MAGENTO_DB_PASSWORD": "magento",
+    "MAGENTO_DB_ROOT_PASSWORD": "magento",
+    "MAGENTO_BASE_URL": "http://localhost:8080/",
+    "MAGENTO_SEARCH_ENGINE": "opensearch",
+    "MAGENTO_SEARCH_HOST": "opensearch"
+  },
+
+  "postStartCommand": "bash /workspace/.devcontainer/scripts/maybe-install-magento.sh"
+}

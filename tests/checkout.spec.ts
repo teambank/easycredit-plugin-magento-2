@@ -3,7 +3,7 @@ import { randomize, takeScreenshot, scaleDown, delay } from "./utils";
 import {
   goToProduct,
   addCurrentProductToCart,
-  // goToCart,
+  clickExpressCheckout,
   goThroughPaymentPage,
   confirmOrder,
 } from "./common";
@@ -77,7 +77,8 @@ test.describe("Go through standard @bill", () => {
     /* Confirm Page */
     await page.locator("easycredit-checkout-label[payment-type=BILL]").click();
     await page
-      .getByRole("button", { name: "Weiter zu easyCredit-Rechnung" })
+      .locator("easycredit-checkout")
+      .getByRole("button", { name: "auf Rechnung zahlen" })
       .click();
 
     await goThroughPaymentPage({
@@ -95,10 +96,7 @@ test.describe("Go through @express @installment", () => {
   test("expressCheckout", async ({ page }) => {
     await goToProduct(page);
 
-    await page
-      .locator("a")
-      .filter({ hasText: "Jetzt direkt in Raten zahlen" })
-      .click();
+    await clickExpressCheckout(page, PaymentTypes.INSTALLMENT);
     await page.getByText("Akzeptieren", { exact: true }).click();
 
     await goThroughPaymentPage({
@@ -117,7 +115,7 @@ test.describe("Go through @express @bill", () => {
   test("expressCheckout", async ({ page }) => {
     await goToProduct(page);
 
-    await page.locator("a").filter({ hasText: "In 30 Tagen" }).click();
+    await clickExpressCheckout(page, PaymentTypes.BILL);
     await page.getByText("Akzeptieren", { exact: true }).click();
 
     await goThroughPaymentPage({
@@ -157,10 +155,7 @@ test.describe("amount should not be changable afterwards @bill @installment", ()
   test("amountNotChangable", async ({ page }) => {
     await goToProduct(page);
 
-    await page
-      .locator("a")
-      .filter({ hasText: "Jetzt direkt in Raten zahlen" })
-      .click();
+    await clickExpressCheckout(page, PaymentTypes.INSTALLMENT);
     await page.getByText("Akzeptieren", { exact: true }).click();
 
     await goThroughPaymentPage({
@@ -169,16 +164,19 @@ test.describe("amount should not be changable afterwards @bill @installment", ()
       express: true
     });
     await expect(
-      page.getByRole('heading', {name:"Bestellung überprüfen"})
+      page.getByRole('heading', {name: "Bestellung überprüfen"})
     ).toBeVisible();
     
     await page.goto("index.php/checkout/cart/");
 
     await page.getByRole("spinbutton", { name: "Menge" }).first().fill("2");
-    await page
-      .getByRole("button", { name: "Warenkorb aktualisieren" })
-      .click();
-    await page.waitForResponse(/checkout\/cart\/updatePost/)
+    const cartUpdateResponse = page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        /checkout\/cart\/updatePost/.test(response.url())
+    );
+    await page.getByRole("button", { name: "Warenkorb aktualisieren" }).click();
+    await cartUpdateResponse;
 
     await page.goto("index.php/easycredit/checkout/review");
     await page.getByRole("button", { name: "Jetzt kaufen" }).click();

@@ -1,16 +1,17 @@
-includes:
-    - %rootDir%/../../bitexpert/phpstan-magento/extension.neon
+# PHPStan config when running from the plugin repo (composer install in workspace).
+# Requires MAGENTO_DIR (e.g. /opt/magento) and MAGENTO_VENDOR_DIR (e.g. /opt/magento/vendor).
 parameters:
+  bootstrapFiles:
+    - phpstan-bootstrap.php
   paths:
-    - %currentWorkingDirectory%
+    - .
   level: 1
   scanDirectories:
-    - %rootDir%/../../../vendor
+    - %env.MAGENTO_VENDOR_DIR%
   excludePaths:
+    - vendor
     - ecs.php
     - rector.php
   ignoreErrors:
     - '#Use service contracts.+?QuoteIdMask#'
   reportUnmatchedIgnoredErrors: false
-  extdn:
-    setTemplateDisallowedForBlockClasses: false

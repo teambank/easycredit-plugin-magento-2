@@ -47,7 +47,7 @@ jobs:
             php-version: 8.3
             composer-version: 'v2'
             search-engine: 'elasticsearch8'
-          - magento-version: '2.4.9-beta1'
+          - magento-version: '2.4.9'
             php-version: 8.5
             composer-version: 'v2'
             search-engine: 'elasticsearch8'
@@ -83,8 +83,10 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: mbstring, gd, bcmath, ctype, curl, dom, hash, iconv, intl, openssl, simplexml, soap, xsl, zip, xdebug
+          extensions: mbstring, gd, bcmath, ctype, curl, dom, hash, iconv, intl, opcache, openssl, simplexml, soap, xsl, zip
           tools: composer:${{ matrix.composer-version }}
+          coverage: none
+          ini-values: opcache.enable=1, opcache.enable_cli=1, opcache.memory_consumption=512, opcache.max_accelerated_files=60000, realpath_cache_size=10M, realpath_cache_ttl=7200
       - name: Checkout
         uses: actions/checkout@master
       - name: Debug
@@ -96,68 +98,39 @@ jobs:
           curl http://localhost:9200
       - name: Setup Magento 2
         run: |
-          mysql -u root --password=root -h 127.0.0.1 -e 'CREATE DATABASE IF NOT EXISTS magento;'
-          git clone --depth=1 -b ${{ matrix.magento-version }} https://github.com/magento/magento2 $MAGENTO_DIR
-          cd $MAGENTO_DIR
-
-          composer install || composer install
-          composer config minimum-stability dev
-          composer config repositories.local path $GITHUB_WORKSPACE
-          
-          COMPOSER_MIRROR_PATH_REPOS=1 composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 dev-${GITHUB_REF##*/}#${GITHUB_SHA}
-          composer require community-engineering/language-de_DE
-          composer remove magento/composer-dependency-version-audit-plugin
-
-          # quick patch functional testing framework in subshell
-          (
-            [ -f $MAGENTO_DIR/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php ] && \
-              cd $MAGENTO_DIR/vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/ && \
-              sed s/xdebug_disable/if\ \(function_exists\(\'debug_disable\'\)\)\ xdebug_disable/g _bootstrap.php > _bootstrap.php1; mv _bootstrap.php1 _bootstrap.php 
-          )
-
-          php bin/magento setup:install --base-url=http://localhost/ \
-          --db-host=127.0.0.1 --db-name=magento --db-user=root --db-password=root --admin-firstname=Admin \
-          --admin-lastname=Istrator --admin-email=admin@magneto.com --admin-user=admin \
-          --admin-password=admin1234578! --language=de_DE --currency=EUR --timezone=Europe/Berlin \
-          --search-engine=${{ matrix.search-engine }} --elasticsearch-host=localhost \
-          --elasticsearch-port=9200 \
-          --backend-frontname=admin
-
-          mysql -u root -proot -h 127.0.0.1 -e "UPDATE admin_user Set interface_locale = 'de_DE';" magento 
-
-          #REF=${GITHUB_REF##*/}
-          #BRANCH=$([[ "$REF" = [0-9]* ]] && echo "$REF-dev" || echo "dev-$REF")
-          #composer require --ignore-platform-reqs teambank/easycredit-plugin-magento-2 $BRANCH
-
-          php bin/magento module:disable Magento_AdminAnalytics
-          php bin/magento s:up
-          php bin/magento deploy:mode:set production -s
-          php bin/magento s:di:com
-          php bin/magento s:static:depl de_DE en_US -j 8
-
-          php bin/magento indexer:set-mode realtime
-          php bin/magento config:set customer/address/telephone_show opt
-          php bin/magento config:set payment/easycredit/credentials/api_key ${{ secrets.EASYCREDITAPIKEY }}
-          php bin/magento config:set payment/easycredit/credentials/api_token ${{ secrets.EASYCREDITAPIPASSWORD }}
-          php bin/magento config:set payment/easycredit/credentials/api_signature ${{ secrets.EASYCREDITAPISIGNATURE }}
-
-          php bin/magento c:clean
+          export WORKSPACE="${GITHUB_WORKSPACE}"
+          export MAGENTO_DIR="${MAGENTO_DIR}"
+          export MAGENTO_CLONE=1
+          export MAGENTO_VERSION="${{ matrix.magento-version }}"
+          export PLUGIN_SOURCE=composer
+          export PLUGIN_CONSTRAINT="dev-${GITHUB_REF##*/}#${GITHUB_SHA}"
+          export BASE_URL="http://localhost/"
+          export DB_HOST="127.0.0.1"
+          export SEARCH_ENGINE="${{ matrix.search-engine }}"
+          export SEARCH_HOST="localhost"
+          export SEARCH_PORT="9200"
+          export EASYCREDIT_API_KEY="${{ secrets.EASYCREDITAPIKEY }}"
+          export EASYCREDIT_API_TOKEN="${{ secrets.EASYCREDITAPIPASSWORD }}"
+          export EASYCREDIT_API_SIGNATURE="${{ secrets.EASYCREDITAPISIGNATURE }}"
+          bash "${GITHUB_WORKSPACE}/.devcontainer/scripts/install-magento-store.sh"
 
       - name: Static Analyze
+        env:
+          MAGENTO_DIR: /opt/magento
+          MAGENTO_VENDOR_DIR: /opt/magento/vendor
         run: |
-          cd $MAGENTO_DIR
-
-          if [[ "${{ matrix.magento-version }}" == "2.4.7" || "${{ matrix.magento-version }}" == "2.4.8" ]]; then
-            echo "Using latest PHPStan (2.x) for Magento version ${{ matrix.magento-version }}"
-            composer update phpstan/phpstan --with-all-dependencies
-            composer require bitexpert/phpstan-magento
+          if [[ "${{ matrix.magento-version }}" == "2.4.7" || "${{ matrix.magento-version }}" == "2.4.8" || "${{ matrix.magento-version }}" == "2.4.9" ]]; then
+            echo "Using PHPStan 2.x from plugin workspace (Magento root keeps rector/phpstan 1.x via magento-coding-standard)"
+            cd "$GITHUB_WORKSPACE"
+            composer install --no-interaction --prefer-dist
+            php vendor/bin/phpstan analyse . -c phpstan.neon
           else
-            echo "Using specific PHPStan versions for Magento version ${{ matrix.magento-version }}"
-            composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies
+            echo "Using PHPStan 1.x in Magento vendor for ${{ matrix.magento-version }}"
+            cd $MAGENTO_DIR
+            composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies --no-interaction
+            cd $PLUGIN_DIR
+            php $MAGENTO_DIR/vendor/bin/phpstan analyse . -c "$GITHUB_WORKSPACE/phpstan.magento.neon"
           fi
-
-          cd $PLUGIN_DIR
-          php $MAGENTO_DIR/vendor/bin/phpstan analyze .
       - name: Coding Style
         if: ${{ matrix.magento-version == '2.4.7' }}
         run: |

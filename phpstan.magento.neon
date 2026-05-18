@@ -1,0 +1,15 @@
+# PHPStan config when phpstan is installed in the Magento root vendor/ (Magento < 2.4.7 CI matrix).
+includes:
+    - %rootDir%/../../bitexpert/phpstan-magento/extension.neon
+parameters:
+  paths:
+    - %currentWorkingDirectory%
+  level: 1
+  scanDirectories:
+    - %rootDir%/../../../vendor
+  excludePaths:
+    - ecs.php
+    - rector.php
+  ignoreErrors:
+    - '#Use service contracts.+?QuoteIdMask#'
+  reportUnmatchedIgnoredErrors: false

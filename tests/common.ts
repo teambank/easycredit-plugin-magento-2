@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { delay, randomize, clickWithRetry } from "./utils";
+import { delay, randomize, doWithRetry } from "./utils";
 import { PaymentTypes } from "./types";
 
 export const goToProduct = async (page, sku = 'regular-product') => {
@@ -9,16 +9,45 @@ export const goToProduct = async (page, sku = 'regular-product') => {
 };
 
 export const addCurrentProductToCart = async (page) => {
+    const addToCartResponse = page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        /checkout\/cart\/add/.test(response.url())
+    );
     await page
       .getByRole("button", { name: "In den Warenkorb" })
       .first()
       .click();
-    await page.waitForResponse(/checkout\/cart\/add/);
+    await addToCartResponse;
 
     await expect(page.locator(".page.messages")).toContainText(
       /Sie haben .+? zu Ihrem Warenkorb hinzugefügt./
     );
-}
+};
+
+const expressPaymentLabel: Record<PaymentTypes, RegExp> = {
+  [PaymentTypes.INSTALLMENT]: /in Raten zahlen/i,
+  [PaymentTypes.BILL]: /auf Rechnung/i,
+};
+
+/** Clicks an option inside the easycredit-express-button web component (not a page-level link). */
+export const clickExpressCheckout = async (
+  page,
+  paymentType: PaymentTypes
+) => {
+  const label = expressPaymentLabel[paymentType];
+
+  await test.step(`Express checkout (${paymentType})`, async () => {
+    const express = page.locator("easycredit-express-button").first();
+    await expect(express).toBeVisible({ timeout: 30_000 });
+
+    await doWithRetry(async () => {
+      const option = express.getByText(label);
+      await expect(option.first()).toBeVisible({ timeout: 5_000 });
+      await option.first().click();
+    });
+  });
+};
 
 export const confirmOrder = async ({
   page,
@@ -68,32 +97,48 @@ export const goThroughPaymentPage = async ({
   await test.step(`easyCredit Payment (${paymentType})`, async () => {
     await page.getByTestId("uc-deny-all-button").click();
 
-    await expect(
-      page.getByRole("heading", {
-        name:
-          paymentType === PaymentTypes.INSTALLMENT
-            ? "Monatliche Wunschrate"
-            : "Ihre Bezahloptionen",
-      })
-    ).toBeVisible();
-
     if (switchPaymentType) {
-      await page
+      const switchButton = page
         .locator(".paymentoptions")
         .getByText(
           paymentType === PaymentTypes.INSTALLMENT ? "Rechnung" : "Ratenkauf"
-        )
-        .click();
+        );
+      await expect(switchButton).toBeVisible();
+      await switchButton.click({ force: true });
     }
 
-    await page.getByRole("button", { name: "Weiter zur Dateneingabe" }).click();
+    await page.getByRole("button", { name: "Weiter" }).click();
+
+    // Fill mobile number for sms tan
+    await page
+      .locator("#mobilfunknummer")
+      .getByRole("textbox")
+      .fill("1703404848");
+
+    await doWithRetry(async () => {
+      await page.getByRole("button", { name: "SMS-TAN senden" }).click();
+      await delay(500);
+      const mtanInput = page.locator("#mTAN").getByRole("textbox");
+      const canFillMtan =
+        (await mtanInput.isVisible()) && (await mtanInput.isEditable());
+      if (!canFillMtan) {
+        throw new Error("mTAN input is not fillable yet");
+      }
+    });
+
+    // Enter the code from the SMS (anything works)
+    await page.locator("#mTAN").getByRole("textbox").fill("123456");
+
+    await doWithRetry(async () => {
+      await page.getByRole("button", { name: "Zur Dateneingabe" }).click();
+    });
 
     if (express) {
       await page.locator("#firstName").fill(randomize("Ralf"));
       await page.locator("#lastName").fill("Ratenkauf");
     }
 
-    await page.locator("#dateOfBirth").fill("05.04.1972");
+    await page.locator("#dateOfBirth").getByRole("textbox").fill("05.04.1972");
 
     if (express) {
       await page
@@ -102,10 +147,6 @@ export const goThroughPaymentPage = async ({
         .fill("ralf.ratenkauf@teambank.de");
     }
 
-    await page
-      .locator("#mobilfunknummer")
-      .getByRole("textbox")
-      .fill("1703404848");
     await page
       .locator("app-ratenkauf-iban-input-dumb")
       .getByRole("textbox")
@@ -117,17 +158,20 @@ export const goThroughPaymentPage = async ({
       await page.locator("#city").fill("Nürnberg");
     }
 
-    await page.locator("#agreeSepa").click();
+    await doWithRetry(async () => {
+      await page.locator("#sepamandat tbk-svg-icon").click({ force: true });
+      await delay(500);
+      const isChecked = await page.locator("#agreeSepa").isChecked();
+      if (!isChecked) {
+        throw new Error("SEPA checkbox was not checked");
+      }
+    });
+
+    await page.locator("#next-btn").click();
 
     await delay(500);
-
-    await clickWithRetry(
-      page.getByRole("button", { name: "Zahlungswunsch prüfen" })
-    );
-
-    await delay(500);
-    await page
-      .getByRole("button", { name: "Zahlungswunsch übernehmen" })
-      .click();
+    await doWithRetry(async () => {
+      await page.getByRole("button", { name: "Zahlung übernehmen" }).click();
+    });
   });
 };
