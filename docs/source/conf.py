@@ -20,13 +20,13 @@
 # -- Project information -----------------------------------------------------
 
 project = u'easyCredit für Magento 2.x'
-copyright = u'2025, NETZKOLLEKTIV GmbH'
+copyright = u'2026, NETZKOLLEKTIV GmbH'
 author = u'Teambank AG'
 
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'3.0.1'
+release = u'3.0.2'
 
 
 # -- General configuration ---------------------------------------------------

@@ -67,6 +67,14 @@ Earlier versions of Magento 2 may work, but are not actively tested anymore. For
 
 If you still have any problems, please open a ticket or contact [ratenkauf@easycredit.de](mailto:ratenkauf@easycredit.de).
 
+## Hyvä Checkout
+
+Für den **Hyvä React Checkout** gibt es eine separate Integration:
+
+[netzkollektiv/magento2-react-checkout-easycredit](https://github.com/netzkollektiv/magento2-react-checkout-easycredit)
+
+Das Repository kann als Ausgangspunkt dienen, ist aber möglicherweise nicht mehr auf dem aktuellen Stand.
+
 # License
 
 * [MIT](https://opensource.org/licenses/MIT)

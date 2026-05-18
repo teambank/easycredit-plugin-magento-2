@@ -12,6 +12,7 @@ easyCredit-Rechnung & Ratenkauf für Magento 2.x
   
    requirements.rst 
    installation.rst
+   hyva.rst
    configuration.rst
    usage-customer.rst
    usage-merchant.rst

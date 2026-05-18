@@ -1,4 +1,6 @@
 /.env
+# Composer auth (Magento Marketplace / GitHub); keep local only
+.devcontainer/auth.json
 .vscode
 node_modules/
 /test-results/

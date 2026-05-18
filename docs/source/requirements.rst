@@ -18,6 +18,11 @@ Das Plugin hat neben Magento 2.x keine weiteren Abhängigkeiten. Es wurde für d
 
 Ältere Versionen von Magento 2 werden nicht mehr aktiv getestet. Wird noch PHP < 7.4 oder eine ältere Version von Magento (<= 2.3) verwendet, versuchen Sie bitte die v1.3.10 der Extension zu installieren.
 
+Hyvä Theme & React Checkout
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Für **Hyvä React Checkout** ist eine zusätzliche Integration nötig; siehe :doc:`hyva`.
+
 Zugangsdaten für "easyCredit"
 ------------------------------------------
 
