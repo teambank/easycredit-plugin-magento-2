@@ -16,7 +16,7 @@ use Netzkollektiv\EasyCredit\Api\Data\CheckoutDataInterface;
 use Netzkollektiv\EasyCredit\Api\Data\CheckoutRequestInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\BackendApi\StorageFactory;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Teambank\EasyCreditApiV3\ApiException;

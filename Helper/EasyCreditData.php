@@ -10,7 +10,6 @@ namespace Netzkollektiv\EasyCredit\Helper;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Framework\App\Cache\Type\Config;
 use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
@@ -25,78 +24,84 @@ use Teambank\EasyCreditApiV3\Service\InstallmentplanApiFactory;
 use Teambank\EasyCreditApiV3\Service\TransactionApiFactory;
 use Teambank\EasyCreditApiV3\Service\WebshopApiFactory;
 
-class Data extends AbstractHelper
+class EasyCreditData extends AbstractHelper
 {
-    private CheckoutSession $checkoutSession;
-
-    private StorageFactory $storageFactory;
-
-    private Logger $logger;
-
-    private CacheInterface $cache;
-
     private const CACHE_KEY = 'easycredit_webshop_info';
 
     private const CACHE_LIFETIME = 3600; // 1 hour in seconds
 
     /**
-     * @var Api\Service\TransactionApiFactory
+     * @var CheckoutSession
      */
-    private TransactionApiFactory $transactionApiFactory;
+    private $checkoutSession;
 
     /**
-     * @var Api\Service\WebshopApiFactory
+     * @var StorageFactory
      */
-    private WebshopApiFactory $webshopApiFactory;
+    private $storageFactory;
 
     /**
-     * @var Api\Service\InstallmentplanApiFactory
+     * @var Logger
      */
-    private InstallmentplanApiFactory $installmentplanApiFactory;
+    private $logger;
 
     /**
-     * @var Api\Integration\CheckoutFactory
+     * @var CacheInterface
      */
-    private CheckoutFactory $checkoutFactory;
+    private $cache;
 
     /**
-     * @var Api\Integration\Util\AddressValidator
+     * @var TransactionApiFactory
      */
-    private AddressValidator $addressValidator;
+    private $transactionApiFactory;
 
     /**
-     * @var Api\Integration\Util\PrefixConverter
+     * @var WebshopApiFactory
      */
-    private PrefixConverter $prefixConverter;
+    private $webshopApiFactory;
+
+    /**
+     * @var InstallmentplanApiFactory
+     */
+    private $installmentplanApiFactory;
+
+    /**
+     * @var CheckoutFactory
+     */
+    private $checkoutFactory;
+
+    /**
+     * @var AddressValidator
+     */
+    private $addressValidator;
+
+    /**
+     * @var PrefixConverter
+     */
+    private $prefixConverter;
 
     public function __construct(
         Context $context,
         CheckoutSession $checkoutSession,
-        ScopeConfigInterface $scopeConfig,
         StorageFactory $storageFactory,
         Logger $logger,
         CacheInterface $cache,
-        Api\Service\TransactionApiFactory $transactionApiFactory,
-        Api\Service\WebshopApiFactory $webshopApiFactory,
-        Api\Service\InstallmentplanApiFactory $installmentplanApiFactory,
-        Api\Integration\CheckoutFactory $checkoutFactory,
-        Api\Integration\Util\AddressValidator $addressValidator,
-        Api\Integration\Util\PrefixConverter $prefixConverter
+        TransactionApiFactory $transactionApiFactory,
+        WebshopApiFactory $webshopApiFactory,
+        InstallmentplanApiFactory $installmentplanApiFactory,
+        CheckoutFactory $checkoutFactory,
+        AddressValidator $addressValidator,
+        PrefixConverter $prefixConverter
     ) {
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
 
         $this->checkoutSession = $checkoutSession;
-        $this->scopeConfig = $scopeConfig;
         $this->storageFactory = $storageFactory;
         $this->logger = $logger;
-
         $this->cache = $cache;
         $this->transactionApiFactory = $transactionApiFactory;
         $this->webshopApiFactory = $webshopApiFactory;
         $this->installmentplanApiFactory = $installmentplanApiFactory;
-
         $this->checkoutFactory = $checkoutFactory;
         $this->addressValidator = $addressValidator;
         $this->prefixConverter = $prefixConverter;

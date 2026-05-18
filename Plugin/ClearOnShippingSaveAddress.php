@@ -8,7 +8,7 @@
 namespace Netzkollektiv\EasyCredit\Plugin;
 
 use Magento\Checkout\Api\ShippingInformationManagementInterface;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 
 class ClearOnShippingSaveAddress
 {

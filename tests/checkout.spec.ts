@@ -188,7 +188,7 @@ test.describe("amount should not be changable afterwards @bill @installment", ()
 });
 
 test.describe("product below amount constraint should not be buyable @bill @installment", () => {
-  test("productOutsideAmountConstraints", async ({ page }) => {
+  test("productBelowAmountConstraint", async ({ page }) => {
     await goToProduct(page, "below-50");
     await addCurrentProductToCart(page);
 
@@ -208,7 +208,7 @@ test.describe("product below amount constraint should not be buyable @bill @inst
 });
 
 test.describe("product above amount constraint should not be buyable  @bill @installment", () => {
-  test("productOutsideAmountConstraints", async ({ page }) => {
+  test("productAboveAmountConstraint", async ({ page }) => {
     await goToProduct(page, "above-10000");
     await addCurrentProductToCart(page);
 

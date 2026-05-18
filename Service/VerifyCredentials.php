@@ -9,7 +9,7 @@ namespace Netzkollektiv\EasyCredit\Service;
 
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Netzkollektiv\EasyCredit\Api\VerifyCredentialsInterface;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 use Teambank\EasyCreditApiV3\Integration\ApiCredentialsInvalidException;
 use Teambank\EasyCreditApiV3\Integration\ApiCredentialsNotActiveException;

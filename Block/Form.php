@@ -20,11 +20,12 @@ class Form extends \Magento\Payment\Block\Form
         array $data = []
     ) {
         $this->scopeConfig = $context->getScopeConfig();
+        $data['template'] = $data['template'] ?? 'easycredit/form.phtml';
+
         parent::__construct(
             $context,
             $data
         );
-        $this->setTemplate('easycredit/form.phtml');
     }
 
     public function getStoreName()

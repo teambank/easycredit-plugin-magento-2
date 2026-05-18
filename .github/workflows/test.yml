@@ -21,11 +21,11 @@ jobs:
           #  search-engine: 'elasticsearch7'
           - magento-version: '2.4.2'
             php-version: 7.4
-            composer-version: 'v1'
+            composer-version: 'v2'
             search-engine: 'elasticsearch7'
           - magento-version: '2.4.3-p3'
             php-version: 7.4
-            composer-version: 'v1'
+            composer-version: 'v2'
             search-engine: 'elasticsearch7'
           - magento-version: '2.4.4'
             php-version: 8.1
@@ -118,6 +118,7 @@ jobs:
         env:
           MAGENTO_DIR: /opt/magento
           MAGENTO_VENDOR_DIR: /opt/magento/vendor
+          PLUGIN_PATH: /opt/magento/vendor/teambank/easycredit-plugin-magento-2
         run: |
           if [[ "${{ matrix.magento-version }}" == "2.4.7" || "${{ matrix.magento-version }}" == "2.4.8" || "${{ matrix.magento-version }}" == "2.4.9" ]]; then
             echo "Using PHPStan 2.x from plugin workspace (Magento root keeps rector/phpstan 1.x via magento-coding-standard)"
@@ -128,15 +129,17 @@ jobs:
             echo "Using PHPStan 1.x in Magento vendor for ${{ matrix.magento-version }}"
             cd $MAGENTO_DIR
             composer require phpstan/phpstan:^1.10 bitexpert/phpstan-magento:^0.30 --update-with-all-dependencies --no-interaction
-            cd $PLUGIN_DIR
+            cd "$PLUGIN_PATH"
             php $MAGENTO_DIR/vendor/bin/phpstan analyse . -c "$GITHUB_WORKSPACE/phpstan.magento.neon"
           fi
       - name: Coding Style
         if: ${{ matrix.magento-version == '2.4.7' }}
+        env:
+          PLUGIN_PATH: /opt/magento/vendor/teambank/easycredit-plugin-magento-2
         run: |
           cd $MAGENTO_DIR
           composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard --dev
-          php vendor/bin/ecs check -c $PLUGIN_DIR/ecs.php $PLUGIN_DIR
+          php vendor/bin/ecs check -c "$PLUGIN_PATH/ecs.php" "$PLUGIN_PATH"
       - name: Install Dependencies
         run: |
           npm install --global yarn

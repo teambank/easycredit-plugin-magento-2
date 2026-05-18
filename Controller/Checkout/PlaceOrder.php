@@ -14,7 +14,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartManagementInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 
 class PlaceOrder extends AbstractController

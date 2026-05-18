@@ -10,7 +10,7 @@ namespace Netzkollektiv\EasyCredit\Service;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Netzkollektiv\EasyCredit\Api\TransactionsInterface;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Teambank\EasyCreditApiV3\ApiException;
 use Teambank\EasyCreditApiV3\Model\CaptureRequest;
 use Teambank\EasyCreditApiV3\Model\RefundRequest;

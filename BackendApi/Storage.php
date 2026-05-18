@@ -13,8 +13,14 @@ use Teambank\EasyCreditApiV3 as Api;
 
 class Storage implements Api\Integration\StorageInterface
 {
+    /**
+     * @var Payment
+     */
     private Payment $payment;
 
+    /**
+     * @var Logger
+     */
     private Logger $logger;
 
     public function __construct(

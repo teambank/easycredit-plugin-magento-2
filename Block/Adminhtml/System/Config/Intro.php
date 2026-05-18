@@ -27,23 +27,9 @@ class Intro extends Field
         array $data = []
     ) {
         $this->scopeConfig = $context->getScopeConfig();
+        $data['template'] = $data['template'] ?? self::TEMPLATE;
 
         parent::__construct($context, $data);
-    }
-
-    /**
-     * Set template to itself
-     *
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        if (! $this->getTemplate()) {
-            $this->setTemplate(self::TEMPLATE);
-        }
-
-        parent::_prepareLayout();
-        return $this;
     }
 
     /**

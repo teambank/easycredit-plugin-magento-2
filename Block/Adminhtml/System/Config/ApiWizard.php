@@ -29,19 +29,9 @@ class ApiWizard extends Field
     public const REST_INTERNAL_VERIFY_CREDENTIALS_METHOD = 'get';
 
     /**
-     * Set template to itself
-     *
-     * @return $this
+     * @var string
      */
-    protected function _prepareLayout()
-    {
-        if (! $this->getTemplate()) {
-            $this->setTemplate(self::WIZARD_TEMPLATE);
-        }
-
-        parent::_prepareLayout();
-        return $this;
-    }
+    protected $_template = self::WIZARD_TEMPLATE;
 
     /**
      * Unset some non-related element parameters

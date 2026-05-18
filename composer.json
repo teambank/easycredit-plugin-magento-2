@@ -28,6 +28,8 @@
     "bitexpert/phpstan-magento": "^0.40"
   },
   "config": {
+    "platform": {
+    },
     "allow-plugins": {
       "phpstan/extension-installer": true
     }

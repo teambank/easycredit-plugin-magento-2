@@ -11,7 +11,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Model\Quote;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Model\Payment\InstallmentPayment as Payment;
 
 class ExpirePayment implements ObserverInterface

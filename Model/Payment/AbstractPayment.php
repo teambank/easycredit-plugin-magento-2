@@ -25,7 +25,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Netzkollektiv\EasyCredit\Block\Info;
 use Netzkollektiv\EasyCredit\Exception\TransactionNotFoundException;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Helper\Payment as EasyCreditPaymentHelper;
 use Teambank\EasyCreditApiV3\ApiException;
 use Teambank\EasyCreditApiV3\Model\CaptureRequest;

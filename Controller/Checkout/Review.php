@@ -12,7 +12,7 @@ use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\ViewInterface;
 use Magento\Framework\View\Element\BlockInterface;
-use Netzkollektiv\EasyCredit\Helper\Data;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Psr\Log\LoggerInterface;
 use Teambank\EasyCreditApiV3\Integration\Checkout;
 
@@ -31,7 +31,7 @@ class Review extends AbstractController
         Context $context,
         Session $checkoutSession,
         Url $customerUrl,
-        Data $easyCreditHelper,
+        EasyCreditHelper $easyCreditHelper,
         LoggerInterface $logger
     ) {
         parent::__construct($context, $checkoutSession, $customerUrl);

@@ -16,7 +16,10 @@ use Netzkollektiv\EasyCredit\Model\Payment as EasyCreditPayment;
 
 class Payment extends AbstractHelper
 {
-    private $paymentConfig = null;
+    /**
+     * @var \Magento\Payment\Model\Config
+     */
+    private \Magento\Payment\Model\Config $paymentConfig;
 
     public function __construct(
         \Magento\Payment\Model\Config $paymentConfig

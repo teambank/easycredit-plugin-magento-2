@@ -10,7 +10,7 @@ namespace Netzkollektiv\EasyCredit\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
-use Netzkollektiv\EasyCredit\Helper\Data as EasyCreditHelper;
+use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 use Psr\Log\LoggerInterface;
 

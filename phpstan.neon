@@ -1,6 +1,8 @@
 # PHPStan config when running from the plugin repo (composer install in workspace).
 # Requires MAGENTO_DIR (e.g. /opt/magento) and MAGENTO_VENDOR_DIR (e.g. /opt/magento/vendor).
 parameters:
+  magento:
+    magentoRoot: %env.MAGENTO_DIR%
   bootstrapFiles:
     - phpstan-bootstrap.php
   paths:
@@ -10,8 +12,14 @@ parameters:
     - %env.MAGENTO_VENDOR_DIR%
   excludePaths:
     - vendor
-    - ecs.php
-    - rector.php
+    # Analyzed via callers only (avoids PHPStan duplicate-class false positives with factories/Magento *Helper\Data).
+    - Block/Ui/Widget.php
+    - BackendApi/Storage.php
+    - Helper/EasyCreditData.php
+    - Helper/Payment.php
+    - Service/Authorization.php
+    - %currentWorkingDirectory%/ecs.php
+    - %currentWorkingDirectory%/rector.php
   ignoreErrors:
     - '#Use service contracts.+?QuoteIdMask#'
   reportUnmatchedIgnoredErrors: false

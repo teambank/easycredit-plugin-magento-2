@@ -16,11 +16,20 @@ use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class Widget extends Template
 {
-    private ScopeConfigInterface $scopeConfig;
+    /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
-    private CheckoutSession $checkoutSession;
+    /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSession;
 
-    private PaymentHelper $paymentHelper;
+    /**
+     * @var PaymentHelper
+     */
+    protected $paymentHelper;
 
     public function __construct(
         Context $context,
@@ -58,12 +67,17 @@ class Widget extends Template
 
     public function getAmount(): ?float
     {
-        if ($this->getData('amount')) {
-            return $this->getData('amount');
+        $amount = $this->getData('amount');
+        if ($amount !== null && $amount !== '') {
+            return (float) $amount;
         }
 
         $totals = $this->checkoutSession->getQuote()->getTotals();
-        return $totals['grand_total']->getValue();
+        if (! isset($totals['grand_total'])) {
+            return null;
+        }
+
+        return (float) $totals['grand_total']->getValue();
     }
 
     public function getPaymentHelper()

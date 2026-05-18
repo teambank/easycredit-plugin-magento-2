@@ -28,6 +28,7 @@ class BillPaymentIntro extends Field
         array $data = []
     ) {
         $this->scopeConfig = $context->getScopeConfig();
+        $data['template'] = $data['template'] ?? self::BILLPAYMENT_INTRO_TEMPLATE;
 
         parent::__construct($context, $data);
     }
@@ -46,21 +47,6 @@ class BillPaymentIntro extends Field
             'payment/' . $methodName . '/active',
             ScopeInterface::SCOPE_STORE
         );
-    }
-
-    /**
-     * Set template to itself
-     *
-     * @return $this
-     */
-    protected function _prepareLayout()
-    {
-        if (! $this->getTemplate()) {
-            $this->setTemplate(self::BILLPAYMENT_INTRO_TEMPLATE);
-        }
-
-        parent::_prepareLayout();
-        return $this;
     }
 
     /**

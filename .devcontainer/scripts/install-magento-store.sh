@@ -107,6 +107,21 @@ search_install_args() {
   esac
 }
 
+configure_composer_allow_plugins() {
+  # Magento < 2.4.4 has no config.allow-plugins; Composer 2.2+ blocks plugins until listed.
+  if ! composer -V 2>/dev/null | grep -qE 'Composer version 2\.'; then
+    return 0
+  fi
+  if composer config --no-plugins allow-plugins.laminas/laminas-dependency-plugin 2>/dev/null | grep -q '^true$'; then
+    return 0
+  fi
+  echo "[install] Enabling Composer allow-plugins (Magento ${MAGENTO_VERSION} + Composer 2)..."
+  composer config --no-plugins allow-plugins.laminas/laminas-dependency-plugin true
+  composer config --no-plugins allow-plugins.magento/magento-composer-installer true
+  composer config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+  composer config --no-plugins 'allow-plugins.magento/*' true
+}
+
 composer_install() {
   # Production install only — dev/test packages break setup:di:compile (missing ParserInterface, etc.).
   COMPOSER_NO_DEV=1 composer install --no-interaction "$@" \
@@ -236,6 +251,7 @@ install_plugin() {
 
 cd "${MAGENTO_DIR}"
 
+configure_composer_allow_plugins
 composer_install
 composer config minimum-stability dev
 install_plugin

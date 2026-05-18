@@ -9,6 +9,7 @@ namespace Netzkollektiv\EasyCredit\Plugin;
 
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Product;
+use Netzkollektiv\EasyCredit\Block\Ui\Widget;
 
 class AddWidgetCatalogListProduct extends AddWidgetAbstract
 {
@@ -19,8 +20,9 @@ class AddWidgetCatalogListProduct extends AddWidgetAbstract
         }
 
         $widget = $listProduct->getLayout()
-            ->createBlock('Netzkollektiv\EasyCredit\Block\Ui\Widget')
-            ->setTemplate('Netzkollektiv_EasyCredit::easycredit/widget.phtml')
+            ->createBlock(Widget::class, '', [
+                'template' => 'Netzkollektiv_EasyCredit::easycredit/widget.phtml',
+            ])
             ->setAmount($this->taxHelper->getTaxPrice($product, $product->getFinalPrice(), true))
             ->setAdditionalAttributes('display-type="minimal" extended="false"')
             ->setPosition('listing')

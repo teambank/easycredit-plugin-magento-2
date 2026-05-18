@@ -15,12 +15,24 @@ use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 class Authorization
 {
+    /**
+     * @var OrderRepository
+     */
     private OrderRepository $orderRepository;
 
+    /**
+     * @var OrderSender
+     */
     private OrderSender $orderSender;
 
+    /**
+     * @var ScopeConfigInterface
+     */
     private ScopeConfigInterface $scopeConfig;
 
+    /**
+     * @var PaymentHelper
+     */
     private PaymentHelper $paymentHelper;
 
     public function __construct(

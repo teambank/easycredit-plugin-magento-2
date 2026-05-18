@@ -43,7 +43,8 @@ if (!process.env.BASE_URL) {
     ...config,
     ... {
       webServer: {
-        command: 'PHP_CLI_SERVER_WORKERS=8 sudo php -S localhost:80 -t /opt/magento/pub /opt/magento/phpserver/router.php',
+        command:
+          'PHP_CLI_SERVER_WORKERS=8 sudo php -q -S localhost:80 -t /opt/magento/pub /opt/magento/phpserver/router.php',
         url: 'http://localhost/',
         reuseExistingServer: !process.env.CI,
         stdout: 'ignore',

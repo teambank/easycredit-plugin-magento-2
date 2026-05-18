@@ -1,15 +1,18 @@
 # PHPStan config when phpstan is installed in the Magento root vendor/ (Magento < 2.4.7 CI matrix).
+# Config lives in the plugin checkout; analysis runs from vendor/teambank/... under MAGENTO_DIR.
 includes:
     - %rootDir%/../../bitexpert/phpstan-magento/extension.neon
 parameters:
+  magento:
+    magentoRoot: %env.MAGENTO_DIR%
   paths:
     - %currentWorkingDirectory%
   level: 1
   scanDirectories:
-    - %rootDir%/../../../vendor
+    - %env.MAGENTO_VENDOR_DIR%
   excludePaths:
-    - ecs.php
-    - rector.php
+    - %currentWorkingDirectory%/ecs.php
+    - %currentWorkingDirectory%/rector.php
   ignoreErrors:
     - '#Use service contracts.+?QuoteIdMask#'
   reportUnmatchedIgnoredErrors: false

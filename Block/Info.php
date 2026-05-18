@@ -20,8 +20,12 @@ class Info extends PaymentInfo
      */
     public function toPdf()
     {
-        $this->setTemplate('Netzkollektiv_EasyCredit::easycredit/info/pdf/default.phtml');
-        return $this->toHtml();
+        $previousTemplate = $this->_template;
+        $this->_template = 'Netzkollektiv_EasyCredit::easycredit/info/pdf/default.phtml';
+        $html = $this->toHtml();
+        $this->_template = $previousTemplate;
+
+        return $html;
     }
 
     public function getPaymentPlan()
