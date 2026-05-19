@@ -3,6 +3,7 @@ import { seconds } from "./utils";
 
 let config: PlaywrightTestConfig = {
   outputDir: "../test-results/" + process.env.VERSION + "/",
+  globalTimeout: process.env.CI ? seconds(45 * 60) : undefined,
   use: {
     baseURL: process.env.BASE_URL ?? "http://localhost",
     trace: "retain-on-failure",
@@ -12,11 +13,6 @@ let config: PlaywrightTestConfig = {
   timeout: seconds(60),
   expect: { timeout: 10_000 },
   projects: [
-    {
-      name: "backend-auth",
-      use: { ...devices["Desktop Chrome"] },
-      testMatch: /.*\.setup\.ts/,
-    },
     {
       name: "checkout",
       use: { ...devices["Desktop Chrome"] },
@@ -31,28 +27,30 @@ let config: PlaywrightTestConfig = {
       name: "backend",
       use: { ...devices["Desktop Chrome"] },
       testMatch: "backend.spec.ts",
-      dependencies: ["backend-auth", "checkout"],
+      dependencies: ["checkout"],
     },
   ],
   reporter: [["list", { printSteps: true }], ["html"]],
-  globalSetup: require.resolve("./global.setup")
+  globalSetup: require.resolve("./global-setup"),
 };
 
 if (!process.env.BASE_URL) {
   config = {
     ...config,
-    ... {
+    ...{
       webServer: {
+        // Single-process server: PHP_CLI_SERVER_WORKERS leaves orphans on shutdown (CI hang).
         command:
-          'PHP_CLI_SERVER_WORKERS=8 sudo php -q -S localhost:80 -t /opt/magento/pub /opt/magento/phpserver/router.php',
-        url: 'http://localhost/',
+          "sudo php -q -S localhost:80 -t /opt/magento/pub /opt/magento/phpserver/router.php",
+        url: "http://localhost/",
         reuseExistingServer: !process.env.CI,
-        stdout: 'ignore',
-        stderr: 'pipe',
-        timeout: 10 * 1000
-      }
-    }
-  }
+        stdout: "ignore",
+        stderr: "ignore",
+        timeout: 10 * 1000,
+        gracefulShutdown: { signal: "SIGTERM", timeout: 5000 },
+      },
+    },
+  };
 }
 
-export default defineConfig(config)
+export default defineConfig(config);

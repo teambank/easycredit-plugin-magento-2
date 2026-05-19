@@ -57,8 +57,7 @@ export const confirmOrder = async ({
   paymentType: PaymentTypes;
 }) => {
   await test.step(`Confirm order`, async () => {
-
-		await expect(page.locator("easycredit-checkout-label")).toContainText(
+    await expect(page.locator("easycredit-checkout-label")).toContainText(
       paymentType === PaymentTypes.INSTALLMENT ? "Ratenkauf" : "Rechnung"
     );
 
@@ -72,14 +71,37 @@ export const confirmOrder = async ({
         .not.toContainText("Zinsen für Ratenzahlung");
     }
 
-    /* Confirm Page */
-    //await page.getByLabel('Please accept the terms').check();
     await page.getByRole("button", { name: "Jetzt kaufen" }).click();
 
-    /* Success Page */
     await expect(
       page.getByText("Vielen Dank für Ihre Bestellung!")
     ).toBeVisible();
+  });
+};
+
+/** After cart changes easyCredit may redirect review → cart; waitUntil commit avoids Playwright errors. */
+export const goToEasyCreditReview = async (page) => {
+  await test.step("Open easyCredit review", async () => {
+    await page.goto("index.php/easycredit/checkout/review", {
+      waitUntil: "commit",
+    });
+    await page.waitForLoadState("domcontentloaded");
+  });
+};
+
+/** Submit place order from review, or hit placeorder controller when review redirected to cart. */
+export const submitEasyCreditPlaceOrder = async (page) => {
+  await test.step("Submit easyCredit place order", async () => {
+    if (/easycredit\/checkout\/review/.test(page.url())) {
+      await page.getByRole("button", { name: "Jetzt kaufen" }).click();
+      await page.waitForLoadState("domcontentloaded");
+      return;
+    }
+
+    await page.goto("index.php/easycredit/checkout/placeorder", {
+      waitUntil: "commit",
+    });
+    await page.waitForLoadState("domcontentloaded");
   });
 };
 

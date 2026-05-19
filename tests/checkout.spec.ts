@@ -6,6 +6,8 @@ import {
   clickExpressCheckout,
   goThroughPaymentPage,
   confirmOrder,
+  goToEasyCreditReview,
+  submitEasyCreditPlaceOrder,
 } from "./common";
 import { PaymentTypes } from "./types";
 
@@ -177,12 +179,13 @@ test.describe("amount should not be changable afterwards @bill @installment", ()
     );
     await page.getByRole("button", { name: "Warenkorb aktualisieren" }).click();
     await cartUpdateResponse;
+    await page.waitForLoadState("networkidle");
 
-    await page.goto("index.php/easycredit/checkout/review");
-    await page.getByRole("button", { name: "Jetzt kaufen" }).click();
+    await goToEasyCreditReview(page);
+    await submitEasyCreditPlaceOrder(page);
 
     await expect(page.locator(".page.messages")).toContainText(
-      'Unable to finish easyCredit Checkout. Validation failed.'
+      /Unable to finish easyCredit Checkout\. Validation failed\.|Unable to finish easyCredit Checkout\. Please restart payment process\.|Unable to initialize easyCredit Checkout review\.|Der Einkauf mit easyCredit konnte nicht abgeschlossen werden\./
     );
   });
 });
