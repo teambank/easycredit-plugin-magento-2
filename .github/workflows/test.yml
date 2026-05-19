@@ -24,10 +24,11 @@ jobs:
           #  php-version: 7.4
           #  composer-version: 'v1'
           #  search-engine: 'elasticsearch7'
-          - magento-version: '2.4.2'
-            php-version: 7.4
-            composer-version: 'v2'
-            search-engine: 'elasticsearch7'
+          # wonfix: Magento 2.4.2 may work, but is not tested anymore
+          #- magento-version: '2.4.2'
+          #  php-version: 7.4
+          #  composer-version: 'v2'
+          #  search-engine: 'elasticsearch7'
           - magento-version: '2.4.3-p3'
             php-version: 7.4
             composer-version: 'v2'
