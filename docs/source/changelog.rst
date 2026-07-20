@@ -1,6 +1,11 @@
 Changelog
 =========
 
+v3.0.3
+------
+
+* Express-Checkout: behebt fehlerhafte Adressdarstellung, die durch die Übernahme von API-Gender-Werten in das Magento-Anrede-Feld verursacht wurde
+
 v3.0.2
 ------
 

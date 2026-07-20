@@ -125,7 +125,8 @@ class ReturnAction extends AbstractController
 
         $address = [
             'email' => $contact->getEmail(),
-            'prefix' => $customer->getGender(),
+            // EasyCredit express checkout returns API gender values, not Magento salutations.
+            'prefix' => null,
             'middlename' => null,
             'suffix' => null,
             'firstname' => $address->getFirstname(),
