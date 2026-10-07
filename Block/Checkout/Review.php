@@ -24,7 +24,6 @@ use Magento\Tax\Helper\Data as TaxHelper;
 use Netzkollektiv\EasyCredit\Helper\Payment as PaymentHelper;
 
 /**
- * @package Netzkollektiv\EasyCredit\Block\Checkout
  * @method setPlaceOrderUrl(string $url)
  * @method getPlaceOrderUrl()
  * @method setPaymentMethod($methodInstance)
@@ -125,7 +124,8 @@ class Review extends Template
     public function renderAddress($address)
     {
         /** @var RendererInterface $renderer */
-        $renderer = $this->addressConfig->getFormatByCode('html')->getRenderer();
+        $renderer = $this->addressConfig->getFormatByCode('html')
+            ->getRenderer();
         $addressData = ConvertArray::toFlatArray($address->getData());
         return $renderer->renderArray($addressData);
     }
@@ -268,7 +268,8 @@ class Review extends Template
      */
     protected function _beforeToHtml()
     {
-        $methodInstance = $this->quote->getPayment()->getMethodInstance();
+        $methodInstance = $this->quote->getPayment()
+            ->getMethodInstance();
         $this->setPaymentMethod($methodInstance);
 
         $this->setShippingRateRequired(true);
@@ -317,7 +318,8 @@ class Review extends Template
     public function getPaymentPlan()
     {
         return $this->encodePaymentPlan(
-            $this->quote->getPayment()->getAdditionalInformation('summary')
+            $this->quote->getPayment()
+                ->getAdditionalInformation('summary')
         );
     }
 

@@ -10,14 +10,11 @@ namespace Netzkollektiv\EasyCredit\Api\Data;
 interface CheckoutRequestInterface
 {
     /**
-     * Gets the cart id
-     *
      * @return string
      */
     public function getCartId(): ?string;
 
     /**
-     * Sets the cart id
      * @return self
      */
     public function setCartId(string $cartId): self;
@@ -36,27 +33,21 @@ interface CheckoutRequestInterface
     public function setExpress(int $flag): self;
 
     /**
-     * Gets the payment type
      * @return string
      */
     public function getPaymentType(): ?string;
 
     /**
-     * Gets the payment type
-     *
      * @return self
      */
     public function setPaymentType(string $paymentType): self;
 
     /**
-     * Gets the number of installments
-     *
      * @return string
      */
     public function getNumberOfInstallments(): ?string;
 
     /**
-     * Sets the number of installments
      * @return self
      */
     public function setNumberOfInstallments(string $num): self;

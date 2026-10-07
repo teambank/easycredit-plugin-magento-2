@@ -10,27 +10,21 @@ namespace Netzkollektiv\EasyCredit\Api\Data;
 interface CheckoutDataInterface
 {
     /**
-     * Gets the error message
-     *
      * @return string
      */
     public function getErrorMessage(): ?string;
 
     /**
-     * Sets the error message
      * @return self
      */
     public function setErrorMessage(string $message): self;
 
     /**
-     * Gets the redirect url
-     *
      * @return string
      */
     public function getRedirectUrl(): ?string;
 
     /**
-     * Sets the redirect url
      * @return self
      */
     public function setRedirectUrl(string $url): self;

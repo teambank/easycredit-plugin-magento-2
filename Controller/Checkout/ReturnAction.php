@@ -58,7 +58,8 @@ class ReturnAction extends AbstractController
     {
         return $this->storageFactory->create(
             [
-                'payment' => $this->checkoutSession->getQuote()->getPayment(),
+                'payment' => $this->checkoutSession->getQuote()
+                    ->getPayment(),
             ]
         );
     }
@@ -81,7 +82,8 @@ class ReturnAction extends AbstractController
 
             if ($this->getStorage()->get('express')) {
                 $this->importExpressCheckoutData($transaction);
-                $this->getStorage()->set('express', false);
+                $this->getStorage()
+                    ->set('express', false);
                 $checkout->finalizeExpress($this->easyCreditQuoteBuilder->build());
             }
 
@@ -117,9 +119,12 @@ class ReturnAction extends AbstractController
 
     protected function importExpressCheckoutData(TransactionInformation $transaction)
     {
-        $customer = $transaction->getTransaction()->getCustomer();
+        $customer = $transaction->getTransaction()
+            ->getCustomer();
         $contact = $customer->getContact();
-        $address = $transaction->getTransaction()->getOrderDetails()->getShippingAddress();
+        $address = $transaction->getTransaction()
+            ->getOrderDetails()
+            ->getShippingAddress();
 
         $quote = $this->checkoutSession->getQuote();
 
@@ -140,7 +145,9 @@ class ReturnAction extends AbstractController
             'telephone' => $contact->getMobilePhoneNumber(),
         ];
 
-        $quote->getBillingAddress()->addData($address);
-        $quote->getShippingAddress()->addData($address);
+        $quote->getBillingAddress()
+            ->addData($address);
+        $quote->getShippingAddress()
+            ->addData($address);
     }
 }

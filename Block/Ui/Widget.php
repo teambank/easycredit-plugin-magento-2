@@ -54,7 +54,8 @@ class Widget extends Template
 
     public function getStoreCode()
     {
-        return $this->_storeManager->getStore()->getCode();
+        return $this->_storeManager->getStore()
+            ->getCode();
     }
 
     public function getConfigValue($key)
@@ -72,7 +73,8 @@ class Widget extends Template
             return (float) $amount;
         }
 
-        $totals = $this->checkoutSession->getQuote()->getTotals();
+        $totals = $this->checkoutSession->getQuote()
+            ->getTotals();
         if (! isset($totals['grand_total'])) {
             return null;
         }

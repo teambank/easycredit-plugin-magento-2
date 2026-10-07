@@ -46,12 +46,14 @@ class ProductAddToCartComplete implements ObserverInterface
         $this->logger->debug('EasyCredit Express Checkout :: sending redirect');
 
         $quote = $this->checkoutSession->getQuote();
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'quote_id');
+        $quoteIdMask = $this->quoteIdMaskFactory->create()
+            ->load($quote->getId(), 'quote_id');
 
         $response = $this->responseFactory->create();
-        $response->getHeaders()->addHeaders([
-            'Content-Type' => 'application/json',
-        ]);
+        $response->getHeaders()
+            ->addHeaders([
+                'Content-Type' => 'application/json',
+            ]);
         $response->setBody(\json_encode([
             'quoteId' => $quoteIdMask->getMaskedId(),
         ], JSON_THROW_ON_ERROR));

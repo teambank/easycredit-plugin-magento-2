@@ -16,7 +16,7 @@ class MigrateWidgetSettingsToMarketingPatch implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function apply(): void
     {
@@ -33,7 +33,7 @@ class MigrateWidgetSettingsToMarketingPatch implements DataPatchInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public static function getDependencies()
     {
@@ -42,12 +42,14 @@ class MigrateWidgetSettingsToMarketingPatch implements DataPatchInterface
 
     public function revert(): void
     {
-        $this->moduleDataSetup->getConnection()->startSetup();
-        $this->moduleDataSetup->getConnection()->endSetup();
+        $this->moduleDataSetup->getConnection()
+            ->startSetup();
+        $this->moduleDataSetup->getConnection()
+            ->endSetup();
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function getAliases()
     {

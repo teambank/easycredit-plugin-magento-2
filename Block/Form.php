@@ -30,7 +30,8 @@ class Form extends \Magento\Payment\Block\Form
 
     public function getStoreName()
     {
-        $name = $this->getMethod()->getConfigData('store_name');
+        $name = $this->getMethod()
+            ->getConfigData('store_name');
         $name = trim($name);
         if ($name !== '') {
             return $name;

@@ -17,9 +17,7 @@ class CreditmemoSaveAfter implements ObserverInterface
     {
         $event = $observer->getEvent();
 
-        /**
-         * @var Creditmemo $creditmemo
-         */
+        /** @var Creditmemo $creditmemo */
         $creditmemo = $event->getCreditmemo();
 
         if ($creditmemo->getEasycreditAmount()) {

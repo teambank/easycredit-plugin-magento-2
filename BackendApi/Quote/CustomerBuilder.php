@@ -36,12 +36,15 @@ class CustomerBuilder
                 'firstName' => $customer->getFirstname(),
                 'lastName' => $customer->getLastname(),
                 'birthDate' => $customer->getDob(),
-                'contact' => $quote->getBillingAddress()->getEmail() ? new Api\Model\Contact(
-                    [
-                        'email' => $quote->getBillingAddress()->getEmail(),
-                    ]
-                ) : null,
-                'companyName' => $quote->getShippingAddress()->getCompany(),
+                'contact' => $quote->getBillingAddress()
+                    ->getEmail() ? new Api\Model\Contact(
+                        [
+                            'email' => $quote->getBillingAddress()
+                                ->getEmail(),
+                        ]
+                    ) : null,
+                'companyName' => $quote->getShippingAddress()
+                    ->getCompany(),
             ]
         );
     }

@@ -17,9 +17,7 @@ class InvoiceSaveAfter implements ObserverInterface
     {
         $event = $observer->getEvent();
 
-        /**
-         * @var Invoice $invoice
-         */
+        /** @var Invoice $invoice */
         $invoice = $event->getData('invoice');
 
         if ($invoice->getBaseEasycreditAmount()) {

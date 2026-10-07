@@ -31,7 +31,8 @@ class Info extends PaymentInfo
     public function getPaymentPlan()
     {
         return $this->encodePaymentPlan(
-            $this->getInfo()->getAdditionalInformation('summary')
+            $this->getInfo()
+                ->getAdditionalInformation('summary')
         );
     }
 

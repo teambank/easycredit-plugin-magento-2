@@ -25,10 +25,9 @@ class PreventShippingAddressChange implements ObserverInterface
 
     public function execute(Observer $observer)
     {
-        /**
-         * @var Address $address
-         */
-        $address = $observer->getEvent()->getData('address');
+        /** @var Address $address */
+        $address = $observer->getEvent()
+            ->getData('address');
         if ($address->getAddressType() != 'shipping') {
             return;
         }

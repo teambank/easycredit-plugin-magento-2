@@ -142,7 +142,8 @@ class EasyCreditData extends AbstractHelper
 
         $storage = $this->storageFactory->create(
             [
-                'payment' => ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()->getPayment(),
+                'payment' => ($quote) ? $quote->getPayment() : $this->checkoutSession->getQuote()
+                    ->getPayment(),
             ]
         );
 
@@ -183,7 +184,8 @@ class EasyCreditData extends AbstractHelper
         }
 
         try {
-            $result = $this->getCheckout()->getWebshopDetails();
+            $result = $this->getCheckout()
+                ->getWebshopDetails();
 
             if ($result !== null) {
                 $this->cache->save(

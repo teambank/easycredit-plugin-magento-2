@@ -25,7 +25,7 @@ class Image extends \Magento\Config\Model\Config\Backend\Image
     /**
      * Makes a decision about whether to add info about the scope.
      *
-     * @return boolean
+     * @return bool
      */
     protected function _addWhetherScopeInfo()
     {

@@ -35,6 +35,7 @@ class Marketing extends Template
 
     public function getBaseUrlMedia(): string
     {
-        return $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'netzkollektiv/easycredit/';
+        return $this->_storeManager->getStore()
+            ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'netzkollektiv/easycredit/';
     }
 }

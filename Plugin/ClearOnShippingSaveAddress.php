@@ -22,6 +22,7 @@ class ClearOnShippingSaveAddress
     public function beforeSaveAddressInformation(
         ShippingInformationManagementInterface $subject
     ) {
-        $this->easyCreditHelper->getCheckout()->clear();
+        $this->easyCreditHelper->getCheckout()
+            ->clear();
     }
 }

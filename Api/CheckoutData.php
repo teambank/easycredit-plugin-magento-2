@@ -16,8 +16,6 @@ class CheckoutData implements CheckoutDataInterface
     private ?string $redirectUrl = null;
 
     /**
-     * Gets the error message
-     *
      * @return string
      */
     public function getErrorMessage(): ?string
@@ -26,8 +24,6 @@ class CheckoutData implements CheckoutDataInterface
     }
 
     /**
-     * Sets the error message
-     *
      * @return self
      */
     public function setErrorMessage(string $message): self
@@ -37,8 +33,6 @@ class CheckoutData implements CheckoutDataInterface
     }
 
     /**
-     * Gets the redirect url
-     *
      * @return string
      */
     public function getRedirectUrl(): ?string
@@ -47,8 +41,6 @@ class CheckoutData implements CheckoutDataInterface
     }
 
     /**
-     * Sets the redirect url
-     *
      * @return self
      */
     public function setRedirectUrl(string $url): self

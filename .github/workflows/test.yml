@@ -140,12 +140,15 @@ jobs:
           fi
       - name: Coding Style
         if: ${{ matrix.magento-version == '2.4.9' }}
-        env:
-          PLUGIN_PATH: /opt/magento/vendor/teambank/easycredit-plugin-magento-2
         run: |
-          cd $MAGENTO_DIR
-          composer require friendsofphp/php-cs-fixer symplify/easy-coding-standard --dev
-          php vendor/bin/ecs check -c "$PLUGIN_PATH/ecs.php" "$PLUGIN_PATH"
+          # Isolated install. Requiring ECS into the plugin lock pulls
+          # laminas-code 4.7.1, which does not support the PHP 8.5 job.
+          # Requiring it inside Magento loads Magento's parser and drops method chains.
+          mkdir -p /tmp/ecs
+          composer require --working-dir=/tmp/ecs --no-interaction \
+            friendsofphp/php-cs-fixer:3.95.2 \
+            symplify/easy-coding-standard:13.2.17
+          php /tmp/ecs/vendor/bin/ecs check -c "$GITHUB_WORKSPACE/ecs.php" "$GITHUB_WORKSPACE"
       - name: Install Dependencies
         run: |
           npm install --global yarn

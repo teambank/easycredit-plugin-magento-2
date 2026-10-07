@@ -23,7 +23,8 @@ class Fee extends Template
      */
     public function getLabelProperties()
     {
-        return $this->getParentBlock()->getLabelProperties();
+        return $this->getParentBlock()
+            ->getLabelProperties();
     }
 
     /**
@@ -31,14 +32,13 @@ class Fee extends Template
      */
     public function getValueProperties()
     {
-        return $this->getParentBlock()->getValueProperties();
+        return $this->getParentBlock()
+            ->getValueProperties();
     }
 
     public function initTotals()
     {
-        /**
-         * @var Totals $parent
-         */
+        /** @var Totals $parent */
         $parent = $this->getParentBlock();
         $source = $parent->getSource();
 

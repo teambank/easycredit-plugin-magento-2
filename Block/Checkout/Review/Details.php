@@ -37,6 +37,7 @@ class Details extends Totals
      */
     public function getTotals()
     {
-        return $this->getQuote()->getTotals();
+        return $this->getQuote()
+            ->getTotals();
     }
 }

@@ -22,11 +22,13 @@ class AddEasyCreditShortcuts implements ObserverInterface
     public function execute(Observer $observer): void
     {
         /** @var ShortcutButtons $shortcutButtons */
-        $shortcutButtons = $observer->getEvent()->getContainer();
+        $shortcutButtons = $observer->getEvent()
+            ->getContainer();
 
-        $shortcut = $shortcutButtons->getLayout()->createBlock(
-            ExpressButton::class
-        )->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
+        $shortcut = $shortcutButtons->getLayout()
+            ->createBlock(
+                ExpressButton::class
+            )->setIsInCatalogProduct($observer->getEvent()->getIsCatalogProduct())
             ->setShowOrPosition($observer->getEvent()->getOrPosition())
             ->setIsShoppingCart((bool) $observer->getEvent()->getIsShoppingCart());
 

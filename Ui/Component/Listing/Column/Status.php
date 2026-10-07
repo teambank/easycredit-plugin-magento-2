@@ -43,8 +43,6 @@ class Status extends Column
     }
 
     /**
-     * Prepare Data Source
-     *
      * @return array
      */
     public function prepareDataSource(array $dataSource)

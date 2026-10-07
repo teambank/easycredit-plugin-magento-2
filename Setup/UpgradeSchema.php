@@ -49,7 +49,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     public function getApiLibraryPackage(): ?CompletePackageInterface
     {
-        $packages = $this->composerFactory->create()->getLocker()->getLockedRepository()->getPackages();
+        $packages = $this->composerFactory->create()
+            ->getLocker()
+            ->getLockedRepository()
+            ->getPackages();
         /** @var CompletePackageInterface $package */
         foreach ($packages as $package) {
             if ($package instanceof CompletePackageInterface && $package->getName() == 'netzkollektiv/easycredit-api-v3-php') {
@@ -107,7 +110,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'comment' => 'Base easyCredit Amount',
                     ]
                 );
-            //Order tables
+            // Order tables
             $setup->getConnection()
                 ->addColumn(
                     $setup->getTable(self::ORDER_TABLE),
@@ -186,7 +189,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'comment' => 'Base easyCredit Amount Invoiced',
                     ]
                 );
-            //Invoice tables
+            // Invoice tables
             $setup->getConnection()
                 ->addColumn(
                     $setup->getTable(self::INVOICE_TABLE),
@@ -213,7 +216,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                         'comment' => 'Base Fee Amount',
                     ]
                 );
-            //Credit memo tables
+            // Credit memo tables
             $setup->getConnection()
                 ->addColumn(
                     $setup->getTable(self::CREDITMEMO_TABLE),

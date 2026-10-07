@@ -93,19 +93,24 @@ class QuoteBuilder
 
     private function getId()
     {
-        return $this->getQuote()->getId();
+        return $this->getQuote()
+            ->getId();
     }
 
     public function getPaymentType()
     {
         return $this->paymentHelper->getTypeByMethod(
-            $this->getQuote()->getPayment()->getMethod()
+            $this->getQuote()
+                ->getPayment()
+                ->getMethod()
         ) . '_PAYMENT';
     }
 
     private function getShippingMethod()
     {
-        $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
+        $shippingMethod = $this->getQuote()
+            ->getShippingAddress()
+            ->getShippingMethod();
 
         if ($this->getIsClickAndCollect()) {
             $shippingMethod = '[Selbstabholung] ' . $shippingMethod;
@@ -124,7 +129,9 @@ class QuoteBuilder
             return false;
         }
 
-        $shippingMethod = $this->getQuote()->getShippingAddress()->getShippingMethod();
+        $shippingMethod = $this->getQuote()
+            ->getShippingAddress()
+            ->getShippingMethod();
         if ($shippingMethod === '') {
             return false;
         }
@@ -138,7 +145,8 @@ class QuoteBuilder
 
     private function getGrandTotal()
     {
-        return $this->getQuote()->getGrandTotal();
+        return $this->getQuote()
+            ->getGrandTotal();
     }
 
     /**
@@ -160,7 +168,8 @@ class QuoteBuilder
     {
         return $this->storageFactory->create(
             [
-                'payment' => $this->getQuote()->getPayment(),
+                'payment' => $this->getQuote()
+                    ->getPayment(),
             ]
         )->get('duration');
     }
@@ -190,7 +199,8 @@ class QuoteBuilder
     {
         return $this->storageFactory->create(
             [
-                'payment' => $this->getQuote()->getPayment(),
+                'payment' => $this->getQuote()
+                    ->getPayment(),
             ]
         )->get('express');
     }
@@ -199,7 +209,8 @@ class QuoteBuilder
     {
         $storage = $this->storageFactory->create(
             [
-                'payment' => $this->getQuote()->getPayment(),
+                'payment' => $this->getQuote()
+                    ->getPayment(),
             ]
         );
 

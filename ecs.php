@@ -29,5 +29,7 @@ return static function (ECSConfig $ecsConfig): void {
         NoSuperfluousPhpdocTagsFixer::class,
         PhpdocNoEmptyReturnFixer::class,
         BlankLineAfterOpeningTagFixer::class,
+        __DIR__ . '/vendor',
+        __DIR__ . '/magento',
     ]);
 };

@@ -235,7 +235,8 @@ abstract class AbstractPayment extends AbstractMethod
             $additionalData = new DataObject($additionalData ?: []);
         }
 
-        $this->getInfoInstance()->setAdditionalInformation('duration', $additionalData->getDuration());
+        $this->getInfoInstance()
+            ->setAdditionalInformation('duration', $additionalData->getDuration());
 
         return parent::assignData($data);
     }
@@ -328,7 +329,8 @@ abstract class AbstractPayment extends AbstractMethod
         $txId = $payment->getAdditionalInformation('transaction_id');
         $token = $payment->getAdditionalInformation('token');
 
-        $tx = $this->easyCreditHelper->getCheckout()->loadTransaction($token);
+        $tx = $this->easyCreditHelper->getCheckout()
+            ->loadTransaction($token);
 
         if ($tx->getStatus() !== TransactionInformation::STATUS_AUTHORIZED) {
             throw new \Exception('payment status of transaction not updated as transaction status is not AUTHORIZED');

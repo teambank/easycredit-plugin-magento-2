@@ -37,7 +37,8 @@ class ItemBuilder
             return $this->_categoryResource->getAttributeRawValue(
                 $categoryId,
                 'name',
-                $this->_storeManager->getStore()->getId()
+                $this->_storeManager->getStore()
+                    ->getId()
             );
         }
 
@@ -69,11 +70,14 @@ class ItemBuilder
         return new Api\Model\ShoppingCartInformationItem(
             [
                 'productName' => $item->getName(),
-                'productUrl' => $item->getProduct()->getProductUrl(),
-                'productImageUrl' => $this->_storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $item->getProduct()->getSmallImage(),
+                'productUrl' => $item->getProduct()
+                    ->getProductUrl(),
+                'productImageUrl' => $this->_storeManager->getStore()
+                    ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . 'catalog/product' . $item->getProduct()->getSmallImage(),
                 'quantity' => (int) $item->getQty(),
                 'price' => $item->getPrice(),
-                'manufacturer' => $item->getProduct()->getData('manufacturer'),
+                'manufacturer' => $item->getProduct()
+                    ->getData('manufacturer'),
                 'productCategory' => $this->getDeepestCategoryName($item->getProduct()->getCategoryIds()),
                 'articleNumber' => $this->buildSkus($item),
             ]

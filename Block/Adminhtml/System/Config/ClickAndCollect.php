@@ -39,7 +39,9 @@ class ClickAndCollect extends Field
      */
     public function render(AbstractElement $element)
     {
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+        $element->unsScope()
+            ->unsCanUseWebsiteValue()
+            ->unsCanUseDefaultValue();
         return parent::render($element);
     }
 

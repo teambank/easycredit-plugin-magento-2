@@ -57,12 +57,15 @@ class Review extends AbstractController
             }
 
             $this->_view->loadLayout();
-            $reviewBlock = $this->_view->getLayout()->getBlock('easycredit.checkout.review');
+            $reviewBlock = $this->_view->getLayout()
+                ->getBlock('easycredit.checkout.review');
             if ($reviewBlock instanceof BlockInterface) {
                 $reviewBlock->setQuote($this->checkoutSession->getQuote());
-                $reviewBlock->getChildBlock('details')->setQuote($this->checkoutSession->getQuote());
+                $reviewBlock->getChildBlock('details')
+                    ->setQuote($this->checkoutSession->getQuote());
                 if ($reviewBlock->getChildBlock('shipping_method')) {
-                    $reviewBlock->getChildBlock('shipping_method')->setQuote($this->checkoutSession->getQuote());
+                    $reviewBlock->getChildBlock('shipping_method')
+                        ->setQuote($this->checkoutSession->getQuote());
                 }
             }
 

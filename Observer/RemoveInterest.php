@@ -33,14 +33,10 @@ class RemoveInterest implements ObserverInterface
     {
         $event = $observer->getEvent();
 
-        /**
-         * @var Order $order
-         */
+        /** @var Order $order */
         $order = $event->getData('order');
 
-        /**
-         * @var Quote $quote
-         */
+        /** @var Quote $quote */
         $quote = $event->getData('quote');
 
         if (! $this->paymentHelper->isSelected($quote->getPayment())) {

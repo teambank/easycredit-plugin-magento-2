@@ -54,7 +54,8 @@ class Authorization
         }
 
         $baseTotalDue = $order->getBaseTotalDue();
-        $order->getPayment()->authorize(true, $baseTotalDue);
+        $order->getPayment()
+            ->authorize(true, $baseTotalDue);
 
         $newOrderStatus = $this->scopeConfig->getValue('payment/easycredit/order_status', ScopeInterface::SCOPE_STORE);
         $order->addStatusHistoryComment(__('Payment authorized by easyCredit. Order status was set as configured in payment method.'), $newOrderStatus);

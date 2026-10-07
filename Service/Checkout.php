@@ -66,17 +66,20 @@ class Checkout implements CheckoutInterface
     public function getCheckoutData($cartId, CheckoutRequestInterface $checkoutData): CheckoutDataInterface
     {
         try {
-            $this->getStorage()->set('express', false);
+            $this->getStorage()
+                ->set('express', false);
 
             $quote = $this->checkoutSession->getQuote();
-            $quote->getPayment()->setMethod(
-                $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
-            );
+            $quote->getPayment()
+                ->setMethod(
+                    $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
+                );
 
             $ecQuote = $this->easyCreditQuoteBuilder->build();
-            $this->easyCreditHelper->getCheckout()->isAvailable(
-                $ecQuote
-            );
+            $this->easyCreditHelper->getCheckout()
+                ->isAvailable(
+                    $ecQuote
+                );
         } catch (\Exception $exception) {
             $this->checkoutData->setErrorMessage($exception->getMessage());
         }
@@ -100,7 +103,8 @@ class Checkout implements CheckoutInterface
     {
         return $this->storageFactory->create(
             [
-                'payment' => $this->checkoutSession->getQuote()->getPayment(),
+                'payment' => $this->checkoutSession->getQuote()
+                    ->getPayment(),
             ]
         );
     }
@@ -118,22 +122,27 @@ class Checkout implements CheckoutInterface
                 $this->_validateQuote();
 
                 $quote = $this->checkoutSession->getQuote();
-                $quote->getPayment()->setMethod(
-                    $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
-                );
+                $quote->getPayment()
+                    ->setMethod(
+                        $this->paymentHelper->getMethodByType($checkoutData->getPaymentType())
+                    );
 
                 if ($checkoutData && $checkoutData->getExpress()) {
-                    $this->getStorage()->clear();
-                    $this->getStorage()->set('express', true);
+                    $this->getStorage()
+                        ->clear();
+                    $this->getStorage()
+                        ->set('express', true);
                     $this->prepareExpressCheckout();
                 }
 
                 $ecQuote = $this->easyCreditQuoteBuilder->build();
-                $this->easyCreditHelper->getCheckout()->start(
-                    $ecQuote
-                );
+                $this->easyCreditHelper->getCheckout()
+                    ->start(
+                        $ecQuote
+                    );
 
-                $quote->getPayment()->save(); // @phpstan-ignore-line
+                $quote->getPayment() // @phpstan-ignore-line
+                    ->save();
                 $quote->collectTotals();
                 $this->quoteRepository->save($quote);
 
@@ -180,7 +189,8 @@ class Checkout implements CheckoutInterface
             $shippingAddress->setCountryId('DE');
         }
 
-        $shippingAddress->setCollectShippingRates(true)->collectShippingRates();
+        $shippingAddress->setCollectShippingRates(true)
+            ->collectShippingRates();
         $shippingMethod = current($shippingAddress->getAllShippingRates());
 
         if ($shippingMethod) {

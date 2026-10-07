@@ -39,7 +39,8 @@ class ExpressButton extends Widget implements ShortcutInterface
     public function getQuoteId()
     {
         $quote = $this->checkoutSession->getQuote();
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($quote->getId(), 'quote_id');
+        $quoteIdMask = $this->quoteIdMaskFactory->create()
+            ->load($quote->getId(), 'quote_id');
         return $quoteIdMask->getMaskedId();
     }
 }

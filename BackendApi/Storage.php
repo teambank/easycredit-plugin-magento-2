@@ -50,6 +50,7 @@ class Storage implements Api\Integration\StorageInterface
             return;
         }
         $this->logger->debug('clear');
-        $this->payment->unsAdditionalInformation()->save(); // @phpstan-ignore-line
+        $this->payment->unsAdditionalInformation() // @phpstan-ignore-line
+            ->save();
     }
 }

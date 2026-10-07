@@ -35,7 +35,8 @@ class Transaction extends Template
      */
     public function getPayment()
     {
-        return $this->getOrder()->getPayment();
+        return $this->getOrder()
+            ->getPayment();
     }
 
     /**

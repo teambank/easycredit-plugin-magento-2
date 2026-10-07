@@ -40,7 +40,8 @@ class Fee extends AbstractTotal
         $this->_setAmount(0);
         $this->_setBaseAmount(0);
 
-        $amount = $quote->getPayment()->getAdditionalInformation('interest_amount');
+        $amount = $quote->getPayment()
+            ->getAdditionalInformation('interest_amount');
         if ($amount == null) {
             return $this;
         }
