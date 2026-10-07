@@ -1,6 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { delay, randomize, doWithRetry } from "./utils";
+import { doWithRetry } from "./utils";
 import { PaymentTypes } from "./types";
+import { createEasyCreditPayment } from "easycredit-playwright-payment";
+
+export const { goThroughPaymentPage } = createEasyCreditPayment({
+  returnUrlPattern: /easycredit\/checkout\/review/i,
+});
 
 export const goToProduct = async (page, sku = 'regular-product') => {
   await test.step(`Go to product (sku: ${sku}}`, async () => {
@@ -105,95 +110,3 @@ export const submitEasyCreditPlaceOrder = async (page) => {
   });
 };
 
-export const goThroughPaymentPage = async ({
-  page,
-  paymentType,
-  express = false,
-  switchPaymentType = false,
-}: {
-  page: any;
-  paymentType: PaymentTypes;
-  express?: boolean;
-  switchPaymentType?: boolean;
-}) => {
-  await test.step(`easyCredit Payment (${paymentType})`, async () => {
-    await page.getByTestId("uc-deny-all-button").click();
-
-    if (switchPaymentType) {
-      const switchButton = page
-        .locator(".paymentoptions")
-        .getByText(
-          paymentType === PaymentTypes.INSTALLMENT ? "Rechnung" : "Ratenkauf"
-        );
-      await expect(switchButton).toBeVisible();
-      await switchButton.click({ force: true });
-    }
-
-    await page.getByRole("button", { name: "Weiter" }).click();
-
-    // Fill mobile number for sms tan
-    await page
-      .locator("#mobilfunknummer")
-      .getByRole("textbox")
-      .fill("1703404848");
-
-    await doWithRetry(async () => {
-      await page.getByRole("button", { name: "SMS-TAN senden" }).click();
-      await delay(500);
-      const mtanInput = page.locator("#mTAN").getByRole("textbox");
-      const canFillMtan =
-        (await mtanInput.isVisible()) && (await mtanInput.isEditable());
-      if (!canFillMtan) {
-        throw new Error("mTAN input is not fillable yet");
-      }
-    });
-
-    // Enter the code from the SMS (anything works)
-    await page.locator("#mTAN").getByRole("textbox").fill("123456");
-
-    await doWithRetry(async () => {
-      await page.getByRole("button", { name: "Zur Dateneingabe" }).click();
-    });
-
-    if (express) {
-      await page.locator("#firstName").fill(randomize("Ralf"));
-      await page.locator("#lastName").fill("Ratenkauf");
-    }
-
-    await page.locator("#dateOfBirth").getByRole("textbox").fill("05.04.1972");
-
-    if (express) {
-      await page
-        .locator("#email")
-        .getByRole("textbox")
-        .fill("ralf.ratenkauf@teambank.de");
-    }
-
-    await page
-      .locator("app-ratenkauf-iban-input-dumb")
-      .getByRole("textbox")
-      .fill("DE12500105170648489890");
-
-    if (express) {
-      await page.locator("#streetAndNumber").fill("Beuthener Str. 25");
-      await page.locator("#postalCode").fill("90402");
-      await page.locator("#city").fill("Nürnberg");
-    }
-
-    await doWithRetry(async () => {
-      await page.locator("#sepamandat tbk-svg-icon").click({ force: true });
-      await delay(500);
-      const isChecked = await page.locator("#agreeSepa").isChecked();
-      if (!isChecked) {
-        throw new Error("SEPA checkbox was not checked");
-      }
-    });
-
-    await page.locator("#next-btn").click();
-
-    await delay(500);
-    await doWithRetry(async () => {
-      await page.getByRole("button", { name: "Zahlung übernehmen" }).click();
-    });
-  });
-};

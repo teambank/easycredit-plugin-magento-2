@@ -159,6 +159,8 @@ jobs:
           sudo apt-get update -o Acquire::AllowReleaseInfoChange=true 
           yarn playwright install --with-deps chromium
       - name: Playwright E2E Tests
+        env:
+          EASYCREDIT_PAYMENT_API: true
         run: |
           cd $GITHUB_WORKSPACE
           VERSION=${{ matrix.magento-version }} yarn playwright test -c tests/
