@@ -52,6 +52,8 @@ class Review extends AbstractController
                     __('Unable to initialize easyCredit Checkout review. Not initialized.')
                 );
                 $this->_redirect('checkout/cart');
+
+                return;
             }
 
             $this->_view->loadLayout();

@@ -31,6 +31,12 @@ class Fee extends AbstractTotal
             return $this;
         }
 
+        // Drop a previous in-memory amount before applying interest again.
+        // collectTotals() can run twice in one request; subtracting the sticky
+        // quote value would set this total to zero on the second pass.
+        $quote->setEasycreditAmount(0);
+        $quote->setBaseEasycreditAmount(0);
+
         $this->_setAmount(0);
         $this->_setBaseAmount(0);
 
@@ -43,18 +49,14 @@ class Fee extends AbstractTotal
             return $this;
         }
 
-        $exist_amount = $quote->getEasycreditAmount();
+        $total->setTotalAmount('easycredit', $amount);
+        $total->setBaseTotalAmount('easycredit', $amount);
 
-        $balance = $amount - $exist_amount;
+        $total->setEasycreditAmount($amount);
+        $total->setBaseEasycreditAmount($amount);
 
-        $total->setTotalAmount('easycredit', $balance);
-        $total->setBaseTotalAmount('easycredit', $balance);
-
-        $total->setEasycreditAmount($balance);
-        $total->setBaseEasycreditAmount($balance);
-
-        $quote->setEasycreditAmount($balance);
-        $quote->setBaseEasycreditAmount($balance);
+        $quote->setEasycreditAmount($amount);
+        $quote->setBaseEasycreditAmount($amount);
 
         return $this;
     }

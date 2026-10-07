@@ -79,10 +79,14 @@ class Status extends Column
                 $transactionId = $this->escaper->escapeHtml(
                     $paymentItem->getData('additional_information/transaction_id')
                 );
-                $item[$this->getData('name')] = '<easycredit-merchant-status-widget 
-                    tx-id="' . $transactionId . '" 
-                    date="' . substr($item['created_at'], 0, strpos(' ', (string) $item['created_at'])) . '"></<easycredit-merchant-status-widget>
-                ';
+                $createdAt = (string) ($item['created_at'] ?? '');
+                $separatorAt = strpos($createdAt, ' ');
+                $date = $this->escaper->escapeHtml(
+                    $separatorAt === false ? $createdAt : substr($createdAt, 0, $separatorAt)
+                );
+                $item[$this->getData('name')] = '<easycredit-merchant-status-widget'
+                    . ' tx-id="' . $transactionId . '"'
+                    . ' date="' . $date . '"></easycredit-merchant-status-widget>';
             }
         }
 

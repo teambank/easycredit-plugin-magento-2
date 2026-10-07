@@ -30,15 +30,29 @@ class Info extends PaymentInfo
 
     public function getPaymentPlan()
     {
-        $summary = \json_decode((string) $this->getInfo()->getAdditionalInformation('summary'), null, 512, JSON_THROW_ON_ERROR);
-        if ($summary === false) {
+        return $this->encodePaymentPlan(
+            $this->getInfo()->getAdditionalInformation('summary')
+        );
+    }
+
+    /**
+     * @param mixed $summary
+     */
+    private function encodePaymentPlan($summary): ?string
+    {
+        if (! is_string($summary) || $summary === '') {
             return null;
         }
 
-        if ($summary === null) {
+        try {
+            $decoded = json_decode($summary, null, 512, JSON_THROW_ON_ERROR);
+            if ($decoded === null) {
+                return null;
+            }
+
+            return json_encode($decoded, JSON_THROW_ON_ERROR);
+        } catch (\JsonException $jsonException) {
             return null;
         }
-
-        return json_encode($summary, JSON_THROW_ON_ERROR);
     }
 }

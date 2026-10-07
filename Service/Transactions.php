@@ -54,6 +54,33 @@ class Transactions implements TransactionsInterface
     }
 
     /**
+     * @param mixed $response
+     */
+    private function encodeResponseBody($response): string
+    {
+        if (is_string($response)) {
+            return $response;
+        }
+
+        return (string) $response;
+    }
+
+    /**
+     * @return never
+     */
+    private function sendServerError(\Throwable $throwable): void
+    {
+        $encoded = json_encode([
+            'error' => $throwable->getMessage(),
+        ]);
+        if ($encoded === false) {
+            $encoded = '{"error":"Internal server error"}';
+        }
+
+        $this->sendJsonResponse($encoded, 500);
+    }
+
+    /**
      * @api
      */
     public function getTransactions(): void
@@ -66,18 +93,11 @@ class Transactions implements TransactionsInterface
                 ->apiMerchantV3TransactionGet(null, null, null, 100, null, null, null, null, [
                     'tId' => $transactionIds,
                 ]);
-            $this->sendJsonResponse($response);
+            $this->sendJsonResponse($this->encodeResponseBody($response));
         } catch (ApiException $apiException) {
             $this->sendJsonResponseFromException($apiException);
         } catch (\Throwable $throwable) {
-            $this->sendJsonResponse(
-                json_encode(
-                    [
-                        'error' => $throwable->getMessage(),
-                    ],
-                    500
-                )
-            );
+            $this->sendServerError($throwable);
         }
     }
 
@@ -90,18 +110,11 @@ class Transactions implements TransactionsInterface
             $response = $this->easyCreditHelper
                 ->getTransactionApi()
                 ->apiMerchantV3TransactionTransactionIdGet($transactionId);
-            $this->sendJsonResponse($response);
+            $this->sendJsonResponse($this->encodeResponseBody($response));
         } catch (ApiException $apiException) {
             $this->sendJsonResponseFromException($apiException);
         } catch (\Throwable $throwable) {
-            $this->sendJsonResponse(
-                json_encode(
-                    [
-                        'error' => $throwable->getMessage(),
-                    ],
-                    500
-                )
-            );
+            $this->sendServerError($throwable);
         }
     }
 
@@ -125,14 +138,7 @@ class Transactions implements TransactionsInterface
         } catch (ApiException $apiException) {
             $this->sendJsonResponseFromException($apiException);
         } catch (\Throwable $throwable) {
-            $this->sendJsonResponse(
-                json_encode(
-                    [
-                        'error' => $throwable->getMessage(),
-                    ],
-                    500
-                )
-            );
+            $this->sendServerError($throwable);
         }
     }
 
@@ -156,14 +162,7 @@ class Transactions implements TransactionsInterface
         } catch (ApiException $apiException) {
             $this->sendJsonResponseFromException($apiException);
         } catch (\Throwable $throwable) {
-            $this->sendJsonResponse(
-                json_encode(
-                    [
-                        'error' => $throwable->getMessage(),
-                    ],
-                    500
-                )
-            );
+            $this->sendServerError($throwable);
         }
     }
 }

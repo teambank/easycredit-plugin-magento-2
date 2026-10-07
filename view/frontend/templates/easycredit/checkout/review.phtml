@@ -1,5 +1,6 @@
 <?php
 // @codingStandardsIgnoreFile
+
 /**
  * @var \Netzkollektiv\EasyCredit\Block\Checkout\Review $block
  */
@@ -66,6 +67,18 @@
         <?php echo $block->getChildHtml('details'); ?>
 
         <form method="post" id="order-review-form" action="<?php echo $block->escapeUrl($block->getPlaceOrderUrl()); ?>" class="form order-review-form">
+            <?php
+            $formKeyHtml = $block->getBlockHtml('formkey');
+            if ($formKeyHtml === '') {
+                $formKeyHtml = $block->getLayout()
+                    ->createBlock(
+                        \Magento\Framework\View\Element\FormKey::class,
+                        'easycredit.checkout.review.formkey'
+                    )
+                    ->toHtml();
+            }
+            echo $formKeyHtml;
+            ?>
             <?php echo $block->getChildHtml('agreements'); ?>
             <div class="actions-toolbar" id="review-buttons-container">
                 <div class="primary">

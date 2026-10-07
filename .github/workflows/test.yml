@@ -139,7 +139,7 @@ jobs:
             php $MAGENTO_DIR/vendor/bin/phpstan analyse . -c "$GITHUB_WORKSPACE/phpstan.magento.neon"
           fi
       - name: Coding Style
-        if: ${{ matrix.magento-version == '2.4.7' }}
+        if: ${{ matrix.magento-version == '2.4.9' }}
         env:
           PLUGIN_PATH: /opt/magento/vendor/teambank/easycredit-plugin-magento-2
         run: |

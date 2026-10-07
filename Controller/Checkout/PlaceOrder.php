@@ -11,13 +11,17 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Url;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Api\CartManagementInterface;
 use Netzkollektiv\EasyCredit\BackendApi\QuoteBuilder;
 use Netzkollektiv\EasyCredit\Helper\EasyCreditData as EasyCreditHelper;
 use Netzkollektiv\EasyCredit\Logger\Logger;
 
-class PlaceOrder extends AbstractController
+class PlaceOrder extends AbstractController implements CsrfAwareActionInterface, HttpPostActionInterface
 {
     private Session $customerSession;
 
@@ -53,6 +57,28 @@ class PlaceOrder extends AbstractController
         $this->logger = $logger;
 
         parent::__construct($context, $checkoutSession, $customerUrl);
+    }
+
+    /**
+     * Invalid form keys redirect back to the cart instead of placing the order.
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect->setPath('checkout/cart');
+
+        return new InvalidRequestException(
+            $resultRedirect,
+            [__('Invalid Form Key. Please refresh the page.')]
+        );
+    }
+
+    /**
+     * Defer to Magento's form key validator. The review form posts form_key.
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return null;
     }
 
     /**
@@ -99,8 +125,12 @@ class PlaceOrder extends AbstractController
             $this->logger->error($localizedException->getMessage());
             $this->messageManager->addErrorMessage(__($localizedException->getMessage()));
             $this->_redirect('easycredit/checkout/cancel');
+
+            return;
         }
 
         $this->_redirect('checkout/onepage/success');
+
+        return;
     }
 }

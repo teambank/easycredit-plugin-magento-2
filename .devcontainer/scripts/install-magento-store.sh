@@ -285,6 +285,7 @@ mysql_cli "${DB_USER}" "${DB_PASSWORD}" \
   -e "UPDATE admin_user Set interface_locale = 'de_DE';" "${DB_NAME}"
 
 disable_module_if_present Magento_AdminAnalytics
+disable_module_if_present Magento_AdminAdobeImsTwoFactorAuth
 disable_module_if_present Magento_TwoFactorAuth
 php bin/magento s:up
 php bin/magento deploy:mode:set production -s
